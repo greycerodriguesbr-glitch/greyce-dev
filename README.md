@@ -115,7 +115,7 @@ Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/foto
 
 - HTML5, CSS3 e JavaScript puro (sem frameworks)
 - Design responsivo e acessível
-- [QRCode.js](https://github.com/davidshimjs/qrcodejs) para gerar os QR Codes do FotoEvento
+- [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) (MIT), incluído no projeto, para gerar os QR Codes do FotoEvento
 
 ## 🚧 Próximos passos
 
