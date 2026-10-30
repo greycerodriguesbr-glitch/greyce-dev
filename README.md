@@ -37,7 +37,7 @@ Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/saud
 
 ## 📸 FotoEvento
 
-> *Cada convidado leva uma foto impressa do seu evento.*
+> *Momentos do seu evento, impressos na hora.*
 
 Plataforma para fotógrafos e organizadores de casamentos, aniversários e formaturas. Cada convidado recebe um **QR Code único**, envia sua melhor foto pelo celular e retira a foto impressa no balcão com um **código de retirada** gerado na hora.
 
