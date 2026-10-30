@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FotoEvento — Fotos do seu evento</title>
+
+  <!-- QR Code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN */
+
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top right, #7c5cff55, transparent 35%),
+        linear-gradient(135deg, #11152a, #25194b);
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 430px;
+      padding: 40px;
+      background: rgba(255,255,255,.96);
+      border-radius: 28px;
+      box-shadow: 0 30px 80px #0005;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 23px;
+      margin-bottom: 35px;
+    }
+
+    .logo-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: white;
+      background: linear-gradient(135deg, #7657ff, #a86cff);
+    }
+
+    .login-box h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      color: #778099;
+      margin-bottom: 28px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #dfe3ed;
+      border-radius: 13px;
+      outline: none;
+      transition: .2s;
+    }
+
+    .field input:focus {
+      border-color: #7657ff;
+      box-shadow: 0 0 0 4px #7657ff15;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 13px;
+      padding: 13px 18px;
+      font-weight: 800;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      width: 100%;
+      color: white;
+      background: linear-gradient(135deg, #7657ff, #a05cff);
+    }
+
+    .demo {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f3f1ff;
+      color: #6754b7;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* APP */
+
+    #app {
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: fixed;
+      width: 250px;
+      height: 100vh;
+      padding: 25px 18px;
+      background: #15182a;
+      color: white;
+    }
+
+    .sidebar .logo {
+      margin-left: 10px;
+    }
+
+    .nav {
+      margin-top: 35px;
+    }
+
+    .nav button {
+      width: 100%;
+      text-align: left;
+      padding: 13px 15px;
+      margin-bottom: 6px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #adb3c7;
+      font-weight: 700;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: white;
+      background: #ffffff12;
+    }
+
+    .logout {
+      position: absolute;
+      bottom: 25px;
+      left: 18px;
+      right: 18px;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 35px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .topbar h1 {
+      font-size: 30px;
+    }
+
+    .topbar p {
+      color: #7d8498;
+      margin-top: 5px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* CARDS */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e8ebf2;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 25px #17203308;
+    }
+
+    .stat-label {
+      color: #81899d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .stat-number {
+      font-size: 30px;
+      font-weight: 900;
+      margin-top: 8px;
+    }
+
+    /* TABLE */
+
+    .table-card {
+      overflow: hidden;
+    }
+
+    .table-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .search {
+      max-width: 300px;
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #dfe3ed;
+      border-radius: 11px;
+      outline: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 15px 10px;
+      border-bottom: 1px solid #edf0f5;
+      font-size: 14px;
+    }
+
+    th {
+      color: #858da0;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 6px 9px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .green {
+      background: #e5f9ee;
+      color: #1b9b58;
+    }
+
+    .yellow {
+      background: #fff4d9;
+      color: #a96c00;
+    }
+
+    /* EVENT CARDS */
+
+    .events {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .event-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .event-card p {
+      color: #7e879b;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: #0e1220aa;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 20;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 550px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+      background: white;
+      border-radius: 22px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .close {
+      border: 0;
+      background: #f1f3f7;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+
+    /* QR */
+
+    .qr-box {
+      text-align: center;
+      padding: 25px;
+    }
+
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      margin: 20px;
+    }
+
+    .qr-name {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .qr-url {
+      margin-top: 8px;
+      color: #778099;
+      font-size: 12px;
+      word-break: break-all;
+    }
+
+    /* PHOTOS */
+
+    .photos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .photo-card {
+      overflow: hidden;
+      background: white;
+      border-radius: 18px;
+      border: 1px solid #e8ebf2;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .photo-info {
+      padding: 13px;
+    }
+
+    /* PUBLIC */
+
+    #publicPage {
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at top right, #8b6cff40, transparent 35%),
+        linear-gradient(135deg, #11152a, #241744);
+    }
+
+    .upload-box {
+      width: 100%;
+      max-width: 540px;
+      background: white;
+      border-radius: 28px;
+      padding: 35px;
+      box-shadow: 0 30px 80px #0005;
+      text-align: center;
+    }
+
+    .upload-box h1 {
+      margin: 18px 0 8px;
+    }
+
+    .upload-box p {
+      color: #7b8396;
+      line-height: 1.6;
+    }
+
+    .drop {
+      margin: 25px 0;
+      border: 2px dashed #d9ddef;
+      border-radius: 20px;
+      padding: 35px 20px;
+      background: #fafaff;
+    }
+
+    .drop-icon {
+      font-size: 45px;
+    }
+
+    #preview {
+      max-width: 100%;
+      max-height: 320px;
+      border-radius: 16px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .success {
+      padding: 25px;
+      background: #e8faf0;
+      border-radius: 18px;
+      color: #188a4c;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width: 900px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+      }
+
+      .sidebar .logo {
+        margin-bottom: 10px;
+      }
+
+      .nav {
+        display: flex;
+        overflow-x: auto;
+        margin-top: 10px;
+      }
+
+      .nav button {
+        white-space: nowrap;
+      }
+
+      .logout {
+        position: static;
+        margin-top: 10px;
+      }
+
+      .content {
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+
+    @media(max-width: 550px) {
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .table-card {
+        overflow-x: auto;
+      }
+
+      .login-box,
+      .upload-box {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+
+<div id="loginPage">
+
+  <div class="login-box">
+
+    <div class="logo">
+      <div class="logo-icon">📸</div>
+      FotoEvento
+    </div>
+
+    <h1>Bem-vindo</h1>
+    <p>Entre no painel para administrar seus eventos.</p>
+
+    <div class="field">
+      <label>Usuário</label>
+      <input id="loginUser" type="text" placeholder="Digite seu usuário">
+    </div>
+
+    <div class="field">
+      <label>Senha</label>
+      <input id="loginPass" type="password" placeholder="Digite sua senha">
+    </div>
+
+    <button class="btn btn-primary" onclick="login()">
+      Entrar no painel
+    </button>
+
+    <div class="demo">
+      Demonstração: <b>admin</b> / <b>1234</b>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= APP ================= -->
+
+<div id="app" class="hidden">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">📸</div>
+      FotoEvento
+    </div>
+
+    <div class="nav">
+
+      <button class="active" onclick="showSection('dashboard', this)">
+        📊 Dashboard
+      </button>
+
+      <button onclick="showSection('events', this)">
+        🎪 Eventos
+      </button>
+
+      <button onclick="showSection('guests', this)">
+        👥 Lista de presença
+      </button>
+
+      <button onclick="showSection('photos', this)">
+        📸 Fotos recebidas
+      </button>
+
+    </div>
+
+    <button class="btn logout" onclick="logout()">
+      Sair
+    </button>
+
+  </aside>
+
+
+  <main class="content">
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="section active">
+
+      <div class="topbar">
+
+        <div>
+          <h1>Dashboard</h1>
+          <p>Controle seus eventos e fotos.</p>
+        </div>
+
+        <button class="btn btn-primary" style="width:auto" onclick="openEventModal()">
+          + Novo evento
+        </button>
+
+      </div>
+
+      <div class="stats">
+
+        <div class="card">
+          <div class="stat-label">EVENTOS</div>
+          <div class="stat-number" id="statEvents">1</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">CONVIDADOS</div>
+          <div class="stat-number" id="statGuests">5</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">FOTOS RECEBIDAS</div>
+          <div class="stat-number" id="statPhotos">2</div>
+        </div>
+
+        <div class="card">
+          <div class="stat-label">AGUARDANDO</div>
+          <div class="stat-number" id="statWaiting">3</div>
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="table-head">
+          <h2>Evento atual</h2>
+          <span class="badge green">ATIVO</span>
+        </div>
+
+        <h3>Casamento João & Maria</h3>
+        <p style="color:#7e879b;margin-top:7px">
+          15/11/2026 • Espaço Jardim
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- EVENTS -->
+
+    <section id="events" class="section">
+
+      <div class="topbar">
+
+        <div>
+          <h1>Eventos</h1>
+          <p>Gerencie seus eventos.</p>
+        </div>
+
+        <button class="btn btn-primary" style="width:auto" onclick="openEventModal()">
+          + Novo evento
+        </button>
+
+      </div>
+
+      <div class="events">
+
+        <div class="card event-card">
+
+          <h3>Casamento João & Maria</h3>
+
+          <p>
+            📅 15/11/2026<br>
+            📍 Espaço Jardim
+          </p>
+
+          <span class="badge green">ATIVO</span>
+
+          <div style="margin-top:18px">
+            <button class="btn btn-primary" style="width:auto" onclick="showSection('guests')">
+              Gerenciar convidados
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- GUESTS -->
+
+    <section id="guests" class="section">
+
+      <div class="topbar">
+
+        <div>
+          <h1>Lista de presença</h1>
+          <p>Selecione o convidado e gere o QR Code.</p>
+        </div>
+
+        <button class="btn btn-primary" style="width:auto" onclick="addGuest()">
+          + Adicionar convidado
+        </button>
+
+      </div>
+
+      <div class="card table-card">
+
+        <div class="table-head">
+
+          <h2>Convidados</h2>
+
+          <input
+            class="search"
+            id="guestSearch"
+            placeholder="Pesquisar nome..."
+            oninput="renderGuests()"
+          >
+
+        </div>
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Nome</th>
+              <th>Status</th>
+              <th>QR Code</th>
+              <th>Foto</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="guestTable"></tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- PHOTOS -->
+
+    <section id="photos" class="section">
+
+      <div class="topbar">
+
+        <div>
+          <h1>Fotos recebidas</h1>
+          <p>Fotos enviadas pelos convidados.</p>
+        </div>
+
+      </div>
+
+      <div class="photos" id="photoGrid"></div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<!-- ================= EVENT MODAL ================= -->
+
+<div class="modal" id="eventModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2>Novo evento</h2>
+
+      <button class="close" onclick="closeModal('eventModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="field">
+      <label>Nome do evento</label>
+      <input id="eventName" placeholder="Ex.: Casamento João & Maria">
+    </div>
+
+    <div class="field">
+      <label>Data</label>
+      <input id="eventDate" type="date">
+    </div>
+
+    <div class="field">
+      <label>Local</label>
+      <input id="eventLocation" placeholder="Nome do local">
+    </div>
+
+    <button class="btn btn-primary" onclick="createEvent()">
+      Criar evento
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ================= QR MODAL ================= -->
+
+<div class="modal" id="qrModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2>QR Code</h2>
+
+      <button class="close" onclick="closeModal('qrModal')">
+        ×
+      </button>
+
+    </div>
+
+    <div class="qr-box">
+
+      <div class="qr-name" id="qrName"></div>
+
+      <div id="qrcode"></div>
+
+      <div class="qr-url" id="qrUrl"></div>
+
+      <button class="btn btn-primary" style="width:auto" onclick="printQR()">
+        🖨️ Imprimir QR
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= PUBLIC UPLOAD ================= -->
+
+<div id="publicPage" class="hidden">
+
+  <div class="upload-box">
+
+    <div class="logo" style="justify-content:center">
+      <div class="logo-icon">📸</div>
+      FotoEvento
+    </div>
+
+    <div id="uploadContent">
+
+      <h1>Envie sua foto</h1>
+
+      <p id="guestWelcome">
+        Você ganhou uma foto neste evento.
+        Escolha sua melhor foto para enviar.
+      </p>
+
+      <div class="drop">
+
+        <div class="drop-icon">📷</div>
+
+        <p style="margin-top:10px">
+          Selecione uma foto do seu celular.
+        </p>
+
+        <input
+          type="file"
+          id="photoInput"
+          accept="image/*"
+          style="margin-top:20px"
+          onchange="previewPhoto(event)"
+        >
+
+        <img id="preview">
+
+      </div>
+
+      <button
+        class="btn btn-primary"
+        onclick="sendPhoto()"
+      >
+        Enviar minha foto
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   DADOS DEMO
+===================================================== */
+
+let guests = [
+  {
+    id: "A7K92X",
+    name: "João da Silva",
+    used: false,
+    photo: null
+  },
+  {
+    id: "B8L31Q",
+    name: "Maria Oliveira",
+    used: true,
+    photo: "demo1"
+  },
+  {
+    id: "C4P82Z",
+    name: "Pedro Santos",
+    used: true,
+    photo: "demo2"
+  },
+  {
+    id: "D9M44K",
+    name: "Ana Souza",
+    used: false,
+    photo: null
+  },
+  {
+    id: "E2N71R",
+    name: "Carlos Lima",
+    used: false,
+    photo: null
+  }
+];
+
+let photos = [];
+
+let currentQRGuest = null;
+let currentPublicGuest = null;
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function login() {
+
+  const user = document.getElementById("loginUser").value;
+  const pass = document.getElementById("loginPass").value;
+
+  if (user === "admin" && pass === "1234") {
+
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+
+    renderGuests();
+    updateStats();
+
+  } else {
+
+    alert("Usuário ou senha incorretos.");
+
+  }
+
+}
+
+
+function logout() {
+
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("loginPage").classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+   NAVEGAÇÃO
+===================================================== */
+
+function showSection(id, button) {
+
+  document.querySelectorAll(".section")
+    .forEach(section => section.classList.remove("active"));
+
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".nav button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  if (button) {
+    button.classList.add("active");
+  }
+
+  if (id === "guests") {
+    renderGuests();
+  }
+
+  if (id === "photos") {
+    renderPhotos();
+  }
+
+}
+
+
+/* =====================================================
+   EVENTO
+===================================================== */
+
+function openEventModal() {
+  document.getElementById("eventModal").classList.add("show");
+}
+
+
+function createEvent() {
+
+  const name = document.getElementById("eventName").value;
+  const date = document.getElementById("eventDate").value;
+  const location = document.getElementById("eventLocation").value;
+
+  if (!name || !date || !location) {
+
+    alert("Preencha todos os campos.");
+
+    return;
+  }
+
+  alert(
+    "Evento criado com sucesso!\n\n" +
+    name
+  );
+
+  closeModal("eventModal");
+
+}
+
+
+/* =====================================================
+   CONVIDADOS
+===================================================== */
+
+function renderGuests() {
+
+  const tbody = document.getElementById("guestTable");
+
+  const search =
+    document.getElementById("guestSearch")?.value.toLowerCase() || "";
+
+  tbody.innerHTML = "";
+
+  guests
+    .filter(g => g.name.toLowerCase().includes(search))
+    .forEach(guest => {
+
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+
+        <td>
+          <strong>${guest.name}</strong>
+        </td>
+
+        <td>
+          ${
+            guest.used
+              ? '<span class="badge green">PRESENTE</span>'
+              : '<span class="badge yellow">AGUARDANDO</span>'
+          }
+        </td>
+
+        <td>
+
+          <button
+            class="btn"
+            style="background:#eeeaff;color:#634ce0"
+            onclick="generateQR('${guest.id}')"
+          >
+            📱 Ver QR
+          </button>
+
+        </td>
+
+        <td>
+
+          ${
+            guest.used
+              ? '<span class="badge green">RECEBIDA</span>'
+              : '<span class="badge yellow">PENDENTE</span>'
+          }
+
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+
+    });
+
+}
+
+
+function addGuest() {
+
+  const name = prompt("Nome do convidado:");
+
+  if (!name) return;
+
+  const id =
+    Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase();
+
+  guests.push({
+    id,
+    name,
+    used: false,
+    photo: null
+  });
+
+  renderGuests();
+  updateStats();
+
+}
+
+
+/* =====================================================
+   QR CODE
+===================================================== */
+
+function generateQR(id) {
+
+  const guest = guests.find(g => g.id === id);
+
+  if (!guest) return;
+
+  currentQRGuest = guest;
+
+  document.getElementById("qrName").textContent =
+    guest.name;
+
+  document.getElementById("qrcode").innerHTML = "";
+
+  /*
+    Na versão online, essa URL será substituída pelo
+    endereço real do seu site.
+
+    Exemplo:
+
+    https://fotoevento.com/f/A7K92X
+  */
+
+  const url =
+    window.location.href.split("#")[0] +
+    "#foto/" +
+    guest.id;
+
+  new QRCode(
+    document.getElementById("qrcode"),
+    {
+      text: url,
+      width: 220,
+      height: 220,
+      colorDark: "#15182a",
+      colorLight: "#ffffff"
+    }
+  );
+
+  document.getElementById("qrUrl").textContent = url;
+
+  document.getElementById("qrModal").classList.add("show");
+
+}
+
+
+function printQR() {
+
+  if (!currentQRGuest) return;
+
+  const qr = document.getElementById("qrcode").innerHTML;
+
+  const html = `
+
+    <!DOCTYPE html>
+
+    <html>
+
+    <head>
+
+      <title>QR - ${currentQRGuest.name}</title>
+
+      <style>
+
+        body {
+          text-align:center;
+          font-family:Arial;
+          padding:50px;
+        }
+
+        img {
+          margin:20px;
+        }
+
+        h1 {
+          font-size:28px;
+        }
+
+      </style>
+
+    </head>
+
+    <body>
+
+      <h1>📸 FotoEvento</h1>
+
+      <h2>${currentQRGuest.name}</h2>
+
+      ${qr}
+
+      <p>Escaneie para enviar sua foto.</p>
+
+    </body>
+
+    </html>
+
+  `;
+
+  const win = window.open("", "_blank");
+
+  win.document.write(html);
+
+  win.document.close();
+
+  win.print();
+
+}
+
+
+/* =====================================================
+   ÁREA PÚBLICA / QR
+===================================================== */
+
+function checkQR() {
+
+  const hash = window.location.hash;
+
+  if (!hash.startsWith("#foto/")) {
+    return;
+  }
+
+  const id = hash.replace("#foto/", "");
+
+  const guest = guests.find(g => g.id === id);
+
+  if (!guest) {
+
+    alert("QR Code inválido.");
+
+    return;
+
+  }
+
+  currentPublicGuest = guest;
+
+  document.getElementById("loginPage")
+    .classList.add("hidden");
+
+  document.getElementById("app")
+    .classList.add("hidden");
+
+  document.getElementById("publicPage")
+    .classList.remove("hidden");
+
+  document.getElementById("guestWelcome").innerHTML =
+    `<b>${guest.name}</b>, escolha uma foto para enviar.`;
+
+  if (guest.used) {
+
+    document.getElementById("uploadContent").innerHTML = `
+
+      <div class="success">
+
+        <h2>✅ Foto já recebida</h2>
+
+        <p style="margin-top:10px">
+          Este QR Code já foi utilizado.
+          Cada convidado pode enviar apenas uma foto.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =====================================================
+   PREVIEW
+===================================================== */
+
+function previewPhoto(event) {
+
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+
+    alert("Escolha uma imagem.");
+
+    event.target.value = "";
+
+    return;
+
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+
+    alert("A foto deve ter no máximo 10 MB.");
+
+    event.target.value = "";
+
+    return;
+
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+
+    const preview =
+      document.getElementById("preview");
+
+    preview.src = e.target.result;
+
+    preview.style.display = "block";
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =====================================================
+   ENVIAR FOTO
+===================================================== */
+
+function sendPhoto() {
+
+  if (!currentPublicGuest) return;
+
+  if (currentPublicGuest.used) {
+
+    alert("Este QR Code já foi utilizado.");
+
+    return;
+
+  }
+
+  const input =
+    document.getElementById("photoInput");
+
+  const file = input.files[0];
+
+  if (!file) {
+
+    alert("Selecione uma foto primeiro.");
+
+    return;
+
+  }
+
+  /*
+    PROTÓTIPO:
+    A foto é armazenada localmente no navegador.
+
+    Na versão real:
+    - enviaremos para o Storage
+    - registraremos no banco
+    - bloquearemos o QR no servidor
+  */
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+
+    currentPublicGuest.used = true;
+
+    currentPublicGuest.photo = e.target.result;
+
+    photos.push({
+      guest: currentPublicGuest.name,
+      image: e.target.result,
+      date: new Date().toLocaleString("pt-BR")
+    });
+
+    document.getElementById("uploadContent").innerHTML = `
+
+      <div class="success">
+
+        <div style="font-size:50px">🎉</div>
+
+        <h2>Foto enviada!</h2>
+
+        <p style="margin-top:10px">
+          Sua foto foi recebida com sucesso.
+        </p>
+
+        <p style="margin-top:10px">
+          Este QR Code não pode ser utilizado novamente.
+        </p>
+
+      </div>
+
+    `;
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =====================================================
+   FOTOS
+===================================================== */
+
+function renderPhotos() {
+
+  const grid =
+    document.getElementById("photoGrid");
+
+  grid.innerHTML = "";
+
+  if (photos.length === 0) {
+
+    grid.innerHTML = `
+
+      <div class="card">
+
+        <h3>Nenhuma foto recebida ainda.</h3>
+
+        <p style="color:#7e879b;margin-top:8px">
+          As fotos enviadas pelos convidados aparecerão aqui.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  photos.forEach(photo => {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "photo-card";
+
+    card.innerHTML = `
+
+      <img src="${photo.image}">
+
+      <div class="photo-info">
+
+        <strong>${photo.guest}</strong>
+
+        <p style="color:#8a92a5;font-size:12px;margin-top:5px">
+          ${photo.date}
+        </p>
+
+        <button
+          class="btn"
+          style="margin-top:10px;background:#eeeaff;color:#634ce0"
+          onclick="downloadPhoto('${photo.image}', '${photo.guest}')"
+        >
+          ⬇ Baixar
+        </button>
+
+      </div>
+
+    `;
+
+    grid.appendChild(card);
+
+  });
+
+}
+
+
+function downloadPhoto(src, name) {
+
+  const a =
+    document.createElement("a");
+
+  a.href = src;
+
+  a.download =
+    "Foto-" +
+    name.replace(/\s+/g, "-") +
+    ".jpg";
+
+  a.click();
+
+}
+
+
+/* =====================================================
+   ESTATÍSTICAS
+===================================================== */
+
+function updateStats() {
+
+  document.getElementById("statGuests").textContent =
+    guests.length;
+
+  document.getElementById("statPhotos").textContent =
+    guests.filter(g => g.used).length;
+
+  document.getElementById("statWaiting").textContent =
+    guests.filter(g => !g.used).length;
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function closeModal(id) {
+
+  document.getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+window.addEventListener("hashchange", checkQR);
+
+checkQR();
+
+renderGuests();
+
+updateStats();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>SaúdePerto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --bg:#F2F6F8; --surface:#FFFFFF; --surface-2:#E8F0F4;
+  --ink:#0D2433; --ink-2:#4A6270; --line:#D5E1E8;
+  --blue:#1657C7; --blue-soft:#E3EDFD;
+  --teal:#0B8F7C; --teal-soft:#DDF3EE;
+  --red:#D23B33; --red-soft:#FCE6E4;
+  --amber:#B86E00; --amber-soft:#FFF1D9;
+  --violet:#5B4FC9; --violet-soft:#ECEAFB;
+  --on-accent:#FFFFFF;
+  --shadow:0 18px 40px -22px rgba(13,36,51,.35);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0A1820; --surface:#11232E; --surface-2:#172E3B;
+    --ink:#E6F0F4; --ink-2:#9BB2BF; --line:#23404F;
+    --blue:#6FA3FF; --blue-soft:#15305A;
+    --teal:#3CCBB3; --teal-soft:#0F3A36;
+    --red:#FF7A70; --red-soft:#43201E;
+    --amber:#F2B45A; --amber-soft:#3A2A10;
+    --violet:#A69BFF; --violet-soft:#26224A;
+    --on-accent:#08141B;
+    --shadow:0 18px 40px -22px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1820; --surface:#11232E; --surface-2:#172E3B;
+  --ink:#E6F0F4; --ink-2:#9BB2BF; --line:#23404F;
+  --blue:#6FA3FF; --blue-soft:#15305A;
+  --teal:#3CCBB3; --teal-soft:#0F3A36;
+  --red:#FF7A70; --red-soft:#43201E;
+  --amber:#F2B45A; --amber-soft:#3A2A10;
+  --violet:#A69BFF; --violet-soft:#26224A;
+  --on-accent:#08141B;
+  --shadow:0 18px 40px -22px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.5}
+h1,h2,h3{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0;letter-spacing:-.02em}
+p{margin:0}
+a{color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:8px}
+.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.muted{color:var(--ink-2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:13px 18px;font:600 .96rem var(--body);cursor:pointer;text-decoration:none;transition:transform .12s, filter .15s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--blue);color:var(--on-accent)}
+.btn-teal{background:var(--teal);color:var(--on-accent)}
+.btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn-danger{background:transparent;border:1.5px solid var(--red);color:var(--red)}
+.btn-block{width:100%}
+.link{background:none;border:0;color:var(--blue);font-weight:600;cursor:pointer;padding:4px;font-size:.92rem}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em}
+.logo span{color:var(--blue)} .logo b{color:var(--teal);font-weight:800}
+ 
+/* ---------- LOGIN ---------- */
+.auth{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.auth-art{background:linear-gradient(160deg,#0E3E8C 0%,#0B6F7A 55%,#0B8F7C 100%);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between;gap:32px;position:relative;overflow:hidden}
+.auth-art::after{content:"";position:absolute;right:-120px;bottom:-120px;width:420px;height:420px;border-radius:50%;border:60px solid rgba(255,255,255,.07)}
+.auth-art h1{font-size:clamp(2.2rem,4.4vw,3.6rem);font-weight:800;max-width:12ch}
+.auth-art p{opacity:.85;max-width:38ch;margin-top:14px;font-size:1.05rem}
+.auth-art .logo span,.auth-art .logo b{color:#fff}
+.feat{display:flex;flex-direction:column;gap:14px;position:relative;z-index:1}
+.feat div{display:flex;gap:12px;align-items:center;font-weight:500}
+.feat svg{width:34px;height:34px;padding:7px;border-radius:10px;background:rgba(255,255,255,.14);flex:none}
+.auth-form{display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.form-card{width:100%;max-width:400px;display:flex;flex-direction:column;gap:18px}
+.form-card h2{font-size:2rem;margin-top:4px}
+#loginForm,#signupForm{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:32px 28px;box-shadow:var(--shadow);max-width:440px}
+.welcome{display:flex;gap:16px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.big-av{width:60px;height:60px;font-size:1.5rem;box-shadow:0 0 0 4px var(--teal-soft);transition:transform .2s}
+.big-av.pop{transform:scale(1.08)}
+.welcome h2{word-break:break-word}
+@media (max-width:520px){#loginForm,#signupForm{padding:24px 18px;border-radius:20px}.form-card h2{font-size:1.6rem}}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-weight:600;font-size:.92rem}
+.input{position:relative;display:flex;align-items:center}
+.input svg.lead{position:absolute;left:14px;width:19px;height:19px;color:var(--ink-2);pointer-events:none}
+.input input{width:100%;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:14px 46px 14px 44px;font:500 1rem var(--body)}
+.input input:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 4px var(--blue-soft)}
+.input input[aria-invalid="true"]{border-color:var(--red)}
+.input .eye{position:absolute;right:6px;background:none;border:0;color:var(--ink-2);padding:8px;cursor:pointer;border-radius:8px}
+.err{color:var(--red);font-size:.85rem;font-weight:600;min-height:1.1em}
+.demo{background:var(--amber-soft);color:var(--ink);border-radius:12px;padding:12px 14px;font-size:.86rem;display:flex;gap:10px;align-items:flex-start}
+.demo svg{color:var(--amber);flex:none;margin-top:2px}
+.or{display:flex;align-items:center;gap:12px;color:var(--ink-2);font-size:.85rem}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.row-between{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+@media (max-width:860px){
+  .auth{grid-template-columns:1fr}
+  .auth-art{padding:32px 20px}
+  .auth-art .feat{display:none}
+}
+ 
+/* ---------- APP SHELL ---------- */
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{background:var(--surface);border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.side .logo{padding:0 10px 18px}
+.nav-btn{display:flex;align-items:center;gap:12px;background:none;border:0;color:var(--ink-2);padding:11px 12px;border-radius:12px;font:600 .96rem var(--body);cursor:pointer;text-align:left;width:100%}
+.nav-btn svg{width:21px;height:21px;flex:none}
+.nav-btn:hover{background:var(--surface-2);color:var(--ink)}
+.nav-btn[aria-current="page"]{background:var(--blue-soft);color:var(--blue)}
+.nav-btn.sos-nav{color:var(--red)}
+.nav-btn.sos-nav[aria-current="page"]{background:var(--red-soft)}
+.side .spacer{flex:1}
+.main{padding:28px 32px 60px;min-width:0}
+.view{max-width:1040px;margin-inline:auto;display:flex;flex-direction:column;gap:22px;animation:fade .25s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topbar h1{font-size:clamp(1.6rem,3vw,2.2rem)}
+.back{display:none}
+.tabbar{display:none}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  .main{padding:18px 16px calc(96px + env(safe-area-inset-bottom,0px))}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px));justify-content:space-around;z-index:20}
+  .tabbar .nav-btn{flex-direction:column;gap:3px;font-size:.7rem;padding:6px 4px;align-items:center;width:auto;flex:1;border-radius:10px}
+  .tabbar .nav-btn[aria-current="page"]{background:none}
+}
+ 
+/* ---------- COMPONENTS ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+.hello{display:flex;align-items:center;gap:14px}
+.avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--blue));color:#fff;display:grid;place-items:center;font-weight:800;font-family:var(--display);font-size:1.2rem;flex:none}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tile{border:0;border-radius:20px;padding:20px 18px;color:#fff;font:700 1.05rem var(--body);display:flex;flex-direction:column;align-items:flex-start;gap:22px;cursor:pointer;text-align:left;min-height:130px;transition:transform .15s}
+.tile:hover{transform:translateY(-3px)}
+.tile svg{width:30px;height:30px}
+.tile small{display:block;font-weight:500;opacity:.85;font-size:.82rem;margin-top:2px}
+.t-blue{background:#1657C7}.t-teal{background:#0B8F7C}.t-red{background:#D23B33}.t-violet{background:#5B4FC9}
+@media (max-width:860px){.tiles{grid-template-columns:1fr 1fr}}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+.card h3{font-size:1.15rem;margin-bottom:12px}
+.item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0;padding-bottom:0}
+.item b{display:block;font-size:.97rem}
+.item small{color:var(--ink-2);font-size:.85rem}
+.item .end{margin-left:auto;display:flex;align-items:center;gap:8px}
+.ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.ico svg{width:21px;height:21px}
+.i-pub{background:var(--teal-soft);color:var(--teal)}
+.i-part{background:var(--blue-soft);color:var(--blue)}
+.i-fil{background:var(--amber-soft);color:var(--amber)}
+.i-red{background:var(--red-soft);color:var(--red)}
+.i-vio{background:var(--violet-soft);color:var(--violet)}
+.tag{font-size:.74rem;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.tag.pub{background:var(--teal-soft);color:var(--teal)}
+.tag.part{background:var(--blue-soft);color:var(--blue)}
+.tag.fil{background:var(--amber-soft);color:var(--amber)}
+.tag.ps{background:var(--red-soft);color:var(--red)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.next{background:var(--amber-soft);border:0}
+.next b{color:var(--amber)}
+ 
+/* busca */
+.segs{display:flex;gap:8px;flex-wrap:wrap}
+.seg{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 15px;font:600 .9rem var(--body);cursor:pointer}
+.seg[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters{display:flex;gap:10px;flex-wrap:wrap}
+.filters input,.filters select{flex:1 1 200px;min-width:0;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:12px 14px;font:500 .96rem var(--body)}
+.filters select{flex:0 1 200px}
+.toggle{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.92rem;cursor:pointer}
+.toggle input{accent-color:var(--red);width:18px;height:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.hcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
+.hcard:hover{border-color:var(--teal);transform:translateY(-2px)}
+.hcard h3{font-family:var(--body);font-size:1rem;font-weight:700;line-height:1.3;margin:0}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.empty{padding:36px;text-align:center;color:var(--ink-2);background:var(--surface);border:1px dashed var(--line);border-radius:18px}
+.ext{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.ext p{flex:1 1 240px}
+ 
+/* detalhe */
+.hero-h{border-radius:20px;padding:26px;background:linear-gradient(150deg,var(--blue-soft),var(--teal-soft));display:flex;flex-direction:column;gap:12px}
+.hero-h h2{font-size:clamp(1.5rem,3vw,2.1rem)}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.act{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:600;font-size:.88rem;color:var(--blue);text-decoration:none;cursor:pointer}
+.act svg{width:22px;height:22px}
+.act[aria-pressed="true"]{color:var(--red);border-color:var(--red)}
+.info{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;font-size:.95rem}
+.info dt{color:var(--ink-2);font-weight:600}
+.info dd{margin:0}
+ 
+/* consultas / remédios */
+.tabs2{display:flex;background:var(--surface-2);border-radius:12px;padding:4px;gap:4px;max-width:360px}
+.tabs2 button{flex:1;border:0;background:none;padding:9px;border-radius:9px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.tabs2 button[aria-selected="true"]{background:var(--surface);color:var(--blue);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.appt{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.date{background:var(--blue-soft);color:var(--blue);border-radius:14px;padding:10px 12px;text-align:center;min-width:64px}
+.date b{display:block;font-family:var(--display);font-size:1.5rem;line-height:1}
+.date small{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end}
+.form-grid label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.88rem}
+.form-grid input,.form-grid select{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:11px 12px;font:500 .95rem var(--body);width:100%}
+.check{width:30px;height:30px;border-radius:9px;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;color:transparent}
+.check[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.day{flex:0 0 auto;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 14px;text-align:center;font-weight:600;font-size:.82rem;cursor:pointer;color:var(--ink)}
+.day b{display:block;font-size:1.05rem;font-family:var(--mono)}
+.day[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:var(--on-accent)}
+.progress{height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--teal);border-radius:99px;transition:width .3s}
+ 
+/* SOS */
+.sos-big{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sosn{background:var(--red-soft);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:6px}
+.sosn strong{font-family:var(--display);font-size:3rem;color:var(--red);line-height:1;letter-spacing:-.03em}
+.sosn span{font-weight:700}
+.sosn small{color:var(--ink-2)}
+.copy{align-self:flex-start;margin-top:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-weight:600;font-size:.84rem;cursor:pointer;color:var(--ink)}
+@media (max-width:860px){.sos-big{grid-template-columns:1fr}}
+.steps{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
+ 
+/* perfil */
+.menu-list button{display:flex;width:100%;align-items:center;gap:12px;background:none;border:0;border-bottom:1px solid var(--line);padding:14px 4px;font:600 .96rem var(--body);color:var(--ink);cursor:pointer;text-align:left}
+.menu-list button:last-child{border-bottom:0}
+.menu-list svg{width:20px;height:20px;color:var(--blue)}
+.menu-list .chev{margin-left:auto;color:var(--ink-2)}
+.switch{margin-left:auto;width:44px;height:26px;border-radius:99px;background:var(--line);position:relative;border:0;cursor:pointer;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
+.switch[aria-checked="true"]{background:var(--teal)}
+.switch[aria-checked="true"]::after{left:21px}
+.lgpd{display:flex;gap:12px;align-items:center;background:var(--teal-soft);border-radius:14px;padding:14px}
+.lgpd svg{color:var(--teal);flex:none}
+ 
+/* projeto */
+.proj{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.proj .card p{color:var(--ink-2)}
+.proj .card h3{margin-top:8px;margin-bottom:8px}
+.s5{grid-column:span 5}.s7{grid-column:span 7}.s4{grid-column:span 4}.s8{grid-column:span 8}.s12{grid-column:span 12}
+.dark-card{background:var(--ink);border:0}
+.dark-card h3{color:var(--bg)}
+.dark-card p{color:color-mix(in srgb,var(--bg) 78%,var(--ink))!important}
+.quote{font-family:var(--display);font-size:clamp(1.25rem,2.4vw,1.7rem);font-weight:600;line-height:1.25;margin:10px 0 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chips span{padding:6px 12px;border-radius:999px;background:var(--surface-2);font-weight:600;font-size:.85rem}
+@media (max-width:860px){.proj>*{grid-column:1/-1}}
+ 
+/* extras */
+.top-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{position:relative;width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.icon-btn svg{width:21px;height:21px}
+.badge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:.7rem;font-weight:800;min-width:20px;height:20px;border-radius:99px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--bg)}
+.notif{position:absolute;right:0;top:54px;width:min(340px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:8px 16px;z-index:30}
+.notif h4{margin:8px 0 2px;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.home-search{display:flex;gap:10px;background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:6px 6px 6px 16px;align-items:center}
+.home-search svg{width:20px;height:20px;color:var(--ink-2);flex:none}
+.home-search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:500 1rem var(--body);padding:10px 0}
+.home-search input:focus{outline:none}
+.shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;font:600 .92rem var(--body);color:var(--ink);text-align:left}
+.sc:hover{border-color:var(--blue)}
+.sc small{display:block;color:var(--ink-2);font-weight:500;font-size:.78rem}
+@media (max-width:860px){.shortcuts{grid-template-columns:1fr 1fr}}
+.tip{display:flex;gap:16px;align-items:center;background:var(--blue-soft);border:0}
+.tip .big{font-family:var(--display);font-size:2.4rem;color:var(--blue);line-height:1;flex:none;width:52px;text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.stat b{font-family:var(--display);font-size:2rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat small{color:var(--ink-2);font-weight:600}
+@media (max-width:520px){.stats{grid-template-columns:1fr 1fr 1fr}.stat{padding:12px}.stat b{font-size:1.5rem}}
+/* onde ir */
+.sympt{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.sy{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:14px;text-align:left;font:600 .93rem var(--body);cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.sy i{width:10px;height:10px;border-radius:50%;margin-top:6px;flex:none}
+.sy[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
+.result{border-radius:20px;padding:22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.result .lvl{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;color:#fff}
+.result .lvl svg{width:32px;height:32px}
+.result h3{font-size:1.4rem;margin-bottom:4px}
+.r-ubs{background:var(--teal-soft)}.r-ubs .lvl{background:#0B8F7C}
+.r-upa{background:var(--amber-soft)}.r-upa .lvl{background:#C77700}
+.r-192{background:var(--red-soft)}.r-192 .lvl{background:#D23B33}
+.scale{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.scale div{border-radius:14px;padding:14px;font-size:.88rem}
+.scale b{display:block;font-size:1rem;margin-bottom:4px}
+@media (max-width:640px){.scale{grid-template-columns:1fr}.result{grid-template-columns:1fr}}
+/* vacinas */
+.vac{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.vac:last-child{border:0}
+.vac b{display:block}
+.vac small{color:var(--ink-2);font-size:.85rem}
+.vstat{border:0;border-radius:999px;padding:7px 12px;font:700 .8rem var(--body);cursor:pointer}
+.vstat.ok{background:var(--teal-soft);color:var(--teal)}
+.vstat.pend{background:var(--amber-soft);color:var(--amber)}
+.ring{--p:0;width:120px;height:120px;border-radius:50%;background:conic-gradient(var(--teal) calc(var(--p)*1%),var(--surface-2) 0);display:grid;place-items:center;flex:none}
+.ring span{width:92px;height:92px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-family:var(--display);font-size:1.6rem;font-weight:800}
+/* ficha */
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.ficha label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.88rem}
+.ficha input,.ficha select{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:11px 12px;font:500 .95rem var(--body);width:100%}
+.idcard{background:linear-gradient(140deg,#D23B33,#9E2A24);color:#fff;border-radius:20px;padding:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+.idcard small{display:block;opacity:.8;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.idcard b{font-size:1.05rem}
+.idcard .blood{font-family:var(--display);font-size:2.4rem;line-height:1}
+.fs{display:flex;gap:8px}
+.fs button{flex:1;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px;font-weight:700;cursor:pointer}
+.fs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+ 
+.devs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.dev{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;gap:16px;align-items:center}
+.dev .avatar{width:64px;height:64px;font-size:1.4rem}
+.dev b{display:block;font-size:1.05rem;line-height:1.3}
+.dev small{color:var(--teal);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+.help-login{display:flex;gap:8px;align-items:center;justify-content:center;font-size:.88rem;color:var(--ink-2);flex-wrap:wrap;text-align:center}
+.support-box textarea{width:100%;min-height:110px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:12px;font:500 .95rem var(--body);resize:vertical}
+.support-box select{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:11px 12px;font:500 .95rem var(--body);width:100%}
+.modal-bg{position:fixed;inset:0;background:rgba(8,20,27,.55);display:grid;place-items:center;z-index:60;padding:16px}
+.modal{background:var(--surface);border-radius:22px;padding:26px;max-width:520px;width:100%;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);max-height:90vh;overflow:auto}
+.modal .dev{padding:14px}
+ 
+/* picadas + IA */
+.bite{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:18px;align-items:start}
+@media (max-width:980px){.bite{grid-template-columns:1fr}}
+.animals{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.an{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:12px 10px;font:600 .88rem var(--body);cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left}
+.an .em{font-size:1.5rem;line-height:1}
+.an[aria-pressed="true"]{border-color:var(--red);box-shadow:0 0 0 2px var(--red) inset;background:var(--red-soft)}
+.lbl{font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px;display:block}
+.symp{display:flex;flex-wrap:wrap;gap:8px}
+.symp label{display:flex;gap:7px;align-items:center;border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;font-weight:600;font-size:.85rem;cursor:pointer;background:var(--surface)}
+.symp input{accent-color:var(--red)}
+.symp label:has(input:checked){border-color:var(--red);background:var(--red-soft)}
+.bite select,.bite input[type=text]{width:100%;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:11px 12px;font:500 .95rem var(--body)}
+.chat{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-height:460px}
+.chat-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);background:linear-gradient(120deg,var(--blue-soft),var(--teal-soft))}
+.bot{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#1657C7,#0B8F7C);color:#fff;display:grid;place-items:center;flex:none}
+.bot svg{width:22px;height:22px}
+.status-dot{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--ink-2)}
+.status-dot i{width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.status-dot.on i{background:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
+.msgs{flex:1;padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;max-height:560px}
+.msg{max-width:92%;padding:12px 14px;border-radius:16px;font-size:.94rem;line-height:1.5}
+.msg.me{align-self:flex-end;background:var(--blue);color:var(--on-accent);border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:var(--surface-2);border-bottom-left-radius:4px}
+.msg.ai ul{margin:6px 0;padding-left:1.1em}
+.msg.ai p{margin:0 0 6px}
+.msg.ai p:last-child{margin:0}
+.msg.ai h5{margin:10px 0 4px;font-size:.92rem;font-family:var(--body)}
+.typing{display:inline-flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--ink-2);animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+.chat-in{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.chat-in input{flex:1;min-width:0;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:11px 12px;font:500 .95rem var(--body)}
+.sev{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:800;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.sev.s192{background:var(--red);color:#fff}.sev.surg{background:var(--amber);color:#fff}.sev.subs{background:var(--teal);color:#fff}
+.dodont{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dodont ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;font-size:.92rem}
+@media (max-width:640px){.dodont{grid-template-columns:1fr}}
+ 
+/* alertas */
+.alerts{display:flex;flex-direction:column;gap:12px}
+.al{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--lvc);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.al.alto{--lvc:var(--red)}.al.mod{--lvc:var(--amber)}.al.baixo{--lvc:var(--teal)}
+.al-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.al-head h3{font-size:1.15rem;flex:1;min-width:180px}
+.lvl-pill{font-size:.74rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;color:#fff;background:var(--lvc)}
+.al-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:.9rem}
+.al-grid b{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
+.al-grid ul{margin:0;padding-left:1.1em}
+@media (max-width:760px){.al-grid{grid-template-columns:1fr}}
+.months{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;max-width:360px}
+.months span{height:8px;border-radius:3px;background:var(--surface-2)}
+.months span.hi{background:var(--lvc)}
+.months span.now{outline:2px solid var(--ink);outline-offset:1px}
+.alert-banner{display:flex;gap:14px;align-items:center;border:0;border-radius:18px;padding:16px 18px;background:var(--amber-soft);cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.alert-banner.alto{background:var(--red-soft)}
+ 
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;z-index:50;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+@media (min-width:861px){.toast{bottom:28px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+ 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1657C7"/><stop offset="1" stop-color="#0B8F7C"/></linearGradient>
+    <symbol id="i-logo" viewBox="0 0 40 40"><path d="M20 38C12 30 3 23 3 13.5 3 7.7 7.5 3 13 3c3 0 5.4 1.4 7 3.6C21.6 4.4 24 3 27 3c5.5 0 10 4.7 10 10.5C37 23 28 30 20 38z" fill="url(#lg)"/><path d="M17.5 11h5v5h5v5h-5v5h-5v-5h-5v-5h5z" fill="#fff"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+    <symbol id="i-pill" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-45 12 12)"/><path d="m8.5 8.5 7 7"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></symbol>
+    <symbol id="i-sos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
+    <symbol id="i-hosp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 7v6M9 10h6M9 21v-4h6v4"/></symbol>
+    <symbol id="i-steth" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6a4 4 0 0 0 8 0V3M10 13v3a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="12" r="2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-id" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 1.9-2.4 3.5-2.4s2.9.8 3.5 2.4M15 10h3M15 13h3"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="i-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></symbol>
+    <symbol id="i-syringe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 2 4 4M17 3l4 4M19 5l-9.5 9.5M14 4l6 6M8 10l6 6-4 4-6-6zM4 20l2-2"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 4.9.7c0 1.7-2.4 2.1-2.4 3.8M12 17v.01"/></symbol>
+    <symbol id="i-bug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20c-3.3 0-5-2.7-5-6v-2a5 5 0 0 1 10 0v2c0 3.3-1.7 6-5 6zM12 20v-9M7 13H3M21 13h-4M7.5 8.5 5 6M16.5 8.5 19 6M8 18l-3 2M16 18l3 2M9.5 7a2.5 2.5 0 0 1 5 0"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.01" stroke-linecap="round"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M12 9v5M9.5 11.5h5"/></symbol>
+  </defs>
+</svg>
+ 
+<!-- ============ LOGIN ============ -->
+<div id="authScreen" class="auth">
+  <div class="auth-art">
+    <div class="logo"><svg width="36" height="36"><use href="#i-logo"/></svg><span>Saúde</span><b>Perto</b></div>
+    <div style="position:relative;z-index:1">
+      <h1>Sua saúde mais perto de você.</h1>
+      <p>Hospitais, clínicas, UPAs e farmácias, suas consultas e seus remédios. Tudo o que você precisa para cuidar da saúde, em um só lugar.</p>
+    </div>
+    <div class="feat">
+      <div><svg><use href="#i-pin"/></svg>Encontre hospitais públicos e particulares perto de você</div>
+      <div><svg><use href="#i-cal"/></svg>Organize consultas, exames e retornos</div>
+      <div><svg><use href="#i-bell"/></svg>Receba lembretes dos seus remédios</div>
+    </div>
+  </div>
+ 
+  <div class="auth-form">
+    <!-- Entrar -->
+    <form class="form-card" id="loginForm" novalidate>
+      <div class="welcome">
+        <div class="avatar big-av" id="liveAv" aria-hidden="true"><svg width="26" height="26"><use href="#i-user"/></svg></div>
+        <div>
+          <p class="eyebrow" id="liveEyebrow">Bem-vindo de volta</p>
+          <h2 id="liveTitle">Entrar</h2>
+          <p class="muted" id="liveSub" style="font-size:.93rem;margin-top:4px">Acesse sua conta para cuidar da sua saúde.</p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="lnome">Seu nome</label>
+        <div class="input"><svg class="lead"><use href="#i-user"/></svg>
+          <input id="lnome" autocomplete="off" placeholder="Como você quer ser chamado" maxlength="40"></div>
+        <span class="err" id="lnomeErr"></span>
+      </div>
+      <div class="field">
+        <label for="cpf">CPF</label>
+        <div class="input"><svg class="lead"><use href="#i-id"/></svg>
+          <input id="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" maxlength="14"></div>
+        <span class="err" id="cpfErr"></span>
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <div class="input"><svg class="lead"><use href="#i-lock"/></svg>
+          <input id="senha" type="password" autocomplete="off" placeholder="Digite sua senha">
+          <button class="eye" type="button" data-eye="senha" aria-label="Mostrar senha"><svg width="20" height="20"><use href="#i-eye"/></svg></button></div>
+        <span class="err" id="senhaErr"></span>
+      </div>
+      <div class="row-between">
+        <button class="link" type="button" id="forgot">Esqueceu sua senha?</button>
+        <button class="link" type="button" id="fillDemo">Usar CPF de teste</button>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+      <div class="or">ou</div>
+      <button class="btn btn-ghost btn-block" type="button" id="toSignup">Criar conta</button>
+      <div class="help-login"><svg width="18" height="18"><use href="#i-help"/></svg>Problemas para entrar? <button class="link" type="button" id="openHelp">Fale com as desenvolvedoras</button></div>
+    </form>
+ 
+    <!-- Criar conta -->
+    <form class="form-card" id="signupForm" novalidate hidden>
+      <div>
+        <p class="eyebrow">Leva menos de 1 minuto</p>
+        <h2 style="margin-top:6px">Criar conta</h2>
+      </div>
+      <div class="field">
+        <label for="nome">Nome completo</label>
+        <div class="input"><svg class="lead"><use href="#i-user"/></svg><input id="nome" autocomplete="off" placeholder="Como você quer ser chamado"></div>
+        <span class="err" id="nomeErr"></span>
+      </div>
+      <div class="field">
+        <label for="cpf2">CPF</label>
+        <div class="input"><svg class="lead"><use href="#i-id"/></svg><input id="cpf2" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" maxlength="14"></div>
+        <span class="err" id="cpf2Err"></span>
+      </div>
+      <div class="field">
+        <label for="senha2">Senha</label>
+        <div class="input"><svg class="lead"><use href="#i-lock"/></svg><input id="senha2" type="password" autocomplete="off" placeholder="Crie uma senha">
+          <button class="eye" type="button" data-eye="senha2" aria-label="Mostrar senha"><svg width="20" height="20"><use href="#i-eye"/></svg></button></div>
+        <span class="err" id="senha2Err"></span>
+      </div>
+      <label class="toggle" style="font-weight:500"><input type="checkbox" id="aceite" style="accent-color:var(--teal)"> Li e aceito a Política de Privacidade (LGPD)</label>
+      <span class="err" id="aceiteErr"></span>
+      <button class="btn btn-teal btn-block" type="submit">Criar conta e entrar</button>
+      <button class="link" type="button" id="toLogin">Já tenho uma conta</button>
+    </form>
+  </div>
+</div>
+ 
+<!-- ============ APP ============ -->
+<div id="appScreen" class="app" hidden>
+  <aside class="side" aria-label="Menu">
+    <div class="logo"><svg width="32" height="32"><use href="#i-logo"/></svg><span>Saúde</span><b>Perto</b></div>
+    <button class="nav-btn" data-go="inicio"><svg><use href="#i-home"/></svg>Início</button>
+    <button class="nav-btn" data-go="buscar"><svg><use href="#i-map"/></svg>Buscar hospitais</button>
+    <button class="nav-btn" data-go="consultas"><svg><use href="#i-cal"/></svg>Consultas</button>
+    <button class="nav-btn" data-go="remedios"><svg><use href="#i-pill"/></svg>Remédios</button>
+    <button class="nav-btn" data-go="ondeir"><svg><use href="#i-compass"/></svg>Onde ir?</button>
+    <button class="nav-btn" data-go="picada"><svg><use href="#i-bug"/></svg>Picadas e mordidas</button>
+    <button class="nav-btn" data-go="vacinas"><svg><use href="#i-syringe"/></svg>Vacinas</button>
+    <button class="nav-btn" data-go="alertas"><svg><use href="#i-alert"/></svg>Alertas na região</button>
+    <button class="nav-btn sos-nav" data-go="emergencia"><svg><use href="#i-sos"/></svg>Emergência</button>
+    <button class="nav-btn" data-go="perfil"><svg><use href="#i-user"/></svg>Meu perfil</button>
+    <button class="nav-btn" data-go="projeto"><svg><use href="#i-info"/></svg>Sobre o projeto</button>
+    <button class="nav-btn" data-go="suporte"><svg><use href="#i-help"/></svg>Ajuda e suporte</button>
+    <div class="spacer"></div>
+    <button class="nav-btn" data-logout style="color:var(--red)"><svg><use href="#i-exit"/></svg>Sair</button>
+  </aside>
+ 
+  <main class="main">
+    <!-- INÍCIO -->
+    <section class="view" data-view="inicio">
+      <div class="topbar">
+        <div class="hello"><div class="avatar" data-initial>K</div>
+          <div><h1>Olá, <span data-first>Kaiky</span>!</h1><p class="muted" id="greetTxt">Cuidar da sua saúde é a nossa prioridade.</p></div></div>
+        <div class="top-actions" style="position:relative">
+          <button class="icon-btn" data-theme-toggle aria-label="Alternar modo escuro"><svg><use href="#i-moon"/></svg></button>
+          <button class="icon-btn" id="bell" aria-label="Notificações" aria-expanded="false"><svg><use href="#i-bell"/></svg><span class="badge" id="bellN">0</span></button>
+          <div class="notif" id="notif" hidden></div>
+        </div>
+      </div>
+      <form class="home-search" id="homeSearch" role="search">
+        <svg><use href="#i-map"/></svg>
+        <input id="homeQ" type="search" placeholder="Buscar hospital, cidade ou especialidade" aria-label="Buscar">
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </form>
+      <button class="alert-banner" id="homeAlert" data-go="alertas"></button>
+      <div class="tiles">
+        <button class="tile t-blue" data-go="buscar" data-tipo="hosp"><svg><use href="#i-hosp"/></svg><span>Hospitais<small>Públicos e particulares</small></span></button>
+        <button class="tile t-teal" data-go="buscar" data-tipo="clin"><svg><use href="#i-steth"/></svg><span>Clínicas e UBS<small>Atendimento básico</small></span></button>
+        <button class="tile t-red" data-go="buscar" data-tipo="upa"><svg><use href="#i-sos"/></svg><span>UPAs 24h<small>Urgência</small></span></button>
+        <button class="tile t-violet" data-go="buscar" data-tipo="farm"><svg><use href="#i-pill"/></svg><span>Farmácias<small>Remédios e genéricos</small></span></button>
+      </div>
+      <div class="two">
+        <div class="card">
+          <div class="row-between" style="margin-bottom:4px"><h3 style="margin:0">Próxima consulta</h3><button class="link" data-go="consultas">Ver todas</button></div>
+          <div id="homeAppt"></div>
+        </div>
+        <div class="card next">
+          <div class="row-between" style="margin-bottom:8px"><h3 style="margin:0">Remédios de hoje</h3><button class="link" data-go="remedios">Abrir</button></div>
+          <p id="homeMedTxt" style="margin-bottom:12px"></p>
+          <div class="progress"><i id="homeMedBar"></i></div>
+        </div>
+      </div>
+      <button class="card" data-go="picada" style="display:flex;gap:16px;align-items:center;text-align:left;cursor:pointer;font:inherit;color:inherit;background:linear-gradient(120deg,var(--red-soft),var(--amber-soft));border:0;width:100%">
+        <span class="bot" style="background:linear-gradient(135deg,#D23B33,#C77700)"><svg><use href="#i-bug"/></svg></span>
+        <span style="flex:1"><b style="font-size:1.05rem">Foi picado ou mordido por algum bicho?</b><br><span class="muted">Fale com a IA do SaúdePerto: ela indica o soro ou remédio certo e o melhor hospital.</span></span>
+        <span class="btn btn-danger" style="flex:none;background:var(--surface)"><svg width="18" height="18"><use href="#i-spark"/></svg>Falar com a IA</span>
+      </button>
+      <div class="shortcuts">
+        <button class="sc" data-go="ondeir"><span class="ico i-part"><svg><use href="#i-compass"/></svg></span><span>Onde ir?<small>UBS, UPA ou 192</small></span></button>
+        <button class="sc" data-go="vacinas"><span class="ico i-pub"><svg><use href="#i-syringe"/></svg></span><span>Vacinas<small id="scVac">Carteira digital</small></span></button>
+        <button class="sc" data-go="perfil" data-scroll="fichaCard"><span class="ico i-red"><svg><use href="#i-drop"/></svg></span><span>Ficha médica<small>Para emergências</small></span></button>
+        <button class="sc" id="scFav"><span class="ico i-fil"><svg fill="none"><use href="#i-heart"/></svg></span><span>Favoritos<small id="scFavN">0 hospitais</small></span></button>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="stH">28</b><small>hospitais no diretório</small></div>
+        <div class="stat"><b id="stC">0</b><small>consultas marcadas</small></div>
+        <div class="stat"><b id="stV">0%</b><small>vacinas em dia</small></div>
+      </div>
+      <div class="card tip">
+        <span class="big" id="tipN">01</span>
+        <div style="flex:1"><p class="eyebrow" style="color:var(--blue)">Dica de saúde do dia</p><p id="tipTxt" style="margin-top:4px;font-weight:500"></p></div>
+        <button class="btn btn-ghost" id="tipNext" style="flex:none">Próxima</button>
+      </div>
+      <div class="card" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--red-soft);border:0">
+        <span class="ico i-red" style="background:var(--surface)"><svg><use href="#i-sos"/></svg></span>
+        <p style="flex:1 1 220px"><b>Emergência?</b> Veja os números gratuitos e o que fazer até a ajuda chegar.</p>
+        <button class="btn btn-danger" data-go="emergencia">Abrir emergência</button>
+      </div>
+    </section>
+ 
+    <!-- BUSCAR -->
+    <section class="view" data-view="buscar" hidden>
+      <div class="topbar"><h1>Buscar atendimento</h1></div>
+      <div class="segs" role="group" aria-label="Tipo de serviço">
+        <button class="seg" data-seg="hosp">Hospitais</button>
+        <button class="seg" data-seg="clin">Clínicas e UBS</button>
+        <button class="seg" data-seg="upa">UPAs 24h</button>
+        <button class="seg" data-seg="farm">Farmácias</button>
+      </div>
+      <div id="hospPanel" style="display:flex;flex-direction:column;gap:16px">
+        <div class="filters">
+          <input id="q" type="search" placeholder="Hospital, cidade ou especialidade" aria-label="Buscar">
+          <select id="uf" aria-label="Estado"></select>
+          <select id="tipo" aria-label="Atendimento"><option value="">Todos os atendimentos</option><option value="pub">Público (SUS)</option><option value="fil">Filantrópico</option><option value="part">Particular</option></select>
+        </div>
+        <label class="toggle"><input type="checkbox" id="ps"> Só com pronto-socorro</label>
+        <p class="muted" id="count" style="font-size:.92rem"></p>
+        <div class="grid" id="grid"></div>
+        <p class="muted" style="font-size:.82rem">Horários e serviços mudam. Confirme com o hospital antes de ir. Em risco de vida, ligue 192.</p>
+      </div>
+      <div id="extPanel" class="card ext" hidden>
+        <span class="ico" id="extIco"></span>
+        <p id="extTxt"></p>
+        <a class="btn btn-primary" id="extLink" target="_blank" rel="noopener"><svg width="18" height="18"><use href="#i-pin"/></svg>Abrir no mapa</a>
+      </div>
+    </section>
+ 
+    <!-- DETALHE -->
+    <section class="view" data-view="detalhe" hidden>
+      <div class="topbar"><button class="btn btn-ghost" data-go="buscar"><svg width="18" height="18"><use href="#i-back"/></svg>Voltar</button></div>
+      <div class="hero-h" id="detHero"></div>
+      <div class="actions">
+        <a class="act" id="detRota" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg>Rota</a>
+        <button class="act" id="detFav" aria-pressed="false"><svg fill="none"><use href="#i-heart"/></svg>Favoritar</button>
+        <button class="act" id="detAgendar"><svg><use href="#i-cal"/></svg>Agendar</button>
+      </div>
+      <div class="card"><h3>Informações</h3><dl class="info" id="detInfo"></dl></div>
+    </section>
+ 
+    <!-- CONSULTAS -->
+    <section class="view" data-view="consultas" hidden>
+      <div class="topbar"><h1>Minhas consultas</h1></div>
+      <div class="tabs2" role="tablist">
+        <button role="tab" aria-selected="true" data-ctab="prox">Próximas</button>
+        <button role="tab" aria-selected="false" data-ctab="hist">Histórico</button>
+      </div>
+      <div class="card" id="apptList"></div>
+      <form class="card" id="apptForm">
+        <h3>Agendar nova consulta ou exame</h3>
+        <div class="form-grid">
+          <label>Tipo<select id="aTipo"><option>Consulta médica</option><option>Retorno médico</option><option>Exame</option></select></label>
+          <label>Especialidade<input id="aEsp" placeholder="Ex.: Cardiologia" required></label>
+          <label>Local<input id="aLocal" placeholder="Ex.: UBS Vila Nova" required></label>
+          <label>Data<input id="aData" type="date" required></label>
+          <label>Horário<input id="aHora" type="time" value="09:00" required></label>
+          <button class="btn btn-primary" type="submit">Salvar</button>
+        </div>
+      </form>
+    </section>
+ 
+    <!-- REMÉDIOS -->
+    <section class="view" data-view="remedios" hidden>
+      <div class="topbar"><h1>Meus remédios</h1></div>
+      <div class="days" id="days"></div>
+      <div class="card">
+        <div class="row-between" style="margin-bottom:10px"><h3 style="margin:0" id="medTitle">Hoje</h3><span class="muted mono" id="medCount"></span></div>
+        <div class="progress" style="margin-bottom:6px"><i id="medBar"></i></div>
+        <div id="medList"></div>
+      </div>
+      <form class="card" id="medForm">
+        <h3>Adicionar remédio</h3>
+        <div class="form-grid">
+          <label>Nome e dose<input id="mNome" placeholder="Ex.: Dipirona 500mg" required></label>
+          <label>Quantidade<input id="mQtd" placeholder="Ex.: 1 comprimido" required></label>
+          <label>Horário<input id="mHora" type="time" value="08:00" required></label>
+          <button class="btn btn-teal" type="submit">Adicionar</button>
+        </div>
+      </form>
+    </section>
+ 
+    <!-- EMERGÊNCIA -->
+    <section class="view" data-view="emergencia" hidden>
+      <div class="topbar"><h1 style="color:var(--red)">Emergência</h1></div>
+      <p class="muted">Ligações gratuitas, 24 horas, em todo o Brasil.</p>
+      <div class="sos-big">
+        <div class="sosn"><strong>192</strong><span>SAMU</span><small>Ambulância para urgências médicas</small><button class="copy" data-copy="192">Copiar número</button></div>
+        <div class="sosn"><strong>193</strong><span>Corpo de Bombeiros</span><small>Resgate, acidentes e incêndios</small><button class="copy" data-copy="193">Copiar número</button></div>
+        <div class="sosn"><strong>136</strong><span>Disque Saúde</span><small>Informações sobre o SUS</small><button class="copy" data-copy="136">Copiar número</button></div>
+      </div>
+      <div>
+        <div class="row-between" style="margin-bottom:10px"><h3 style="margin:0">Minha ficha médica</h3><button class="link" data-go="perfil" data-scroll="fichaCard">Editar</button></div>
+        <div class="idcard" id="idcard"></div>
+      </div>
+      <div class="two">
+        <div class="card"><h3>Enquanto a ajuda não chega</h3>
+          <ol class="steps"><li>Mantenha a calma e fique em local seguro.</li><li>Informe endereço completo e um ponto de referência.</li><li>Diga o que aconteceu e quantas pessoas precisam de ajuda.</li><li>Não desligue até o atendente orientar.</li></ol></div>
+        <div class="card"><h3>Pronto-socorro mais perto</h3>
+          <p class="muted" style="margin-bottom:14px">Veja hospitais com pronto-socorro ou procure UPAs 24h no mapa.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-danger" id="goPS">Hospitais com pronto-socorro</button>
+            <button class="btn btn-ghost" data-go="picada">Picada ou mordida</button>
+            <button class="btn btn-ghost" data-go="buscar" data-tipo="upa">UPAs 24h</button>
+          </div></div>
+      </div>
+    </section>
+ 
+    <!-- PERFIL -->
+    <section class="view" data-view="perfil" hidden>
+      <div class="topbar"><h1>Meu perfil</h1></div>
+      <div class="card hello"><div class="avatar" data-initial>K</div><div><b style="font-size:1.15rem" data-fullname>Kaiky Pereira</b><p class="muted mono" id="cpfMask"></p></div></div>
+      <div class="two">
+        <div class="card menu-list">
+          <button data-go="consultas"><svg><use href="#i-cal"/></svg>Minhas consultas<span class="chev">›</span></button>
+          <button data-go="remedios"><svg><use href="#i-pill"/></svg>Meus remédios<span class="chev">›</span></button>
+          <button data-go="buscar" id="favBtn"><svg><use href="#i-heart" fill="none"/></svg>Hospitais favoritos<span class="chev" id="favCount">0</span></button>
+          <button data-go="projeto"><svg><use href="#i-info"/></svg>Sobre o SaúdePerto<span class="chev">›</span></button>
+          <button data-go="suporte"><svg><use href="#i-help"/></svg>Ajuda e suporte<span class="chev">›</span></button>
+        </div>
+        <div class="card">
+          <h3>Privacidade e segurança</h3>
+          <div class="menu-list">
+            <button type="button" data-sw><svg><use href="#i-bell"/></svg>Lembretes de remédio<span class="switch" role="switch" aria-checked="true"></span></button>
+            <button type="button" data-sw><svg><use href="#i-cal"/></svg>Aviso 3 dias antes da consulta<span class="switch" role="switch" aria-checked="true"></span></button>
+            <button type="button" data-sw><svg><use href="#i-pin"/></svg>Usar minha localização<span class="switch" role="switch" aria-checked="false"></span></button>
+          </div>
+          <div class="lgpd" style="margin-top:12px"><svg width="26" height="26"><use href="#i-shield"/></svg><span style="font-size:.9rem">Seus dados são protegidos com criptografia, em conformidade com a LGPD (Lei nº 13.709/2018). Você pode excluí-los a qualquer momento.</span></div>
+        </div>
+      </div>
+      <form class="card" id="fichaCard">
+        <div class="row-between" style="margin-bottom:12px"><h3 style="margin:0">Ficha médica de emergência</h3><span class="tag ps">Aparece na tela de Emergência</span></div>
+        <div class="ficha">
+          <label>Tipo sanguíneo<select id="fSangue"><option value="">Não sei</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+          <label>Alergias<input id="fAlergia" placeholder="Ex.: dipirona, camarão"></label>
+          <label>Condições de saúde<input id="fCond" placeholder="Ex.: hipertensão, diabetes"></label>
+          <label>Contato de emergência<input id="fContato" placeholder="Nome e telefone"></label>
+        </div>
+        <button class="btn btn-primary" type="submit" style="margin-top:14px">Salvar ficha</button>
+      </form>
+      <div class="card">
+        <h3>Acessibilidade</h3>
+        <div class="two" style="gap:14px">
+          <div><p style="font-weight:600;margin-bottom:8px">Tamanho da letra</p>
+            <div class="fs" id="fs"><button type="button" data-fs="15" aria-label="Letra pequena">A−</button><button type="button" data-fs="16" aria-pressed="true" aria-label="Letra normal">A</button><button type="button" data-fs="18" aria-label="Letra grande">A+</button><button type="button" data-fs="20" aria-label="Letra muito grande">A++</button></div></div>
+          <div><p style="font-weight:600;margin-bottom:8px">Aparência</p>
+            <div class="fs"><button type="button" data-set-theme="light">Claro</button><button type="button" data-set-theme="dark">Escuro</button></div></div>
+        </div>
+      </div>
+      <button class="btn btn-danger" data-logout style="align-self:flex-start"><svg width="18" height="18"><use href="#i-exit"/></svg>Sair da conta</button>
+    </section>
+ 
+    <!-- ONDE IR -->
+    <section class="view" data-view="ondeir" hidden>
+      <div class="topbar"><div><p class="eyebrow">Guia rápido</p><h1 style="margin-top:6px">Onde devo ir?</h1></div></div>
+      <p class="muted" style="max-width:62ch">Escolha a situação mais parecida com a sua. O SaúdePerto mostra o tipo de atendimento indicado na rede de saúde, para você não perder tempo em fila errada.</p>
+      <div class="sympt" id="sympt"></div>
+      <div id="result"></div>
+      <div class="scale">
+        <div style="background:var(--teal-soft)"><b style="color:var(--teal)">UBS · Posto de saúde</b>Consultas, vacinas, receitas, exames de rotina e casos leves. Horário comercial.</div>
+        <div style="background:var(--amber-soft)"><b style="color:var(--amber)">UPA 24h</b>Urgências de média gravidade: febre alta, cortes, fraturas, crises que não passam.</div>
+        <div style="background:var(--red-soft)"><b style="color:var(--red)">SAMU 192 · Pronto-socorro</b>Risco de vida: dor no peito, desmaio, AVC, acidente grave, sangramento intenso.</div>
+      </div>
+      <p class="muted" style="font-size:.82rem">Este guia é uma orientação geral e não substitui a avaliação de um profissional de saúde. Na dúvida sobre gravidade, ligue 192.</p>
+    </section>
+ 
+    <!-- VACINAS -->
+    <section class="view" data-view="vacinas" hidden>
+      <div class="topbar"><div><p class="eyebrow">Carteira digital</p><h1 style="margin-top:6px">Minhas vacinas</h1></div></div>
+      <div class="card" style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
+        <div class="ring" id="vacRing"><span id="vacPct">0%</span></div>
+        <div style="flex:1 1 240px"><h3 style="margin-bottom:6px" id="vacTitle"></h3><p class="muted">Calendário de vacinação do adulto do Programa Nacional de Imunizações (SUS). Toque no status para marcar como tomada ou pendente.</p></div>
+      </div>
+      <div class="card" id="vacList"></div>
+      <div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--teal-soft);border:0">
+        <span class="ico" style="background:var(--surface);color:var(--teal)"><svg><use href="#i-syringe"/></svg></span>
+        <p style="flex:1 1 240px">As vacinas do calendário são gratuitas em qualquer UBS. Leve um documento com foto e, se tiver, a caderneta de vacinação.</p>
+        <button class="btn btn-teal" data-go="buscar" data-tipo="clin">Achar uma UBS</button>
+      </div>
+    </section>
+ 
+    <!-- ALERTAS -->
+    <section class="view" data-view="alertas" hidden>
+      <div class="topbar"><div><p class="eyebrow" style="color:var(--amber)">Vigilância em saúde</p><h1 style="margin-top:6px">Alertas de doenças na sua região</h1></div></div>
+      <div class="card" style="display:flex;gap:14px;align-items:end;flex-wrap:wrap">
+        <div style="flex:1 1 220px"><label class="lbl" for="alUF">Onde você está?</label>
+          <select id="alUF" style="width:100%;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:11px 12px;font:500 .95rem var(--body)"></select></div>
+        <div style="flex:1 1 220px"><span class="lbl">Período</span><b id="alMonth" style="font-size:1.1rem"></b></div>
+        <div style="flex:1 1 200px;display:flex;gap:10px;flex-wrap:wrap" id="alCount"></div>
+      </div>
+      <div class="alerts" id="alerts"></div>
+      <p class="muted" style="font-size:.82rem;max-width:80ch">O nível de risco considera a época do ano e o histórico de cada doença na região. Surtos atuais e números de casos são divulgados pelo Ministério da Saúde e pela secretaria de saúde do seu estado ou município. Siga sempre as orientações deles.</p>
+    </section>
+ 
+    <!-- PICADAS -->
+    <section class="view" data-view="picada" hidden>
+      <div class="topbar"><div><p class="eyebrow" style="color:var(--red)">Assistente com IA</p><h1 style="margin-top:6px">Picadas e mordidas de animais</h1></div></div>
+      <p class="muted" style="max-width:66ch">Cobra, escorpião, aranha, abelha, taturana ou mordida de cão, gato e morcego. Conte o que aconteceu e a IA indica o tratamento específico, como soro antiveneno ou vacina antirrábica, e para qual hospital ir.</p>
+      <div class="bite">
+        <form class="card" id="biteForm" style="display:flex;flex-direction:column;gap:18px">
+          <div><span class="lbl">1. Qual animal?</span><div class="animals" id="animals"></div></div>
+          <div class="two" style="gap:10px">
+            <div><label class="lbl" for="bUF">2. Estado</label><select id="bUF"></select></div>
+            <div><label class="lbl" for="bCity">Cidade</label><input type="text" id="bCity" placeholder="Ex.: Campinas"></div>
+          </div>
+          <div><span class="lbl">3. O que a pessoa está sentindo?</span><div class="symp" id="symp"></div></div>
+          <div><label class="lbl" for="bObs">Detalhes (opcional)</label><input type="text" id="bObs" placeholder="Ex.: picada no pé há 20 minutos, criança de 6 anos"></div>
+          <span class="err" id="biteErr"></span>
+          <button class="btn btn-primary" type="submit"><svg width="18" height="18"><use href="#i-spark"/></svg>Falar com a IA</button>
+          <div style="display:flex;gap:10px;align-items:center;background:var(--red-soft);border-radius:12px;padding:10px 12px;font-size:.88rem">
+            <svg width="20" height="20" style="color:var(--red);flex:none"><use href="#i-sos"/></svg>
+            <span>Falta de ar, desmaio ou inchaço no rosto: <b>ligue 192 agora</b>. Dúvidas sobre veneno: <b>Disque-Intoxicação 0800 722 6001</b>.</span>
+          </div>
+        </form>
+        <div class="chat">
+          <div class="chat-head">
+            <span class="bot"><svg><use href="#i-spark"/></svg></span>
+            <div style="flex:1"><b>IA SaúdePerto</b><br><span class="status-dot" id="aiStatus"><i></i>Conectando...</span></div>
+            <button class="btn btn-ghost" type="button" id="aiStop" hidden style="padding:8px 12px">Parar</button>
+          </div>
+          <div class="msgs" id="msgs" aria-live="polite">
+            <div class="msg ai"><p>Olá! Sou a assistente do SaúdePerto. Escolha o animal, o estado e os sintomas ao lado, e eu digo o que fazer agora, qual tratamento a pessoa precisa e para qual hospital ir.</p></div>
+          </div>
+          <form class="chat-in" id="chatForm">
+            <input id="chatQ" placeholder="Pergunte algo, ex.: posso colocar gelo?" aria-label="Pergunta para a IA">
+            <button class="btn btn-primary" type="submit">Enviar</button>
+          </form>
+        </div>
+      </div>
+      <div class="card" id="bitePlan" hidden></div>
+      <div id="biteHosp"></div>
+      <p class="muted" style="font-size:.82rem">A IA dá uma orientação inicial e não substitui o atendimento médico. O soro antiveneno só é aplicado em hospital. Confirme pelo 192 ou pelo Disque-Intoxicação qual unidade da sua região tem o soro disponível.</p>
+    </section>
+ 
+    <!-- SUPORTE -->
+    <section class="view" data-view="suporte" hidden>
+      <div class="topbar"><div><p class="eyebrow">Ajuda e suporte</p><h1 style="margin-top:6px">Está com problema no app?</h1></div></div>
+      <p class="muted" style="max-width:60ch">Acione as desenvolvedoras do SaúdePerto. Descreva o que aconteceu e envie a mensagem para a equipe.</p>
+      <div class="devs">
+        <div class="dev"><div class="avatar">NF</div><div><small>Desenvolvedora</small><b>Nathielly Damasceno Florenco</b></div></div>
+        <div class="dev"><div class="avatar">GR</div><div><small>Desenvolvedora</small><b>Greyce Kelly Silva Santos Rodrigues</b></div></div>
+      </div>
+      <form class="card support-box" id="supForm">
+        <h3>Relatar um problema</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.88rem">Tipo de problema
+            <select id="supTipo"><option>Não consigo entrar</option><option>Busca de hospitais</option><option>Consultas ou remédios</option><option>Vacinas ou ficha médica</option><option>Outro problema</option></select></label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.88rem">O que aconteceu?
+            <textarea id="supMsg" placeholder="Ex.: cliquei em Buscar e a lista não apareceu."></textarea></label>
+          <span class="err" id="supErr"></span>
+          <button class="btn btn-primary" type="submit" style="align-self:flex-start">Acionar desenvolvedoras</button>
+        </div>
+      </form>
+      <div class="card" id="supDone" hidden style="background:var(--teal-soft);border:0">
+        <h3>Chamado registrado</h3>
+        <p style="margin-bottom:10px">Protocolo <b class="mono" id="supProto"></b>. Copie a mensagem abaixo e envie para Nathielly ou Greyce Kelly.</p>
+        <pre id="supText" class="mono" style="white-space:pre-wrap;background:var(--surface);border-radius:12px;padding:14px;font-size:.85rem;margin:0 0 12px"></pre>
+        <button class="btn btn-teal" type="button" id="supCopy">Copiar mensagem</button>
+      </div>
+    </section>
+ 
+    <!-- PROJETO -->
+    <section class="view" data-view="projeto" hidden>
+      <div class="topbar"><div><p class="eyebrow">O projeto</p><h1 style="margin-top:6px">Por que o SaúdePerto existe</h1></div></div>
+      <div class="proj">
+        <div class="card s5"><p class="eyebrow" style="color:var(--red)">Problema</p><h3>Informação espalhada atrasa o atendimento</h3><p>Muitas pessoas têm dificuldade para encontrar rapidamente hospitais, clínicas, UPAs, UBSs e farmácias, principalmente quando as informações estão espalhadas em diferentes locais.</p></div>
+        <div class="card s7 dark-card"><p class="eyebrow">Solução</p><h3>Tudo sobre serviços de saúde em um só lugar</h3><p>O SaúdePerto reúne endereço, distância, horário de funcionamento e tipo de atendimento dos estabelecimentos próximos, com rotas até cada um. Também organiza consultas, exames, retornos e lembretes de medicamentos, e facilita a localização de serviços de emergência.</p></div>
+        <div class="card s4"><p class="eyebrow">Público-alvo</p><h3>Para todas as pessoas</h3><p>Usuários de serviços públicos e particulares, de diferentes classes socioeconômicas.</p><div class="chips"><span>Baixa</span><span>Média</span><span>Alta</span></div></div>
+        <div class="card s8"><p class="eyebrow">MVP</p><h3>O essencial para validar a proposta</h3><p>Busca de serviços de saúde, localização de estabelecimentos próximos, visualização de informações e rotas, organização de compromissos de saúde e localização de atendimentos de emergência.</p></div>
+        <div class="card s12" style="background:var(--teal-soft);border:0"><p class="eyebrow">Objetivo</p><p style="margin-top:8px;color:var(--ink)">Tornar o acesso às informações sobre serviços de saúde mais simples, rápido e acessível, ajudando as pessoas a encontrar e organizar seus atendimentos em um único lugar.</p>
+          <p class="eyebrow" style="margin-top:22px">Pergunta central</p><p class="quote">Como a tecnologia pode facilitar o acesso das pessoas aos serviços de saúde e contribuir para uma experiência mais simples, organizada e acessível?</p></div>
+      </div>
+      <div><p class="eyebrow" style="margin-bottom:12px">Desenvolvido por</p>
+      <div class="devs">
+        <div class="dev"><div class="avatar">NF</div><div><small>Desenvolvedora</small><b>Nathielly Damasceno Florenco</b></div></div>
+        <div class="dev"><div class="avatar">GR</div><div><small>Desenvolvedora</small><b>Greyce Kelly Silva Santos Rodrigues</b></div></div>
+      </div></div>
+    </section>
+  </main>
+ 
+  <nav class="tabbar" aria-label="Abas">
+    <button class="nav-btn" data-go="inicio"><svg><use href="#i-home"/></svg>Início</button>
+    <button class="nav-btn" data-go="buscar"><svg><use href="#i-map"/></svg>Buscar</button>
+    <button class="nav-btn" data-go="consultas"><svg><use href="#i-cal"/></svg>Consultas</button>
+    <button class="nav-btn" data-go="remedios"><svg><use href="#i-pill"/></svg>Remédios</button>
+    <button class="nav-btn" data-go="perfil"><svg><use href="#i-user"/></svg>Perfil</button>
+  </nav>
+</div>
+ 
+<div class="modal-bg" id="helpModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="row-between"><h2 id="helpTitle" style="font-size:1.4rem">Precisa de ajuda?</h2><button class="link" type="button" id="closeHelp">Fechar</button></div>
+    <p class="muted">Se o app estiver com problema, acione as desenvolvedoras do SaúdePerto:</p>
+    <div class="devs">
+        <div class="dev"><div class="avatar">NF</div><div><small>Desenvolvedora</small><b>Nathielly Damasceno Florenco</b></div></div>
+        <div class="dev"><div class="avatar">GR</div><div><small>Desenvolvedora</small><b>Greyce Kelly Silva Santos Rodrigues</b></div></div>
+      </div>
+    <p class="muted" style="font-size:.88rem">Depois de entrar, use <b>Ajuda e suporte</b> no menu para relatar o problema com detalhes.</p>
+  </div>
+</div>
+ 
+<div class="toast" id="toast" hidden></div>
+ 
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem("sp-"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("sp-"+k,JSON.stringify(v))}catch(e){}}};
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(t._t);t._t=setTimeout(()=>t.hidden=true,2400)}
+ 
+/* ---------- CPF ---------- */
+const digits=s=>s.replace(/\D/g,"");
+function maskCPF(v){const d=digits(v).slice(0,11);return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d{1,2})$/,".$1-$2")}
+function validCPF(v){return digits(v).length===11}
+["#cpf","#cpf2"].forEach(s=>$(s).addEventListener("input",e=>{e.target.value=maskCPF(e.target.value);e.target.removeAttribute("aria-invalid");$(s+"Err").textContent=""}));
+$$("[data-eye]").forEach(b=>b.addEventListener("click",()=>{const i=$("#"+b.dataset.eye);const show=i.type==="password";i.type=show?"text":"password";b.setAttribute("aria-label",show?"Ocultar senha":"Mostrar senha")}));
+ 
+function setErr(id,msg){$("#"+id+"Err").textContent=msg;const el=$("#"+id);if(el)el.setAttribute("aria-invalid",msg?"true":"false");return !msg}
+ 
+let user={nome:"Kaiky Pereira",cpf:""};
+/* nome ao vivo na tela de entrar */
+function liveName(){
+  const n=$("#lnome").value.trim(), first=n.split(" ")[0];
+  const av=$("#liveAv");
+  if(first){
+    const parts=n.split(/\s+/);const ini=(parts[0][0]+(parts.length>1?parts[parts.length-1][0]:"")).toUpperCase();
+    if(av.textContent!==ini){av.textContent=ini;av.classList.add("pop");setTimeout(()=>av.classList.remove("pop"),180)}
+    $("#liveEyebrow").textContent="Que bom te ver";
+    $("#liveTitle").textContent="Olá, "+first.charAt(0).toUpperCase()+first.slice(1)+"!";
+    $("#liveSub").textContent="Digite seu CPF e senha para entrar.";
+  }else{
+    av.innerHTML='<svg width="26" height="26"><use href="#i-user"/></svg>';
+    $("#liveEyebrow").textContent="Bem-vindo de volta";$("#liveTitle").textContent="Entrar";
+    $("#liveSub").textContent="Acesse sua conta para cuidar da sua saúde.";
+  }
+}
+$("#lnome").addEventListener("input",()=>{setErr("lnome","");liveName()});
+$("#lnome").value=store.get("nome","");liveName();
+$("#fillDemo").addEventListener("click",()=>{if(!$("#lnome").value.trim()){$("#lnome").value="Kaiky Pereira";liveName()}$("#cpf").value="529.982.247-25";$("#senha").value="123456";setErr("cpf","");setErr("senha","")});
+$("#forgot").addEventListener("click",()=>toast("Enviaríamos um link de redefinição para o e-mail cadastrado."));
+$("#toSignup").addEventListener("click",()=>{$("#loginForm").hidden=true;$("#signupForm").hidden=false;$("#nome").focus()});
+$("#toLogin").addEventListener("click",()=>{$("#signupForm").hidden=true;$("#loginForm").hidden=false});
+ 
+$("#loginForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const nm=$("#lnome").value.trim().replace(/\s+/g," ");
+  const ok0=true;
+  const ok1=true;setErr("cpf","");
+  const ok2=true;setErr("senha","");
+  if(ok0&&ok1&&ok2){user.nome=(nm||"Visitante").replace(/(^|\s)\S/g,c=>c.toUpperCase());store.set("nome",user.nome);enter($("#cpf").value);toast("Bem-vindo, "+user.nome.split(" ")[0]+"!")}
+});
+$("#signupForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const n=$("#nome").value.trim();
+  const a=true;
+  const b=true;
+  const c=true;
+  const d=true;
+  if(a&&b&&c&&d){user.nome=n||"Visitante";store.set("nome",n);enter($("#cpf2").value);toast("Conta criada. Bem-vindo!")}
+});
+ 
+function enter(cpf){
+  user.cpf=cpf;
+  $("#senha").value="";$("#senha2").value="";
+  const first=user.nome.split(" ")[0];
+  $$("[data-first]").forEach(e=>e.textContent=first);
+  $$("[data-initial]").forEach(e=>e.textContent=first[0].toUpperCase());
+  $$("[data-fullname]").forEach(e=>e.textContent=user.nome);
+  const d=digits(cpf);$("#cpfMask").textContent=d.length===11?"CPF ***."+d.slice(3,6)+"."+d.slice(6,9)+"-**":(d?"CPF "+cpf:"CPF não informado");
+  $("#authScreen").hidden=true;$("#appScreen").hidden=false;go("inicio");
+}
+$$("[data-logout]").forEach(b=>b.addEventListener("click",()=>{$("#appScreen").hidden=true;$("#authScreen").hidden=false;$("#signupForm").hidden=true;$("#loginForm").hidden=false;$("#cpf").value="";window.scrollTo(0,0);toast("Você saiu da conta.")}));
+ 
+/* ---------- NAVEGAÇÃO ---------- */
+function go(view,opts={}){
+  $$("[data-view]").forEach(v=>v.hidden=v.dataset.view!==view);
+  const navKey=view==="detalhe"?"buscar":view;
+  $$(".nav-btn[data-go]").forEach(b=>b.dataset.go===navKey?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current"));
+  if(view==="buscar")setSeg(opts.tipo||curSeg);
+  if(view==="inicio")renderHome();
+  if(view==="consultas")renderAppts();
+  if(view==="remedios")renderMeds();
+  if(view==="perfil"){$("#favCount").textContent=favs.size;loadFicha()}
+  if(view==="vacinas")renderVac();
+  if(view==="ondeir")renderSym();
+  if(view==="emergencia")renderIdCard();
+  if(view==="alertas")renderAlerts();
+  $("#notif").hidden=true;
+  window.scrollTo({top:0});
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-go]");if(!b)return;
+  onlyFav=b.id==="favBtn";
+  go(b.dataset.go,{tipo:onlyFav?"hosp":b.dataset.tipo});
+  if(b.dataset.scroll)setTimeout(()=>$("#"+b.dataset.scroll).scrollIntoView({behavior:"smooth",block:"start"}),60);
+});
+ 
+/* ---------- HOSPITAIS ---------- */
+const UFS={AM:"Amazonas",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",GO:"Goiás",MG:"Minas Gerais",PA:"Pará",PE:"Pernambuco",PR:"Paraná",RJ:"Rio de Janeiro",RS:"Rio Grande do Sul",SC:"Santa Catarina",SP:"São Paulo"};
+const TIPO={pub:"Público (SUS)",fil:"Filantrópico",part:"Particular"};
+const H=[
+ {n:"Hospital das Clínicas da FMUSP",c:"São Paulo",uf:"SP",t:"pub",ps:true,d:"Maior complexo hospitalar da América Latina, ligado à Faculdade de Medicina da USP.",e:"Alta complexidade, transplantes, especialidades clínicas e cirúrgicas"},
+ {n:"Hospital São Paulo (UNIFESP)",c:"São Paulo",uf:"SP",t:"pub",ps:true,d:"Hospital universitário da Escola Paulista de Medicina.",e:"Clínica geral, cirurgia, especialidades"},
+ {n:"Santa Casa de Misericórdia de São Paulo",c:"São Paulo",uf:"SP",t:"fil",ps:true,d:"Hospital filantrópico com grande volume de atendimentos pelo SUS.",e:"Clínica geral, pediatria, ortopedia"},
+ {n:"Hospital Israelita Albert Einstein",c:"São Paulo",uf:"SP",t:"part",ps:true,d:"Referência em alta complexidade, transplantes e oncologia.",e:"Oncologia, cardiologia, transplantes"},
+ {n:"Hospital Sírio-Libanês",c:"São Paulo",uf:"SP",t:"part",ps:true,d:"Referência em oncologia, cardiologia e neurologia.",e:"Oncologia, cardiologia, neurologia"},
+ {n:"Hospital Vital Brazil (Instituto Butantan)",c:"São Paulo",uf:"SP",t:"pub",ps:true,d:"Hospital do Instituto Butantan especializado em acidentes com animais peçonhentos.",e:"Acidentes com cobras, escorpiões, aranhas e lagartas",bite:true},
+ {n:"Instituto Nacional de Câncer (INCA)",c:"Rio de Janeiro",uf:"RJ",t:"pub",ps:false,d:"Órgão do Ministério da Saúde para prevenção e tratamento do câncer.",e:"Oncologia"},
+ {n:"Hospital Municipal Souza Aguiar",c:"Rio de Janeiro",uf:"RJ",t:"pub",ps:true,d:"Um dos maiores hospitais de emergência do país, no Centro do Rio.",e:"Emergência, trauma, queimados"},
+ {n:"Hospital Copa D'Or",c:"Rio de Janeiro",uf:"RJ",t:"part",ps:true,d:"Hospital geral da Rede D'Or em Copacabana.",e:"Cardiologia, emergência, cirurgia"},
+ {n:"Hospital das Clínicas da UFMG",c:"Belo Horizonte",uf:"MG",t:"pub",ps:true,d:"Hospital universitário de alta complexidade na região hospitalar de BH.",e:"Alta complexidade, transplantes"},
+ {n:"Hospital Mater Dei",c:"Belo Horizonte",uf:"MG",t:"part",ps:true,d:"Rede privada de hospitais gerais em Minas Gerais.",e:"Maternidade, cirurgia, emergência"},
+ {n:"Hospital de Clínicas de Porto Alegre",c:"Porto Alegre",uf:"RS",t:"pub",ps:true,d:"Hospital universitário da UFRGS, referência no Sul.",e:"Alta complexidade, transplantes"},
+ {n:"Hospital Nossa Senhora da Conceição",c:"Porto Alegre",uf:"RS",t:"pub",ps:true,d:"Maior hospital do Grupo Hospitalar Conceição, 100% SUS.",e:"Clínica geral, emergência, cirurgia"},
+ {n:"Hospital Moinhos de Vento",c:"Porto Alegre",uf:"RS",t:"part",ps:true,d:"Hospital geral privado de alta complexidade.",e:"Cardiologia, oncologia, maternidade"},
+ {n:"Hospital de Clínicas da UFPR",c:"Curitiba",uf:"PR",t:"pub",ps:false,d:"Maior hospital público do Paraná, ligado à UFPR.",e:"Especialidades, transplantes"},
+ {n:"Hospital Pequeno Príncipe",c:"Curitiba",uf:"PR",t:"fil",ps:true,d:"Maior hospital exclusivamente pediátrico do Brasil.",e:"Pediatria"},
+ {n:"HU-UFSC Polydoro Ernani de São Thiago",c:"Florianópolis",uf:"SC",t:"pub",ps:true,d:"Hospital universitário da UFSC, atendimento 100% SUS.",e:"Clínica geral, pediatria, maternidade"},
+ {n:"Hospital de Base do Distrito Federal",c:"Brasília",uf:"DF",t:"pub",ps:true,d:"Principal referência em trauma e alta complexidade do DF.",e:"Trauma, emergência, neurocirurgia"},
+ {n:"Hospital Sarah Brasília",c:"Brasília",uf:"DF",t:"pub",ps:false,d:"Rede Sarah de reabilitação, atendimento gratuito.",e:"Reabilitação, ortopedia, neurologia"},
+ {n:"Hospital Estadual de Urgências de Goiás (HUGO)",c:"Goiânia",uf:"GO",t:"pub",ps:true,d:"Referência em urgência e trauma em Goiás.",e:"Urgência, trauma"},
+ {n:"Hospital Geral Roberto Santos",c:"Salvador",uf:"BA",t:"pub",ps:true,d:"Maior hospital público da Bahia.",e:"Emergência, clínica geral, maternidade"},
+ {n:"Hospital Português",c:"Salvador",uf:"BA",t:"fil",ps:true,d:"Hospital filantrópico tradicional de Salvador.",e:"Cardiologia, cirurgia"},
+ {n:"Hospital da Restauração",c:"Recife",uf:"PE",t:"pub",ps:true,d:"Maior emergência pública de Pernambuco.",e:"Emergência, trauma, neurologia"},
+ {n:"IMIP – Instituto Prof. Fernando Figueira",c:"Recife",uf:"PE",t:"fil",ps:true,d:"Referência em saúde materno-infantil pelo SUS.",e:"Maternidade, pediatria"},
+ {n:"Instituto Dr. José Frota (IJF)",c:"Fortaleza",uf:"CE",t:"pub",ps:true,d:"Principal hospital de urgência e trauma de Fortaleza.",e:"Urgência, trauma, queimados"},
+ {n:"Hospital Universitário Walter Cantídio",c:"Fortaleza",uf:"CE",t:"pub",ps:false,d:"Hospital universitário da UFC.",e:"Especialidades, transplantes"},
+ {n:"Hospital Universitário Getúlio Vargas",c:"Manaus",uf:"AM",t:"pub",ps:false,d:"Hospital universitário da UFAM.",e:"Clínica geral, cirurgia"},
+ {n:"Hospital Ophir Loyola",c:"Belém",uf:"PA",t:"pub",ps:false,d:"Referência em oncologia no Pará.",e:"Oncologia"}
+];
+const ICO={pub:"i-hosp",part:"i-cross",fil:"i-heart"};
+let favs=new Set(store.get("favs",[])), onlyFav=false, curSeg="hosp", curH=null;
+$("#uf").innerHTML='<option value="">Todo o Brasil</option>'+Object.keys(UFS).sort((a,b)=>UFS[a].localeCompare(UFS[b])).map(u=>`<option value="${u}">${UFS[u]}</option>`).join("");
+const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const rota=q=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+ 
+const EXT={
+ clin:{t:"Clínicas e UBS",ico:"i-steth",cls:"i-pub",q:"UBS posto de saúde perto de mim",txt:"<b>Unidades Básicas de Saúde e clínicas</b><br><span class='muted'>Consultas, vacinas e acompanhamento. Abra o mapa para ver as unidades mais perto de você.</span>"},
+ upa:{t:"UPAs 24h",ico:"i-sos",cls:"i-red",q:"UPA 24h perto de mim",txt:"<b>Unidades de Pronto Atendimento 24h</b><br><span class='muted'>Febre alta, cortes, fraturas e outras urgências. Em risco de vida, ligue 192.</span>"},
+ farm:{t:"Farmácias",ico:"i-pill",cls:"i-vio",q:"farmácia aberta agora perto de mim",txt:"<b>Farmácias abertas agora</b><br><span class='muted'>Inclui unidades do programa Farmácia Popular. Abra o mapa para ver as mais perto.</span>"}
+};
+function setSeg(k){
+  curSeg=k;$$("[data-seg]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.seg===k));
+  $("#hospPanel").hidden=k!=="hosp";$("#extPanel").hidden=k==="hosp";
+  if(k!=="hosp"){const x=EXT[k];$("#extIco").className="ico "+x.cls;$("#extIco").innerHTML=`<svg><use href="#${x.ico}"/></svg>`;$("#extTxt").innerHTML=x.txt;$("#extLink").href=rota(x.q)}
+  else renderHosp();
+}
+$$("[data-seg]").forEach(b=>b.addEventListener("click",()=>setSeg(b.dataset.seg)));
+ 
+function renderHosp(){
+  const q=norm($("#q").value.trim()),uf=$("#uf").value,t=$("#tipo").value,ps=$("#ps").checked;
+  const list=H.filter(h=>(!uf||h.uf===uf)&&(!t||h.t===t)&&(!ps||h.ps)&&(!onlyFav||favs.has(h.n))&&(!q||norm(h.n+" "+h.c+" "+UFS[h.uf]+" "+h.e).includes(q)))
+    .sort((a,b)=>a.uf.localeCompare(b.uf)||a.n.localeCompare(b.n));
+  $("#count").innerHTML=(onlyFav?'Mostrando só favoritos · <button class="link" id="allH">ver todos</button> · ':'')+`${list.length} ${list.length===1?"hospital encontrado":"hospitais encontrados"}`;
+  const all=$("#allH");if(all)all.onclick=()=>{onlyFav=false;renderHosp()};
+  $("#grid").innerHTML=list.length?list.map(h=>`<button class="hcard" data-h="${H.indexOf(h)}">
+    <div style="display:flex;gap:12px;align-items:flex-start"><span class="ico i-${h.t}"><svg${h.t==="fil"?' fill="none"':''}><use href="#${ICO[h.t]}"/></svg></span>
+    <div><h3>${h.n}</h3><p class="muted" style="font-size:.88rem">${h.c} · ${h.uf}</p></div>
+    ${favs.has(h.n)?'<svg width="18" height="18" style="margin-left:auto;color:var(--red);flex:none" fill="currentColor"><use href="#i-heart"/></svg>':''}</div>
+    <div class="tags"><span class="tag ${h.t}">${TIPO[h.t]}</span>${h.ps?'<span class="tag ps">Pronto-socorro</span>':''}</div>
+    <p class="muted" style="font-size:.9rem">${h.d}</p></button>`).join(""):'<div class="empty">Nenhum hospital com esses filtros. Tente outro estado ou limpe a busca.</div>';
+}
+["#q"].forEach(s=>$(s).addEventListener("input",renderHosp));
+["#uf","#tipo","#ps"].forEach(s=>$(s).addEventListener("change",renderHosp));
+$("#grid").addEventListener("click",e=>{const c=e.target.closest("[data-h]");if(c)openH(+c.dataset.h)});
+$("#goPS").addEventListener("click",()=>{$("#ps").checked=true;go("buscar",{tipo:"hosp"})});
+ 
+function openH(i){
+  const h=H[i];curH=h;
+  $("#detHero").innerHTML=`<div class="tags"><span class="tag ${h.t}">${TIPO[h.t]}</span>${h.ps?'<span class="tag ps">Pronto-socorro</span>':''}</div><h2>${h.n}</h2><p class="muted">${h.d}</p>`;
+  $("#detRota").href=rota(h.n+", "+h.c+" - "+h.uf);
+  $("#detInfo").innerHTML=`<dt>Cidade</dt><dd>${h.c}, ${UFS[h.uf]}</dd><dt>Atendimento</dt><dd>${TIPO[h.t]}</dd><dt>Serviços</dt><dd>${h.e}</dd><dt>Emergência</dt><dd>${h.ps?"Possui pronto-socorro":"Sem pronto-socorro aberto ao público. Procure uma UPA 24h."}</dd>`;
+  syncFav();go("detalhe");
+}
+function syncFav(){const on=favs.has(curH.n);$("#detFav").setAttribute("aria-pressed",on);$("#detFav").querySelector("svg").setAttribute("fill",on?"currentColor":"none");$("#detFav").lastChild.textContent=on?"Favorito":"Favoritar"}
+$("#detFav").addEventListener("click",()=>{favs.has(curH.n)?favs.delete(curH.n):favs.add(curH.n);store.set("favs",[...favs]);syncFav();toast(favs.has(curH.n)?"Adicionado aos favoritos.":"Removido dos favoritos.")});
+$("#detAgendar").addEventListener("click",()=>{go("consultas");$("#aLocal").value=curH.n;$("#aEsp").focus();toast("Preencha a especialidade e a data.")});
+ 
+/* ---------- CONSULTAS ---------- */
+const MES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],SEM=["dom","seg","ter","qua","qui","sex","sáb"];
+const today=new Date();today.setHours(0,0,0,0);
+const iso=d=>d.toISOString().slice(0,10);
+const addDays=n=>{const d=new Date(today);d.setDate(d.getDate()+n);return iso(d)};
+let appts=store.get("appts",null)||[
+ {tipo:"Consulta médica",esp:"Clínica Geral",local:"Clínica da Família · Dra. Mariana Silva",data:addDays(3),hora:"14:30"},
+ {tipo:"Retorno médico",esp:"Cardiologia",local:"Hospital Municipal · Dr. Carlos Mendes",data:addDays(16),hora:"09:00"},
+ {tipo:"Exame",esp:"Hemograma completo",local:"Laboratório Central",data:addDays(-12),hora:"07:30"}
+];
+let ctab="prox";
+$$("[data-ctab]").forEach(b=>b.addEventListener("click",()=>{ctab=b.dataset.ctab;$$("[data-ctab]").forEach(x=>x.setAttribute("aria-selected",x===b));renderAppts()}));
+function apptHTML(a,past){const d=new Date(a.data+"T12:00");
+  return `<div class="item appt"><div class="date"${past?' style="background:var(--surface-2);color:var(--ink-2)"':''}><small>${MES[d.getMonth()]}</small><b>${String(d.getDate()).padStart(2,"0")}</b><small>${SEM[d.getDay()]}</small></div>
+  <div><b>${a.tipo} · ${a.esp}</b><small>${a.local}</small><br><small class="mono">${a.hora}</small></div>
+  <span class="tag ${past?"":"pub"}">${past?"Realizada":"Confirmada"}</span></div>`}
+function renderAppts(){
+  const sorted=[...appts].sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+  const list=ctab==="prox"?sorted.filter(a=>a.data>=iso(today)):sorted.filter(a=>a.data<iso(today)).reverse();
+  $("#apptList").innerHTML=list.length?list.map(a=>apptHTML(a,ctab==="hist")).join(""):`<p class="muted">${ctab==="prox"?"Nenhuma consulta marcada. Use o formulário abaixo para agendar.":"Nenhuma consulta no histórico."}</p>`;
+}
+$("#aData").value=addDays(7);
+$("#apptForm").addEventListener("submit",e=>{e.preventDefault();
+  appts.push({tipo:$("#aTipo").value,esp:$("#aEsp").value.trim(),local:$("#aLocal").value.trim(),data:$("#aData").value,hora:$("#aHora").value});
+  store.set("appts",appts);e.target.reset();$("#aData").value=addDays(7);$("#aHora").value="09:00";ctab="prox";
+  $$("[data-ctab]").forEach(x=>x.setAttribute("aria-selected",x.dataset.ctab==="prox"));renderAppts();toast("Consulta salva. Você receberá um lembrete 3 dias antes.")});
+ 
+/* ---------- REMÉDIOS ---------- */
+let meds=store.get("meds",null)||[
+ {nome:"Losartana 50mg",qtd:"1 comprimido",hora:"08:00"},
+ {nome:"Metformina 850mg",qtd:"1 comprimido",hora:"12:00"},
+ {nome:"Atorvastatina 20mg",qtd:"1 comprimido",hora:"20:00"}
+];
+let taken=store.get("taken",{}), curDay=iso(today);
+const MED_C=["i-fil","i-pub","i-part","i-vio","i-red"];
+function renderDays(){
+  $("#days").innerHTML=[0,1,2,3,4,5,6].map(n=>{const d=new Date(today);d.setDate(d.getDate()+n);const k=iso(d);
+    return `<button class="day" data-day="${k}" aria-pressed="${k===curDay}">${n===0?"Hoje":SEM[d.getDay()]}<b>${String(d.getDate()).padStart(2,"0")}</b></button>`}).join("");
+}
+$("#days").addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(b){curDay=b.dataset.day;renderMeds()}});
+function renderMeds(){
+  renderDays();
+  const list=[...meds].sort((a,b)=>a.hora.localeCompare(b.hora));
+  const done=list.filter(m=>taken[curDay+m.nome]).length;
+  const d=new Date(curDay+"T12:00");
+  $("#medTitle").textContent=curDay===iso(today)?"Hoje":`${SEM[d.getDay()]}, ${d.getDate()} de ${MES[d.getMonth()]}`;
+  $("#medCount").textContent=`${done}/${list.length} tomados`;
+  $("#medBar").style.width=(list.length?done/list.length*100:0)+"%";
+  $("#medList").innerHTML=list.map((m,i)=>{const k=curDay+m.nome,on=!!taken[k];
+    return `<div class="item"><span class="ico ${MED_C[i%5]}"><svg><use href="#i-pill"/></svg></span>
+    <div><b>${m.nome}</b><small>${m.qtd} · <span class="mono">${m.hora}</span></small></div>
+    <div class="end"><button class="link" data-del="${m.nome}" aria-label="Remover ${m.nome}" style="color:var(--ink-2)">Remover</button>
+    <button class="check" data-take="${k}" aria-pressed="${on}" aria-label="Marcar ${m.nome} como tomado"><svg width="16" height="16"><use href="#i-check"/></svg></button></div></div>`}).join("")||'<p class="muted">Nenhum remédio cadastrado.</p>';
+}
+$("#medList").addEventListener("click",e=>{
+  const t=e.target.closest("[data-take]");if(t){taken[t.dataset.take]=!taken[t.dataset.take];store.set("taken",taken);renderMeds();return}
+  const d=e.target.closest("[data-del]");if(d){meds=meds.filter(m=>m.nome!==d.dataset.del);store.set("meds",meds);renderMeds();toast("Remédio removido.")}
+});
+$("#medForm").addEventListener("submit",e=>{e.preventDefault();meds.push({nome:$("#mNome").value.trim(),qtd:$("#mQtd").value.trim(),hora:$("#mHora").value});store.set("meds",meds);e.target.reset();$("#mHora").value="08:00";renderMeds();toast("Remédio adicionado. Vamos lembrar você no horário.")});
+ 
+/* ---------- INÍCIO ---------- */
+function renderHome(){
+  const next=[...appts].filter(a=>a.data>=iso(today)).sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora))[0];
+  $("#homeAppt").innerHTML=next?apptHTML(next,false):'<p class="muted">Nenhuma consulta marcada.</p>';
+  const k=iso(today),done=meds.filter(m=>taken[k+m.nome]).length;
+  const pend=[...meds].sort((a,b)=>a.hora.localeCompare(b.hora)).find(m=>!taken[k+m.nome]);
+  $("#homeMedTxt").innerHTML=pend?`Próxima dose: <b>${pend.nome}</b> às <span class="mono">${pend.hora}</span>`:"Tudo certo! Você tomou todos os remédios de hoje.";
+  $("#homeMedBar").style.width=(meds.length?done/meds.length*100:0)+"%";
+  const h=new Date().getHours();
+  $("#greetTxt").textContent=(h<12?"Bom dia":h<18?"Boa tarde":"Boa noite")+". Cuidar da sua saúde é a nossa prioridade.";
+  $("#stC").textContent=appts.filter(a=>a.data>=iso(today)).length;
+  const vp=vacPct();$("#stV").textContent=vp+"%";$("#scVac").textContent=vp+"% em dia";
+  $("#scFavN").textContent=favs.size+(favs.size===1?" hospital":" hospitais");
+  showTip();renderNotif();renderHomeAlert();
+}
+ 
+/* ---------- BUSCA DA HOME / FAVORITOS ---------- */
+$("#homeSearch").addEventListener("submit",e=>{e.preventDefault();$("#q").value=$("#homeQ").value;onlyFav=false;go("buscar",{tipo:"hosp"})});
+$("#scFav").addEventListener("click",()=>{onlyFav=true;go("buscar",{tipo:"hosp"})});
+ 
+/* ---------- DICAS ---------- */
+const TIPS=[
+ "Beba água ao longo do dia. Sede já é um sinal de que o corpo precisa de líquido.",
+ "Lave as mãos com água e sabão por pelo menos 20 segundos antes de comer.",
+ "Tome os remédios sempre no mesmo horário. Os lembretes do app ajudam nisso.",
+ "Nunca pare um remédio de uso contínuo sem falar com seu médico.",
+ "30 minutos de caminhada por dia já fazem bem para o coração.",
+ "Guarde remédios longe do calor, da umidade e do alcance das crianças.",
+ "Vacina não é só para criança: confira sua carteira de vacinação de adulto.",
+ "Meça a pressão com regularidade na UBS, mesmo sem sentir nada."
+];
+let tipI=new Date().getDate()%TIPS.length;
+function showTip(){$("#tipN").textContent=String(tipI+1).padStart(2,"0");$("#tipTxt").textContent=TIPS[tipI]}
+$("#tipNext").addEventListener("click",()=>{tipI=(tipI+1)%TIPS.length;showTip()});
+ 
+/* ---------- NOTIFICAÇÕES ---------- */
+function renderNotif(){
+  const items=[];const k=iso(today);
+  const pend=[...meds].sort((a,b)=>a.hora.localeCompare(b.hora)).find(m=>!taken[k+m.nome]);
+  if(pend)items.push({ico:"i-pill",cls:"i-fil",t:"Hora do remédio",s:`${pend.nome} às ${pend.hora}`,go:"remedios"});
+  const next=[...appts].filter(a=>a.data>=k).sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora))[0];
+  if(next){const d=Math.round((new Date(next.data+"T00:00")-today)/864e5);items.push({ico:"i-cal",cls:"i-part",t:d===0?"Consulta hoje":`Consulta em ${d} dia${d>1?"s":""}`,s:`${next.esp} · ${next.hora}`,go:"consultas"})}
+  const vp=vacs.filter(v=>!vacDone[v.n]);if(vp.length)items.push({ico:"i-syringe",cls:"i-pub",t:`${vp.length} vacina${vp.length>1?"s":""} pendente${vp.length>1?"s":""}`,s:vp[0].n,go:"vacinas"});
+  const altos=alertsFor(alUF).filter(x=>x.lv==="alto");if(altos.length)items.unshift({ico:"i-alert",cls:"i-red",t:"Alerta de saúde em "+alUF,s:altos.map(x=>x.d.nome.split(" (")[0]).join(", "),go:"alertas"});
+  const f=store.get("ficha",{});if(!f.sangue&&!f.contato)items.push({ico:"i-drop",cls:"i-red",t:"Complete sua ficha médica",s:"Ajuda o socorro em emergências",go:"perfil"});
+  $("#bellN").textContent=items.length;$("#bellN").hidden=!items.length;
+  $("#notif").innerHTML=`<h4>Notificações</h4>`+(items.map(i=>`<div class="item" style="cursor:pointer" data-go="${i.go}"${i.go==="perfil"?' data-scroll="fichaCard"':''}><span class="ico ${i.cls}"><svg${i.ico==="i-heart"?' fill="none"':''}><use href="#${i.ico}"/></svg></span><div><b>${i.t}</b><small>${i.s}</small></div></div>`).join("")||'<p class="muted" style="padding:10px 0">Tudo em dia por aqui.</p>');
+}
+$("#bell").addEventListener("click",e=>{e.stopPropagation();const n=$("#notif");n.hidden=!n.hidden;$("#bell").setAttribute("aria-expanded",!n.hidden)});
+document.addEventListener("click",e=>{if(!e.target.closest("#notif")&&!e.target.closest("#bell"))$("#notif").hidden=true});
+ 
+/* ---------- ONDE IR ---------- */
+const SYM=[
+ {s:"Gripe, resfriado ou dor de garganta leve",r:"ubs"},
+ {s:"Renovar receita, vacina ou exame de rotina",r:"ubs"},
+ {s:"Pressão ou glicemia para acompanhar",r:"ubs"},
+ {s:"Febre alta que não baixa com remédio",r:"upa"},
+ {s:"Corte que não para de sangrar com pressão leve",r:"upa"},
+ {s:"Torção ou suspeita de fratura",r:"upa"},
+ {s:"Vômito ou diarreia que não passam",r:"upa"},
+ {s:"Dor forte no peito ou falta de ar intensa",r:"192"},
+ {s:"Rosto torto, fala enrolada ou braço fraco",r:"192"},
+ {s:"Desmaio, convulsão ou acidente grave",r:"192"}
+];
+const RES={
+ ubs:{t:"Procure uma UBS (posto de saúde)",d:"Seu caso pode ser atendido na Unidade Básica de Saúde mais perto de você, sem enfrentar a fila da emergência.",ico:"i-steth",btn:'<button class="btn btn-teal" data-go="buscar" data-tipo="clin">Achar uma UBS</button>'},
+ upa:{t:"Vá a uma UPA 24h",d:"A situação precisa de atendimento hoje. As UPAs funcionam 24 horas para urgências de média gravidade.",ico:"i-sos",btn:'<button class="btn btn-primary" data-go="buscar" data-tipo="upa">Achar uma UPA 24h</button>'},
+ "192":{t:"Ligue 192 agora",d:"Esses sinais podem indicar risco de vida. Chame o SAMU e não vá dirigindo sozinho. No AVC e no infarto, cada minuto conta.",ico:"i-sos",btn:'<button class="btn btn-danger" data-go="emergencia" style="background:var(--surface)">Abrir emergência</button>'}
+};
+const DOT={ubs:"var(--teal)",upa:"var(--amber)","192":"var(--red)"};
+let symSel=null;
+function renderSym(){
+  $("#sympt").innerHTML=SYM.map((x,i)=>`<button class="sy" data-sy="${i}" aria-pressed="${symSel===i}"><i style="background:${DOT[x.r]}"></i>${x.s}</button>`).join("");
+  if(symSel===null){$("#result").innerHTML="";return}
+  const r=RES[SYM[symSel].r],k=SYM[symSel].r;
+  $("#result").innerHTML=`<div class="result r-${k==="192"?"192":k}"><span class="lvl"><svg><use href="#${r.ico}"/></svg></span><div><h3>${r.t}</h3><p class="muted" style="margin-bottom:12px">${r.d}</p>${r.btn}</div></div>`;
+}
+$("#sympt").addEventListener("click",e=>{const b=e.target.closest("[data-sy]");if(b){symSel=+b.dataset.sy;renderSym();$("#result").scrollIntoView({behavior:"smooth",block:"nearest"})}});
+ 
+/* ---------- VACINAS ---------- */
+const vacs=[
+ {n:"Hepatite B",d:"3 doses",p:"Previne a hepatite B e a cirrose causada por ela"},
+ {n:"Dupla adulto (dT)",d:"Reforço a cada 10 anos",p:"Previne difteria e tétano"},
+ {n:"Febre amarela",d:"Dose única",p:"Recomendada em todo o país"},
+ {n:"Tríplice viral",d:"1 ou 2 doses, conforme a idade",p:"Previne sarampo, caxumba e rubéola"},
+ {n:"Influenza (gripe)",d:"Anual, nas campanhas",p:"Atualizada todo ano contra os vírus em circulação"},
+ {n:"COVID-19",d:"Conforme orientação vigente",p:"Consulte a UBS sobre o reforço indicado para você"}
+];
+let vacDone=store.get("vac",{"Hepatite B":true,"Dupla adulto (dT)":true,"Febre amarela":true,"Tríplice viral":true});
+const vacPct=()=>Math.round(vacs.filter(v=>vacDone[v.n]).length/vacs.length*100);
+function renderVac(){
+  const p=vacPct(),pend=vacs.length-vacs.filter(v=>vacDone[v.n]).length;
+  $("#vacRing").style.setProperty("--p",p);$("#vacPct").textContent=p+"%";
+  $("#vacTitle").textContent=pend?`${pend} vacina${pend>1?"s":""} pendente${pend>1?"s":""}`:"Carteira em dia!";
+  $("#vacList").innerHTML=vacs.map(v=>`<div class="vac"><span class="ico ${vacDone[v.n]?"i-pub":"i-fil"}"><svg><use href="#i-syringe"/></svg></span>
+    <div><b>${v.n}</b><small>${v.d} · ${v.p}</small></div>
+    <button class="vstat ${vacDone[v.n]?"ok":"pend"}" data-vac="${v.n}">${vacDone[v.n]?"✓ Tomada":"Pendente"}</button></div>`).join("");
+}
+$("#vacList").addEventListener("click",e=>{const b=e.target.closest("[data-vac]");if(!b)return;vacDone[b.dataset.vac]=!vacDone[b.dataset.vac];store.set("vac",vacDone);renderVac();toast(vacDone[b.dataset.vac]?"Vacina marcada como tomada.":"Vacina marcada como pendente.")});
+ 
+/* ---------- FICHA MÉDICA ---------- */
+function loadFicha(){const f=store.get("ficha",{});$("#fSangue").value=f.sangue||"";$("#fAlergia").value=f.alergia||"";$("#fCond").value=f.cond||"";$("#fContato").value=f.contato||""}
+$("#fichaCard").addEventListener("submit",e=>{e.preventDefault();store.set("ficha",{sangue:$("#fSangue").value,alergia:$("#fAlergia").value.trim(),cond:$("#fCond").value.trim(),contato:$("#fContato").value.trim()});toast("Ficha médica salva.")});
+function renderIdCard(){const f=store.get("ficha",{});
+  $("#idcard").innerHTML=`<div><small>Nome</small><b>${user.nome}</b></div><div><small>Tipo sanguíneo</small><span class="blood">${f.sangue||"—"}</span></div>
+  <div><small>Alergias</small><b>${f.alergia||"Nenhuma informada"}</b></div><div><small>Condições</small><b>${f.cond||"Nenhuma informada"}</b></div>
+  <div><small>Contato de emergência</small><b>${f.contato||"Não informado"}</b></div>`;}
+ 
+/* ---------- PICADAS + IA ---------- */
+const ANIMAIS={
+ cobra:{nome:"Cobra",em:"🐍",sev:"192",trat:"Soro antiofídico específico: antibotrópico (jararaca), anticrotálico (cascavel), antilaquético (surucucu) ou antielapídico (coral). Só é aplicado em hospital de referência.",
+  faca:["Ligue 192 ou vá imediatamente a um hospital de referência","Mantenha a pessoa deitada, calma e sem andar","Lave o local com água e sabão","Tire anéis, relógio e calçados apertados","Se puder, fotografe a cobra de longe, sem tentar pegar"],
+  naoFaca:["Não faça torniquete ou garrote","Não corte, fure nem chupe o local","Não passe folhas, pó de café, álcool ou outras substâncias","Não dê bebida alcoólica"]},
+ escorpiao:{nome:"Escorpião",em:"🦂",sev:"urg",trat:"Soro antiescorpiônico, aplicado em hospital nos casos moderados e graves. Crianças menores de 10 anos e idosos têm mais risco.",
+  faca:["Lave o local com água e sabão","Compressa morna ajuda a aliviar a dor","Procure atendimento imediatamente, principalmente se for criança","Se possível, leve o escorpião em um pote fechado para identificação"],
+  naoFaca:["Não corte, fure nem chupe o local","Não faça torniquete","Não espere os sintomas piorarem para buscar ajuda"]},
+ aranha:{nome:"Aranha",em:"🕷️",sev:"urg",trat:"Soro antiaracnídico (armadeira, aranha-marrom) ou antiloxoscélico, conforme a espécie e a gravidade. A lesão da aranha-marrom pode aparecer horas depois.",
+  faca:["Lave o local com água e sabão","Compressa morna alivia a dor da picada de armadeira","Procure atendimento, mesmo que a dor pareça pequena","Se possível, leve a aranha para identificação"],
+  naoFaca:["Não corte nem esprema o local","Não faça torniquete","Não passe pomadas ou produtos caseiros"]},
+ abelha:{nome:"Abelha ou vespa",em:"🐝",sev:"ubs",trat:"Em geral anti-histamínico e analgésico. Em caso de alergia grave (anafilaxia), adrenalina em emergência. Muitas picadas exigem hospital.",
+  faca:["Retire o ferrão raspando com a unha ou um cartão","Lave com água e sabão","Compressa fria diminui o inchaço","Ligue 192 se houver falta de ar, inchaço no rosto ou muitas picadas"],
+  naoFaca:["Não use pinça nem aperte o ferrão, isso injeta mais veneno","Não coce o local"]},
+ lagarta:{nome:"Taturana (lagarta)",em:"🐛",sev:"urg",trat:"Soro antilonômico nos casos com a lagarta Lonomia, que pode causar sangramentos. Outros casos são tratados para a dor.",
+  faca:["Lave o local com água fria","Compressa fria alivia a dor","Procure atendimento e observe sangramentos na gengiva, na urina ou manchas roxas","Se possível, leve a lagarta em um pote, sem tocar nela"],
+  naoFaca:["Não esfregue o local","Não passe produtos caseiros"]},
+ mamifero:{nome:"Cão, gato ou morcego",em:"🐕",sev:"urg",trat:"Profilaxia contra a raiva: vacina antirrábica e, conforme o caso, soro ou imunoglobulina antirrábica. Mordida ou arranhão de morcego é sempre considerado grave.",
+  faca:["Lave o ferimento com bastante água e sabão por 15 minutos","Procure uma UBS ou pronto atendimento no mesmo dia","Se for cão ou gato, observe o animal por 10 dias","Leve a carteira de vacinação"],
+  naoFaca:["Não mate o cão ou gato, ele precisa ser observado","Não deixe para depois: a vacina tem hora certa para funcionar","Não toque em morcegos caídos"]},
+ outro:{nome:"Outro animal",em:"❓",sev:"urg",trat:"O tratamento depende do animal. Leve uma foto ou descrição para o atendimento.",
+  faca:["Lave o local com água e sabão","Procure atendimento e descreva o animal"],naoFaca:["Não corte nem chupe o local","Não faça torniquete"]}
+};
+const SINT=["Dor forte","Inchaço","Vermelhidão","Sangramento","Vômito","Falta de ar","Tontura ou desmaio","Visão turva ou pálpebra caída","Suor e salivação","É criança","É idoso"];
+const GRAVE=["Falta de ar","Tontura ou desmaio","Visão turva ou pálpebra caída"];
+let bAnimal="cobra";
+$("#animals").innerHTML=Object.entries(ANIMAIS).map(([k,a])=>`<button type="button" class="an" data-an="${k}" aria-pressed="${k===bAnimal}"><span class="em" aria-hidden="true">${a.em}</span>${a.nome}</button>`).join("");
+$("#animals").addEventListener("click",e=>{const b=e.target.closest("[data-an]");if(!b)return;bAnimal=b.dataset.an;$$("[data-an]").forEach(x=>x.setAttribute("aria-pressed",x===b))});
+$("#symp").innerHTML=SINT.map((x,i)=>`<label><input type="checkbox" value="${x}" id="sy${i}">${x}</label>`).join("");
+$("#bUF").innerHTML='<option value="">Selecione</option>'+Object.keys(UFS).sort((a,b)=>UFS[a].localeCompare(UFS[b])).map(u=>`<option value="${u}">${UFS[u]}</option>`).join("")+'<option value="OUTRO">Outro estado</option>';
+ 
+const esc=t=>t.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function md(t){
+  const lines=esc(t).split("\n");let out="",inList=false;
+  for(let l of lines){
+    l=l.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+    if(/^\s*[-•*]\s+/.test(l)){if(!inList){out+="<ul>";inList=true}out+="<li>"+l.replace(/^\s*[-•*]\s+/,"")+"</li>";continue}
+    if(inList){out+="</ul>";inList=false}
+    if(/^#{1,4}\s/.test(l))out+="<h5>"+l.replace(/^#{1,4}\s/,"")+"</h5>";
+    else if(l.trim())out+="<p>"+l+"</p>";
+  }
+  return out+(inList?"</ul>":"");
+}
+function addMsg(who,html){const d=document.createElement("div");d.className="msg "+who;d.innerHTML=html;$("#msgs").append(d);$("#msgs").scrollTop=$("#msgs").scrollHeight;return d}
+ 
+function caseInfo(){
+  const sint=$$("#symp input:checked").map(i=>i.value);
+  const a=ANIMAIS[bAnimal],uf=$("#bUF").value,city=$("#bCity").value.trim(),obs=$("#bObs").value.trim();
+  let sev=a.sev;if(sint.some(x=>GRAVE.includes(x)))sev="192";
+  if(sev==="ubs"&&(sint.includes("Falta de ar")))sev="192";
+  if(bAnimal==="escorpiao"&&(sint.includes("É criança")||sint.includes("Vômito")||sint.includes("Suor e salivação")))sev="192";
+  const hosp=H.filter(h=>h.ps&&(uf&&uf!=="OUTRO"?h.uf===uf:false)).sort((x,y)=>(y.bite?1:0)-(x.bite?1:0)||(y.t==="pub")-(x.t==="pub"));
+  return {a,uf,city,obs,sint,sev,hosp};
+}
+const SEVTXT={"192":["s192","Emergência: ligue 192"],urg:["surg","Urgente: vá hoje ao pronto-socorro"],ubs:["subs","Procure atendimento se piorar"]};
+ 
+function renderPlan(c){
+  const [cls,txt]=SEVTXT[c.sev];
+  $("#bitePlan").hidden=false;
+  $("#bitePlan").innerHTML=`<span class="sev ${cls}">${txt}</span><h3 style="margin:6px 0 8px">${c.a.em} ${c.a.nome}: tratamento específico</h3><p style="margin-bottom:16px">${c.a.trat}</p>
+  <div class="dodont"><div style="background:var(--teal-soft);border-radius:14px;padding:14px"><b style="color:var(--teal)">Faça agora</b><ul style="margin-top:8px">${c.a.faca.map(x=>"<li>"+x+"</li>").join("")}</ul></div>
+  <div style="background:var(--red-soft);border-radius:14px;padding:14px"><b style="color:var(--red)">Não faça</b><ul style="margin-top:8px">${c.a.naoFaca.map(x=>"<li>"+x+"</li>").join("")}</ul></div></div>`;
+  const place=(c.city?c.city+" ":"")+(c.uf&&c.uf!=="OUTRO"?UFS[c.uf]:"");
+  const q=bAnimal==="mamifero"?"vacina antirrábica UBS "+place:bAnimal==="abelha"?"pronto-socorro "+place:"hospital referência soro antiveneno "+place;
+  $("#biteHosp").innerHTML=`<h3 style="margin-bottom:12px">Hospitais indicados</h3><div class="grid">${c.hosp.slice(0,4).map(h=>`<div class="hcard" style="cursor:default"><div style="display:flex;gap:12px;align-items:flex-start"><span class="ico i-${h.t}"><svg${h.t==="fil"?' fill="none"':''}><use href="#${ICO[h.t]}"/></svg></span><div><h3>${h.n}</h3><p class="muted" style="font-size:.88rem">${h.c} · ${h.uf}</p></div></div><div class="tags">${h.bite?'<span class="tag ps">Referência em animais peçonhentos</span>':''}<span class="tag ${h.t}">${TIPO[h.t]}</span><span class="tag ps">Pronto-socorro</span></div><a class="btn btn-primary" href="${rota(h.n+", "+h.c+" - "+h.uf)}" target="_blank" rel="noopener"><svg width="16" height="16"><use href="#i-pin"/></svg>Ver rota</a></div>`).join("")}
+  <div class="card ext"><span class="ico i-red"><svg><use href="#i-pin"/></svg></span><p><b>${bAnimal==="mamifero"?"Vacina antirrábica perto de você":"Hospital com soro perto de você"}</b><br><span class="muted">Busca no mapa as unidades de referência${place?" em "+place:" mais próximas"}.</span></p><a class="btn btn-danger" style="background:var(--surface)" href="${rota(q)}" target="_blank" rel="noopener">Abrir no mapa</a></div></div>`;
+}
+ 
+function offlineAnswer(c){
+  const [,txt]=SEVTXT[c.sev];
+  let r=`**${txt}.**\n\n**Tratamento específico:** ${c.a.trat}\n\n**Faça agora:**\n`+c.a.faca.map(x=>"- "+x).join("\n");
+  r+=`\n\n**Para onde ir:** `+(c.hosp.length?`${c.hosp[0].n} (${c.hosp[0].c}), que tem pronto-socorro${c.hosp[0].bite?" e é referência em acidentes com animais peçonhentos":""}. Veja a lista e as rotas abaixo.`:`o pronto-socorro de referência mais próximo. Use o botão de mapa abaixo.`);
+  r+=`\n\nConfirme pelo 192 ou pelo Disque-Intoxicação (0800 722 6001) qual hospital tem o soro disponível.`;
+  return r;
+}
+ 
+let sample=null,aiCtl=null,turns=[],rules="";
+(async()=>{
+  try{sample=window.claude?await claude.use("sample"):null}catch(e){sample=null}
+  const st=$("#aiStatus");
+  if(sample){st.classList.add("on");st.innerHTML="<i></i>IA conectada"}
+  else st.innerHTML="<i></i>Modo offline (respostas do app)";
+})();
+ 
+function buildRules(c){
+  const lista=c.hosp.slice(0,8).map(h=>`- ${h.n} (${h.c}/${h.uf}, ${TIPO[h.t]}${h.bite?", referência nacional em acidentes com animais peçonhentos":""})`).join("\n")||"- Nenhum hospital do diretório neste estado.";
+  return `Você é a assistente de triagem do app SaúdePerto, no Brasil. Responda sempre em português do Brasil, com frases curtas e claras, para uma pessoa leiga e assustada.
+Situação: acidente com animal. Oriente o que fazer agora, qual o tratamento específico (soro antiveneno ou vacina/soro antirrábico, conforme o animal, seguindo o Ministério da Saúde) e para qual hospital ir.
+Regras:
+- Comece com uma linha em negrito com a gravidade: "Emergência: ligue 192", "Urgente: vá hoje ao pronto-socorro" ou "Procure atendimento se piorar".
+- Depois, no máximo 3 seções curtas com títulos em negrito: "Faça agora", "Tratamento específico", "Para onde ir".
+- Em "Para onde ir", escolha um hospital da lista abaixo e explique em uma frase por quê. Se a lista estiver vazia ou nenhum servir, diga para procurar o pronto-socorro de referência mais próximo e ligar 192.
+- Nunca recomende torniquete, cortar, chupar o local ou remédios caseiros. Não invente telefones nem endereços. Os únicos números permitidos são 192 (SAMU) e 0800 722 6001 (Disque-Intoxicação).
+- Diga que a disponibilidade do soro deve ser confirmada pelo 192 ou pelo Disque-Intoxicação.
+- Você não substitui o médico. Seja breve: até 170 palavras.
+Hospitais do diretório com pronto-socorro na região:
+${lista}`;
+}
+ 
+async function askAI(userText){
+  const c=caseInfo();
+  const bubble=addMsg("ai",'<span class="typing"><i></i><i></i><i></i></span>');
+  if(!sample){setTimeout(()=>{bubble.innerHTML=md(turns.length>1?"Estou no modo offline e não consigo responder perguntas livres agora. Siga o plano abaixo e, na dúvida, ligue 192 ou 0800 722 6001.":offlineAnswer(c))},600);return}
+  aiCtl=new AbortController();$("#aiStop").hidden=false;
+  try{
+    const {text}=await sample([{role:"user",content:rules},...turns],{cache:false,modelTier:"quick",signal:aiCtl.signal,onText:({text})=>{bubble.innerHTML=md(text);$("#msgs").scrollTop=$("#msgs").scrollHeight}});
+    turns.push({role:"assistant",content:text});
+  }catch(e){
+    if(e.text)bubble.innerHTML=md(e.text);
+    if(e.code==="cancelled"){if(!e.text)bubble.innerHTML="<p class='muted'>Resposta interrompida.</p>";turns.pop()}
+    else{
+      const off=["not_granted","sampling_disabled","not_declared","capability_disabled","capability_removed"].includes(e.code);
+      if(off){sample=null;$("#aiStatus").classList.remove("on");$("#aiStatus").innerHTML="<i></i>Modo offline (respostas do app)"}
+      if(!e.text)bubble.innerHTML=md(e.code==="rate_limited"?"Muitas perguntas seguidas. Aguarde um pouco e tente de novo.":off?offlineAnswer(c):"Não consegui responder agora. Siga o plano abaixo e, na dúvida, ligue 192.");
+      turns.pop();
+    }
+  }finally{$("#aiStop").hidden=true;aiCtl=null}
+}
+$("#aiStop").addEventListener("click",()=>aiCtl?.abort());
+ 
+$("#biteForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  if(!$("#bUF").value){$("#biteErr").textContent="Escolha o estado para eu indicar o hospital.";$("#bUF").focus();return}
+  $("#biteErr").textContent="";
+  const c=caseInfo();renderPlan(c);
+  if(UF27[c.uf]){alUF=c.uf;store.set("alUF",alUF)}
+  rules=buildRules(c);
+  const msg=`Acidente com ${c.a.nome.toLowerCase()}. Local: ${c.city||"cidade não informada"}, ${c.uf==="OUTRO"?"outro estado":UFS[c.uf]}. Sintomas: ${c.sint.join(", ")||"nenhum marcado"}.${c.obs?" Detalhes: "+c.obs+".":""} O que eu faço e para onde vou?`;
+  turns=[{role:"user",content:msg}];
+  $("#msgs").innerHTML="";addMsg("me",esc(msg));askAI();
+  if(c.sev==="192")toast("Sinais de gravidade: ligue 192 agora.");
+});
+$("#chatForm").addEventListener("submit",e=>{
+  e.preventDefault();const q=$("#chatQ").value.trim();if(!q||aiCtl)return;
+  if(!turns.length){const c=caseInfo();rules=buildRules(c);if($("#bUF").value)renderPlan(c)}
+  turns.push({role:"user",content:q});turns=turns.slice(-12);if(turns[0].role!=="user")turns.shift();
+  addMsg("me",esc(q));$("#chatQ").value="";askAI();
+});
+ 
+/* ---------- ALERTAS ---------- */
+const UF27={AC:"Acre",AL:"Alagoas",AP:"Amapá",AM:"Amazonas",BA:"Bahia",CE:"Ceará",DF:"Distrito Federal",ES:"Espírito Santo",GO:"Goiás",MA:"Maranhão",MT:"Mato Grosso",MS:"Mato Grosso do Sul",MG:"Minas Gerais",PA:"Pará",PB:"Paraíba",PR:"Paraná",PE:"Pernambuco",PI:"Piauí",RJ:"Rio de Janeiro",RN:"Rio Grande do Norte",RS:"Rio Grande do Sul",RO:"Rondônia",RR:"Roraima",SC:"Santa Catarina",SP:"São Paulo",SE:"Sergipe",TO:"Tocantins"};
+const REGIAO={N:["AC","AP","AM","PA","RO","RR","TO"],NE:["AL","BA","CE","MA","PB","PE","PI","RN","SE"],CO:["DF","GO","MT","MS"],SE:["ES","MG","RJ","SP"],S:["PR","RS","SC"]};
+const regOf=uf=>Object.keys(REGIAO).find(r=>REGIAO[r].includes(uf));
+const AMAZ=["AC","AM","AP","PA","RO","RR","MT","TO","MA"];
+const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const DOENCAS=[
+ {id:"dengue",nome:"Dengue, chikungunya e zika",onde:()=>true,alta:()=>[0,1,2,3,4],base:"mod",
+  sint:["Febre alta de início súbito","Dor atrás dos olhos e no corpo","Manchas vermelhas na pele","Dor forte nas articulações (chikungunya)"],
+  prot:["Elimine água parada em vasos, pneus e calhas","Use repelente e roupas compridas","Instale telas nas janelas","Vacina contra dengue no SUS para o público indicado"],
+  ir:"UBS aos primeiros sintomas. Dor forte na barriga, vômitos ou sangramento: pronto-socorro.",vac:true},
+ {id:"gripe",nome:"Gripe (influenza) e vírus respiratórios",onde:()=>true,alta:uf=>["N","NE"].includes(regOf(uf))?[1,2,3,4,5]:[3,4,5,6,7],base:"mod",
+  sint:["Febre, tosse e dor de garganta","Dor no corpo e cansaço","Falta de ar é sinal de alerta"],
+  prot:["Vacine-se contra a gripe todo ano","Lave as mãos com frequência","Use máscara se estiver com sintomas","Mantenha ambientes ventilados"],
+  ir:"UBS para sintomas leves. Falta de ar ou lábios arroxeados: pronto-socorro ou 192.",vac:true},
+ {id:"febre",nome:"Febre amarela",onde:uf=>!["AL","PB","PE","RN","SE","CE"].includes(uf),alta:()=>[11,0,1,2,3,4],base:"baixo",
+  sint:["Febre e dor de cabeça","Dor muscular e vômitos","Pele e olhos amarelados nos casos graves"],
+  prot:["Tome a vacina (dose única), pelo menos 10 dias antes de ir para áreas de mata","Use repelente em trilhas e áreas rurais","Avise a vigilância se encontrar macacos mortos"],
+  ir:"Procure atendimento logo aos primeiros sintomas, principalmente após visitar áreas de mata.",vac:true},
+ {id:"malaria",nome:"Malária",onde:uf=>AMAZ.includes(uf),alta:()=>[0,1,2,3,4,5,6,7,8,9,10,11],base:"alto",
+  sint:["Febre alta com calafrios","Suor intenso e dor de cabeça","Febre que vai e volta"],
+  prot:["Use repelente e roupas compridas ao entardecer e amanhecer","Durma com mosquiteiro","Evite beira de rios e igarapés no fim da tarde"],
+  ir:"Faça o exame de gota espessa na UBS ou posto de diagnóstico no mesmo dia. O tratamento é gratuito no SUS."},
+ {id:"lepto",nome:"Leptospirose",onde:()=>true,alta:uf=>({N:[0,1,2,3,4],NE:[3,4,5,6],CO:[11,0,1,2],SE:[11,0,1,2],S:[11,0,1,2]})[regOf(uf)],base:"baixo",
+  sint:["Febre e dor de cabeça","Dor forte na panturrilha","Olhos avermelhados"],
+  prot:["Evite contato com água de enchentes e lama","Use botas e luvas na limpeza após alagamentos","Guarde alimentos em recipientes fechados contra ratos"],
+  ir:"Procure atendimento se tiver febre até 30 dias depois de contato com enchente."},
+ {id:"chagas",nome:"Doença de Chagas (transmissão pelo açaí)",onde:uf=>["PA","AP","AM","MA","TO"].includes(uf),alta:()=>[7,8,9,10,11],base:"baixo",
+  sint:["Febre prolongada","Inchaço no rosto e nas pernas","Cansaço e falta de ar"],
+  prot:["Consuma açaí e caldo de cana de locais que fazem o branqueamento","Prefira produtos com selo de boas práticas","Evite bebidas preparadas sem higiene"],
+  ir:"Procure a UBS e informe que consumiu açaí nos últimos dias."}
+];
+function levelOf(d,uf,m){if(d.alta(uf).includes(m))return "alto";return d.base==="alto"?"alto":d.base==="mod"?"mod":"baixo"}
+const LV={alto:"Risco alto",mod:"Risco moderado",baixo:"Risco baixo"};
+let alUF=store.get("alUF","SP");
+$("#alUF").innerHTML=Object.entries(UF27).sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+function alertsFor(uf){const m=new Date().getMonth();const ord={alto:0,mod:1,baixo:2};
+  return DOENCAS.filter(d=>d.onde(uf)).map(d=>({d,lv:levelOf(d,uf,m)})).sort((a,b)=>ord[a.lv]-ord[b.lv])}
+function renderAlerts(){
+  $("#alUF").value=alUF;const m=new Date().getMonth(),list=alertsFor(alUF);
+  $("#alMonth").textContent=MESES[m]+" · "+UF27[alUF];
+  const n=l=>list.filter(x=>x.lv===l).length;
+  $("#alCount").innerHTML=`<span class="tag ps">${n("alto")} alto</span><span class="tag fil">${n("mod")} moderado</span><span class="tag pub">${n("baixo")} baixo</span>`;
+  $("#alerts").innerHTML=list.map(({d,lv})=>{const hi=d.alta(alUF);
+    return `<article class="al ${lv}"><div class="al-head"><h3>${d.nome}</h3><span class="lvl-pill">${LV[lv]}</span></div>
+    <div><span class="muted" style="font-size:.8rem;font-weight:600">Meses de maior risco</span><div class="months" aria-label="Meses de maior risco">${MESES.map((x,i)=>`<span class="${hi.includes(i)?"hi":""} ${i===m?"now":""}" title="${x}"></span>`).join("")}</div></div>
+    <div class="al-grid"><div><b>Sintomas</b><ul>${d.sint.map(x=>"<li>"+x+"</li>").join("")}</ul></div>
+    <div><b>Como se proteger</b><ul>${d.prot.map(x=>"<li>"+x+"</li>").join("")}</ul></div>
+    <div><b>Onde procurar ajuda</b><p>${d.ir}</p>${d.vac?'<button class="link" data-go="vacinas" style="padding:6px 0">Ver minhas vacinas</button>':''}</div></div></article>`}).join("");
+  renderHomeAlert();
+}
+function renderHomeAlert(){
+  const list=alertsFor(alUF),alto=list.filter(x=>x.lv==="alto");const b=$("#homeAlert");
+  b.className="alert-banner "+(alto.length?"alto":"");
+  b.innerHTML=`<span class="ico" style="background:var(--surface);color:${alto.length?"var(--red)":"var(--amber)"}"><svg><use href="#i-alert"/></svg></span>
+  <span style="flex:1"><b>Alertas de saúde em ${UF27[alUF]}</b><br><span class="muted">${alto.length?alto.map(x=>x.d.nome.split(" (")[0]).join(", ")+": risco alto nesta época.":"Nenhuma doença em risco alto agora. Veja como se proteger."}</span></span>
+  <span class="link" style="flex:none">Ver alertas ›</span>`;
+}
+$("#alUF").addEventListener("change",()=>{alUF=$("#alUF").value;store.set("alUF",alUF);renderAlerts()});
+ 
+/* ---------- SUPORTE ---------- */
+$("#openHelp").addEventListener("click",()=>{$("#helpModal").hidden=false;$("#closeHelp").focus()});
+$("#closeHelp").addEventListener("click",()=>$("#helpModal").hidden=true);
+$("#helpModal").addEventListener("click",e=>{if(e.target.id==="helpModal")$("#helpModal").hidden=true});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#helpModal").hidden=true});
+$("#supForm").addEventListener("submit",e=>{
+  e.preventDefault();const msg=$("#supMsg").value.trim();
+  if(!msg){$("#supErr").textContent="Conte rapidamente o que aconteceu.";return}
+  $("#supErr").textContent="";
+  const now=new Date(),proto="SP-"+now.getFullYear()+String(now.getMonth()+1).padStart(2,"0")+String(now.getDate()).padStart(2,"0")+"-"+(Math.floor(Math.random()*9000)+1000);
+  $("#supProto").textContent=proto;
+  $("#supText").textContent="Olá, Nathielly e Greyce Kelly!\nChamado "+proto+" · SaúdePerto\nUsuário: "+user.nome+"\nProblema: "+$("#supTipo").value+"\nDescrição: "+msg+"\nData: "+now.toLocaleString("pt-BR");
+  $("#supDone").hidden=false;$("#supDone").scrollIntoView({behavior:"smooth",block:"nearest"});toast("Chamado "+proto+" registrado.");
+});
+$("#supCopy").addEventListener("click",()=>{const t=$("#supText").textContent;
+  function sel(){const r=document.createRange();r.selectNodeContents($("#supText"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Texto selecionado. Use Ctrl+C para copiar.")}
+  try{navigator.clipboard.writeText(t).then(()=>toast("Mensagem copiada. Agora é só enviar.")).catch(sel)}catch(e){sel()}
+});
+ 
+/* ---------- TEMA E LETRA ---------- */
+const root=document.documentElement;
+function isDark(){return root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches}
+function setTheme(t){root.dataset.theme=t;store.set("theme",t);syncTheme()}
+function syncTheme(){const d=isDark();$$("[data-theme-toggle] use").forEach(u=>u.setAttribute("href",d?"#i-sun":"#i-moon"));$$("[data-set-theme]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.setTheme===(d?"dark":"light")))}
+$$("[data-theme-toggle]").forEach(b=>b.addEventListener("click",()=>setTheme(isDark()?"light":"dark")));
+$$("[data-set-theme]").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.setTheme)));
+const savedTheme=store.get("theme",null);if(savedTheme)root.dataset.theme=savedTheme;syncTheme();
+function setFs(px){root.style.fontSize=px+"px";store.set("fs",px);$$("[data-fs]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.fs==px))}
+$$("[data-fs]").forEach(b=>b.addEventListener("click",()=>setFs(+b.dataset.fs)));
+setFs(store.get("fs",16));
+ 
+/* ---------- PERFIL / SOS ---------- */
+$$("[data-sw]").forEach(b=>b.addEventListener("click",()=>{const s=b.querySelector(".switch");const on=s.getAttribute("aria-checked")!=="true";s.setAttribute("aria-checked",on);toast(on?"Ativado.":"Desativado.")}));
+$$("[data-copy]").forEach(b=>b.addEventListener("click",()=>{const n=b.dataset.copy;
+  const p=navigator.clipboard?navigator.clipboard.writeText(n):Promise.reject();p.then(()=>toast("Número "+n+" copiado.")).catch(()=>toast("Ligue para "+n+"."))}));
+</script>
+ 
+</body>
+</html>
+ 
