@@ -59,7 +59,7 @@ O caminho de cada foto:
 
 ### Funcionalidades
 
-- 🔐 Contas da equipe com senha protegida por hash e aceite da LGPD
+- 🔐 Contas da equipe com login por celular e senha (sem precisar de e-mail), senha protegida por hash e aceite da LGPD
 - 🎪 Vários eventos, com evento ativo e painel de andamento (aguardando, na fila, prontas e retiradas)
 - 👥 Lista de convidados com celular, busca e QR Code único e intransferível
 - 📱 Convidado entra pelo nome ou pelo QR, confirmando os 4 últimos números do celular (com limite de tentativas)

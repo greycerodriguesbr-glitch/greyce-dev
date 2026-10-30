@@ -1724,8 +1724,9 @@
     <div>
       <h1>Transforme cada momento em <span>memórias especiais.</span></h1>
       <p class="lead">
-        Escolha aquele clique especial, envie pelo celular e leve pra casa
-        uma lembrancinha impressa, feita com todo carinho. 💕
+        Fotos impressas na hora para casamentos, aniversários, formaturas e
+        eventos corporativos. Cada convidado envia sua foto pelo celular e
+        recebe uma lembrança impressa ainda durante o evento.
       </p>
     </div>
 
@@ -1779,8 +1780,8 @@
         <p>Para quem trabalha no evento: monte a lista de convidados, imprima e entregue as fotos.</p>
 
         <div class="field">
-          <label for="loginEmail">E-mail</label>
-          <input id="loginEmail" type="email" autocomplete="username" placeholder="voce@empresa.com">
+          <label for="loginPhone">Celular</label>
+          <input id="loginPhone" type="tel" inputmode="numeric" autocomplete="username" maxlength="15" placeholder="(11) 98765-4321" data-phone>
         </div>
 
         <div class="field">
@@ -1815,13 +1816,8 @@
         </div>
 
         <div class="field">
-          <label for="suPhone">Celular / WhatsApp</label>
+          <label for="suPhone">Celular / WhatsApp <span class="muted">(é com ele que você vai entrar)</span></label>
           <input id="suPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 98765-4321" data-phone>
-        </div>
-
-        <div class="field">
-          <label for="suEmail">E-mail</label>
-          <input id="suEmail" type="email" autocomplete="email" placeholder="voce@empresa.com">
         </div>
 
         <div class="field">
@@ -2183,12 +2179,12 @@
    e códigos ficam em um servidor.
 ===================================================== */
 
-const STORAGE_KEY = "fotoevento:v3";
+const STORAGE_KEY = "fotoevento:v4";
 const SESSION_KEY = "fotoevento:sessao";
 const MAX_FILE_MB = 15;
 const MAX_PHOTO_SIDE = 1600;
 const PHOTO_QUALITY = 0.82;
-const DEMO_EMAIL = "demo@fotoevento.com";
+const DEMO_PHONE = "11900000000";
 const DEMO_PASS = "demo1234";
 
 const $ = (sel) => document.querySelector(sel);
@@ -2329,15 +2325,14 @@ function save() {
 
 // Cria a conta de demonstração com um evento e convidados de exemplo
 async function ensureDemoAccount() {
-  if (state.users.some((u) => u.email === DEMO_EMAIL)) return;
+  if (state.users.some((u) => u.phone === DEMO_PHONE)) return;
 
   const salt = newId(12);
   const user = {
     id: newId(10),
     name: "Equipe Demonstração",
     company: "Impressão e balcão",
-    phone: "11987654321",
-    email: DEMO_EMAIL,
+    phone: DEMO_PHONE,
     salt,
     passHash: await hashPassword(DEMO_PASS, salt),
     createdAt: nowText()
@@ -2414,7 +2409,7 @@ function showAuth(which) {
   $("#loginError").textContent = "";
   $("#signupError").textContent = "";
   if (which === "guest") showGuestFind();
-  const first = $({ guest: "#guestName", login: "#loginEmail", signup: "#suName" }[which]);
+  const first = $({ guest: "#guestName", login: "#loginPhone", signup: "#suName" }[which]);
   setTimeout(() => first.focus(), 30);
 }
 
@@ -2556,8 +2551,8 @@ $("#guestExit").addEventListener("click", () => {
 
 
 
-async function login(email, password) {
-  const user = state.users.find((u) => u.email === email.trim().toLowerCase());
+async function login(phone, password) {
+  const user = state.users.find((u) => u.phone === onlyDigits(phone));
   if (!user) return null;
   const hash = await hashPassword(password, user.salt);
   return hash === user.passHash ? user : null;
@@ -2565,17 +2560,17 @@ async function login(email, password) {
 
 $("#loginForm").addEventListener("submit", async (ev) => {
   ev.preventDefault();
-  const email = $("#loginEmail").value;
+  const phone = $("#loginPhone").value;
   const pass = $("#loginPass").value;
 
-  if (!email || !pass) {
-    $("#loginError").textContent = "Informe seu e-mail e senha.";
+  if (!validPhone(phone) || !pass) {
+    $("#loginError").textContent = "Informe seu celular com DDD e a senha.";
     return;
   }
 
-  const user = await login(email, pass);
+  const user = await login(phone, pass);
   if (!user) {
-    $("#loginError").textContent = "E-mail ou senha incorretos.";
+    $("#loginError").textContent = "Celular ou senha incorretos.";
     return;
   }
 
@@ -2586,7 +2581,7 @@ $("#loginForm").addEventListener("submit", async (ev) => {
 
 $("#demoLogin").addEventListener("click", async () => {
   await ensureDemoAccount();
-  const user = await login(DEMO_EMAIL, DEMO_PASS);
+  const user = await login(DEMO_PHONE, DEMO_PASS);
   if (user) {
     setSession(user.id);
     route();
@@ -2599,15 +2594,13 @@ $("#signupForm").addEventListener("submit", async (ev) => {
   const name = $("#suName").value.trim();
   const company = $("#suCompany").value.trim();
   const phone = onlyDigits($("#suPhone").value);
-  const email = $("#suEmail").value.trim().toLowerCase();
   const pass = $("#suPass").value;
 
   if (name.length < 3) return (err.textContent = "Digite seu nome completo.");
   if (!validPhone(phone)) return (err.textContent = "Digite um celular válido com DDD.");
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return (err.textContent = "Digite um e-mail válido.");
   if (pass.length < 6) return (err.textContent = "A senha precisa ter pelo menos 6 caracteres.");
   if (!$("#suTerms").checked) return (err.textContent = "Para continuar, aceite os Termos e a Política de Privacidade.");
-  if (state.users.some((u) => u.email === email)) return (err.textContent = "Já existe uma conta com esse e-mail. Faça login.");
+  if (state.users.some((u) => u.phone === phone)) return (err.textContent = "Já existe uma conta com esse celular. Faça login.");
 
   const salt = newId(12);
   const user = {
@@ -2615,7 +2608,6 @@ $("#signupForm").addEventListener("submit", async (ev) => {
     name,
     company,
     phone,
-    email,
     salt,
     passHash: await hashPassword(pass, salt),
     createdAt: nowText()
@@ -2752,7 +2744,7 @@ $("#confirmOk").addEventListener("click", () => {
 function renderAccount() {
   $("#accAvatar").textContent = initials(me.name);
   $("#accName").textContent = me.name;
-  $("#accCompany").textContent = me.company || me.email;
+  $("#accCompany").textContent = me.company || formatPhone(me.phone);
   $("#helloTitle").textContent = `Olá, ${me.name.split(" ")[0]}!`;
 }
 
