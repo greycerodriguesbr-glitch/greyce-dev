@@ -1671,6 +1671,38 @@
       color: var(--primary-ink);
     }
 
+    .result.ok {
+      background: linear-gradient(135deg, #FFE3EE, #FFF3F8);
+      color: var(--primary-ink);
+    }
+
+    .steps span.on {
+      background: linear-gradient(90deg, #FC438A, #FF7BB0);
+    }
+
+    .upload-box h1 {
+      font-family: var(--display);
+    }
+
+    .drop-icon {
+      animation: bob 2.4s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .result .big {
+      animation: pop .5s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(.4); opacity: 0; }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .toast {
       background: #3B1730;
     }
@@ -1692,8 +1724,8 @@
     <div>
       <h1>Transforme cada momento em <span>memórias especiais.</span></h1>
       <p class="lead">
-        Seus convidados enviam a melhor foto pelo celular e levam para casa
-        uma lembrança impressa do seu evento. Sem filas, sem confusão.
+        Escolha aquele clique especial, envie pelo celular e leve pra casa
+        uma lembrancinha impressa, feita com todo carinho. 💕
       </p>
     </div>
 
@@ -1715,15 +1747,15 @@
 
       <!-- Convidado -->
       <form id="guestLoginForm" class="hidden" novalidate>
-        <h2>Área do convidado</h2>
-        <p>Procure seu nome na lista do evento para enviar sua foto ou ver seu código de retirada.</p>
+        <h2>Que bom ter você aqui! 💖</h2>
+        <p>Procure seu nome na lista e vamos transformar seu momento favorito em uma lembrança impressa.</p>
 
         <!-- Passo 1: procurar o nome -->
         <div id="guestFind">
           <div class="field">
-            <label for="guestName">Seu nome</label>
-            <input id="guestName" type="search" autocomplete="off" maxlength="60" placeholder="Digite pelo menos 3 letras">
-            <div class="hint">Também dá para entrar escaneando o QR Code do seu convite.</div>
+            <label for="guestName">Como você se chama? ✨</label>
+            <input id="guestName" type="search" autocomplete="off" maxlength="60" placeholder="Digite seu nome...">
+            <div class="hint">📷 Tem o QR Code do convite? É só apontar a câmera do celular!</div>
           </div>
           <div class="name-results" id="guestResults" aria-live="polite"></div>
         </div>
@@ -1732,12 +1764,12 @@
         <div id="guestConfirm" class="hidden">
           <div class="picked" id="guestPicked"></div>
           <div class="field">
-            <label for="guestLast4">Confirme os 4 últimos números do seu celular</label>
+            <label for="guestLast4">Só pra garantir que é você 🤫 digite os 4 últimos números do seu celular</label>
             <input id="guestLast4" class="last4" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="• • • •">
           </div>
           <div class="error" id="guestLoginError" role="alert"></div>
-          <button class="btn btn-primary btn-block" type="submit">Entrar</button>
-          <p class="switch-auth"><button class="link" type="button" id="guestBack">← Não sou eu, voltar</button></p>
+          <button class="btn btn-primary btn-block" type="submit">Entrar 💕</button>
+          <p class="switch-auth"><button class="link" type="button" id="guestBack">← Ops, não sou eu</button></p>
         </div>
       </form>
 
@@ -2125,7 +2157,7 @@
       <span>Gifts da All<small>Fotos do seu evento</small></span>
     </div>
     <div id="uploadContent"></div>
-    <button class="link" id="guestExit" style="margin-top:18px;font-size:14px">← Sair da área do convidado</button>
+    <button class="link" id="guestExit" style="margin-top:18px;font-size:14px">← Voltar ao início</button>
   </div>
 </div>
 
@@ -2446,7 +2478,7 @@ $("#guestName").addEventListener("input", () => {
     .slice(0, 6);
 
   if (!found.length) {
-    box.innerHTML = `<p class="none">Não encontramos esse nome na lista. Confira como seu nome foi escrito ou fale com a equipe do evento.</p>`;
+    box.innerHTML = `<p class="none">Hmm, não achamos esse nome 🥺 Tente escrever de outro jeito ou chame a equipe do evento que a gente te ajuda!</p>`;
     return;
   }
 
@@ -2497,13 +2529,13 @@ $("#guestLoginForm").addEventListener("submit", (ev) => {
   }
 
   if ((wrongTries[g.id] || 0) >= MAX_TRIES) {
-    err.textContent = "Muitas tentativas. Procure a equipe do evento.";
+    err.textContent = "Muitas tentativas por aqui 😅 Chame a equipe do evento que a gente te ajuda.";
     return;
   }
 
   if (g.phone.slice(-4) !== typed) {
     wrongTries[g.id] = (wrongTries[g.id] || 0) + 1;
-    err.textContent = "Os números não conferem com o cadastro. Tente de novo.";
+    err.textContent = "Ops, esses números não batem 🙈 Tenta de novo?";
     $("#guestLast4").select();
     return;
   }
@@ -3506,18 +3538,18 @@ function renderPublic(id) {
   box.innerHTML = `
     ${stepsBar(1)}
     ${event ? `<span class="event-chip">${esc(event.name)}</span>` : ""}
-    <h1>Olá, ${esc(g.name.split(" ")[0])}! 👋</h1>
+    <h1>Oiê, ${esc(g.name.split(" ")[0])}! 💖</h1>
     <p>${g.status === "aguardando"
-      ? "Você ganhou uma foto impressa deste evento. Para garantir que é você, confirme seu celular."
-      : "Sua foto já foi enviada. Confirme seu celular para ver seu código de retirada."}</p>
+      ? "Você ganhou uma lembrancinha impressa deste dia tão especial! Antes, só pra garantir que é você:"
+      : "Sua foto já está com a gente! Confirme que é você para ver seu código de retirada."}</p>
 
     <form id="verifyForm" novalidate>
       <div class="field">
-        <label for="verifyPhone">Os 4 últimos números do seu celular</label>
+        <label for="verifyPhone">Os 4 últimos números do seu celular 🤫</label>
         <input id="verifyPhone" class="last4" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="• • • •">
       </div>
       <div class="error" id="verifyError" role="alert"></div>
-      <button class="btn btn-primary btn-block" type="submit">Continuar</button>
+      <button class="btn btn-primary btn-block" type="submit">Continuar 💕</button>
     </form>`;
 
   setTimeout(() => $("#verifyPhone")?.focus(), 50);
@@ -3535,7 +3567,7 @@ function renderPublic(id) {
 
     if (!guest || typed.length !== 4 || typed !== guest.phone.slice(-4)) {
       attempts++;
-      err.textContent = "Os números não conferem com o cadastro. Tente de novo.";
+      err.textContent = "Ops, esses números não batem 🙈 Tenta de novo?";
       return;
     }
 
@@ -3551,12 +3583,12 @@ function renderUploadStep() {
 
   $("#uploadContent").innerHTML = `
     ${stepsBar(2)}
-    <h1>Escolha sua foto</h1>
-    <p>Envie a sua melhor foto do evento. Ela será impressa para você.</p>
+    <h1>Escolha sua foto favorita 📸</h1>
+    <p>Aquela que te faz sorrir só de olhar! Ela vai virar uma lembrancinha impressa só pra você.</p>
 
     <label class="drop" id="dropZone">
       <div class="drop-icon">📷</div>
-      <p style="margin-top:10px"><b>Toque para escolher ou tirar uma foto</b><br>ou arraste a imagem para cá</p>
+      <p style="margin-top:10px"><b>Toque aqui para escolher ou tirar uma foto ✨</b><br>ou arraste a imagem para cá</p>
       <p style="font-size:12px;margin-top:6px">JPG ou PNG · até ${MAX_FILE_MB} MB</p>
       <input type="file" id="photoInput" accept="image/*">
       <img id="preview" class="hidden" alt="Pré-visualização da foto">
@@ -3564,8 +3596,8 @@ function renderUploadStep() {
 
     <div class="error" id="uploadError" role="alert"></div>
 
-    <button class="btn btn-primary btn-block" id="sendBtn" disabled>Enviar minha foto</button>
-    <p style="font-size:12px;margin-top:12px">Atenção: cada convidado pode enviar apenas uma foto.</p>`;
+    <button class="btn btn-primary btn-block" id="sendBtn" disabled>Enviar minha foto 💌</button>
+    <p style="font-size:12px;margin-top:12px">💡 Capricha na escolha: cada convidado pode enviar uma foto só.</p>`;
 
   const input = $("#photoInput");
   const drop = $("#dropZone");
@@ -3627,7 +3659,7 @@ async function handleFile(file) {
     return;
   }
 
-  btn.textContent = "Preparando a foto...";
+  btn.textContent = "Preparando sua foto com carinho... ✨";
 
   try {
     pendingImage = await compressImage(file);
@@ -3637,7 +3669,7 @@ async function handleFile(file) {
   } catch (e) {
     err.textContent = "Não consegui abrir essa imagem. Tente outra foto.";
   } finally {
-    btn.textContent = "Enviar minha foto";
+    btn.textContent = "Enviar minha foto 💌";
   }
 }
 
@@ -3696,24 +3728,24 @@ function renderTicket(g, justSent = false) {
   $("#uploadContent").innerHTML = `
     ${stepsBar(3)}
     <div class="result ok">
-      <div class="big">${delivered ? "✅" : "🎉"}</div>
-      <h2>${delivered ? "Foto já retirada" : justSent ? "Foto enviada!" : "Sua foto já foi enviada"}</h2>
+      <div class="big">${delivered ? "💝" : "🎉"}</div>
+      <h2>${delivered ? "Lembrancinha entregue!" : justSent ? "Ebaaa, foto enviada!" : "Sua foto já está com a gente!"}</h2>
       <p style="margin-top:8px;color:inherit">
         ${delivered
-          ? `Você retirou sua foto em ${esc(g.deliveredAt || "")}. Obrigado por participar!`
+          ? `Você retirou sua foto em ${esc(g.deliveredAt || "")}. Obrigada por fazer parte desse dia! 💕`
           : g.status === "impressa"
-            ? "<b>Sua foto já está impressa!</b> Vá até o balcão e mostre o código abaixo."
-            : "Sua foto está na fila de impressão. Quando passar no balcão, mostre o código abaixo."}
+            ? "<b>Sua foto já está prontinha!</b> 🥰 Passa no balcão e mostra o código abaixo."
+            : "Sua foto já está na fila de impressão 🖨️💕 Quando passar no balcão, é só mostrar o código abaixo."}
       </p>
     </div>
 
     ${delivered ? "" : `
     <div class="ticket">
-      <small>Código de retirada</small>
+      <small>💝 Seu código de retirada</small>
       <div class="pickup-code">${esc(g.pickupCode)}</div>
       <p style="font-size:13px">${esc(g.name)} · ${esc(event?.name || "")}</p>
     </div>
-    <p style="font-size:12px;margin-top:12px">Dica: tire um print desta tela. O código é pessoal e só pode ser usado uma vez.</p>`}`;
+    <p style="font-size:12px;margin-top:12px">📲 Dica: tira um print desta tela! O código é só seu e vale uma vez.</p>`}`;
 }
 
 
