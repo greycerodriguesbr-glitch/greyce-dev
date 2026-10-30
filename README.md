@@ -7,7 +7,7 @@ Portfólio de projetos web da **Greyce Rodrigues**. Cada projeto é uma aplicaç
 | Projeto | O que faz | Testar |
 |---|---|---|
 | 🏥 **SaúdePerto** | App de saúde com assistente de IA para picadas e mordidas, busca de hospitais, consultas, remédios e vacinas | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/saudeperto/) |
-| 📸 **FotoEvento** | Coleta de fotos de eventos: cada convidado recebe um QR Code e envia uma foto | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) |
+| 📸 **FotoEvento** | Fotos impressas em eventos: QR Code único por convidado, confirmação por celular e código de retirada | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) |
 
 ---
 
@@ -37,20 +37,35 @@ Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/saud
 
 ## 📸 FotoEvento
 
-Ideal para casamentos, aniversários e formaturas: o organizador cadastra os convidados, gera um **QR Code único** para cada um, e o convidado escaneia e envia sua melhor foto do evento. Cada QR Code só pode ser usado **uma vez**.
+> *Cada convidado leva uma foto impressa do seu evento.*
+
+Plataforma para fotógrafos e organizadores de casamentos, aniversários e formaturas. Cada convidado recebe um **QR Code único**, envia sua melhor foto pelo celular e retira a foto impressa no balcão com um **código de retirada** gerado na hora.
+
+### Como funciona
+
+1. **O organizador cria uma conta** e cadastra o evento
+2. **Cadastra os convidados** com nome e celular, e cada um ganha um QR Code único
+3. **O convidado escaneia o QR**, confirma o próprio celular e envia a foto
+4. **Na hora, é gerado um código de retirada** de 6 números, pessoal e de uso único
+5. **No balcão**, o organizador digita o código, confere a foto e confirma a entrega
 
 ### Funcionalidades
 
-- 📊 **Dashboard** com total de eventos, convidados, fotos recebidas e pendentes
-- 🎪 **Cadastro de eventos** com nome, data e local
-- 👥 **Lista de presença** com busca e status de cada convidado
-- 📱 **QR Code por convidado**, pronto para imprimir
-- 📷 **Página de envio** para o convidado, com pré-visualização e limite de 10 MB
-- ⬇️ **Galeria de fotos recebidas** com download
+- 🔐 **Contas de organizador**: criar conta, entrar e sair, com senha protegida por hash e aceite da LGPD
+- 🎪 **Vários eventos por conta**, com evento ativo e indicadores de andamento
+- 👥 **Convidados com celular**, busca por nome ou número e QR Code único e intransferível
+- 📱 **Confirmação de identidade**: o convidado só envia a foto depois de confirmar o celular cadastrado
+- 🎟️ **Código de retirada** gerado no envio e **tela de retirada** para validar e marcar a entrega
+- 🖨️ **Impressão do QR Code** em formato de cartão, pronto para mesa ou convite
+- 🖼️ **Galeria de fotos** com status (aguardando, pronta para retirar, retirada) e download
+- 📉 Fotos reduzidas automaticamente para carregar rápido e caber no armazenamento
+- 📲 Layout responsivo para celular, sem bibliotecas além do gerador de QR Code
 
 ### Como usar
 
-Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador e entre com o usuário de demonstração **admin** / **1234**.
+Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador. Crie sua conta ou clique em **"Entrar com a conta de demonstração"**, que já vem com um evento e convidados de exemplo.
+
+> Os dados ficam salvos no próprio navegador. Para testar o fluxo completo, use o botão **Testar** no QR Code de um convidado: ele abre a página do convidado na mesma máquina.
 
 ---
 
@@ -63,7 +78,7 @@ Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/foto
 ## 🚧 Próximos passos
 
 - SaúdePerto: conectar a uma base real de estabelecimentos de saúde e salvar os dados do usuário em um servidor
-- FotoEvento: guardar as fotos na nuvem e bloquear o QR Code no servidor, não só no navegador
+- FotoEvento: servidor com banco de dados e armazenamento em nuvem, para o QR Code funcionar no celular de qualquer convidado, e envio do código de retirada por SMS ou WhatsApp
 
 ---
 

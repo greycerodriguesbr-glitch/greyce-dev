@@ -3,191 +3,437 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FotoEvento — Fotos do seu evento</title>
+  <title>FotoEvento — Fotos impressas para cada convidado</title>
+  <meta name="description" content="Cada convidado recebe um QR Code único, envia sua melhor foto pelo celular e retira a foto impressa com um código de retirada.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
 
   <!-- QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --ink: #172033;
+      --ink-2: #6f788e;
+      --line: #e6e9f1;
+      --primary: #7657ff;
+      --primary-2: #a05cff;
+      --primary-soft: #efebff;
+      --primary-ink: #5b43dc;
+      --green-soft: #e3f8ec;
+      --green: #178a4e;
+      --yellow-soft: #fff3d6;
+      --yellow: #9a6200;
+      --blue-soft: #e4efff;
+      --blue: #2563c9;
+      --red-soft: #fde8e8;
+      --red: #c33131;
+      --side: #13162a;
+      --shadow: 0 10px 30px #17203310;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Inter, Arial, sans-serif;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
     }
 
     body {
-      background: #f5f7fb;
-      color: #172033;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
     }
 
-    button, input {
+    button, input, select {
       font: inherit;
+      color: inherit;
     }
 
     button {
       cursor: pointer;
     }
 
+    :focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+
     .hidden {
       display: none !important;
     }
 
-    /* LOGIN */
+    .muted {
+      color: var(--ink-2);
+    }
 
-    #loginPage {
-      min-height: 100vh;
-      display: flex;
+    /* ================= BOTÕES ================= */
+
+    .btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      background:
-        radial-gradient(circle at top right, #7c5cff55, transparent 35%),
-        linear-gradient(135deg, #11152a, #25194b);
+      gap: 6px;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      transition: transform .15s, filter .15s, background .15s;
+      white-space: nowrap;
     }
 
-    .login-box {
-      width: 100%;
-      max-width: 430px;
-      padding: 40px;
-      background: rgba(255,255,255,.96);
-      border-radius: 28px;
-      box-shadow: 0 30px 80px #0005;
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      font-size: 23px;
-      margin-bottom: 35px;
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
     }
 
-    .logo-icon {
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-items: center;
-      border-radius: 15px;
+    .btn-primary {
       color: white;
-      background: linear-gradient(135deg, #7657ff, #a86cff);
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 8px 20px -8px #7657ffaa;
     }
 
-    .login-box h1 {
-      font-size: 30px;
-      margin-bottom: 8px;
+    .btn-soft {
+      background: var(--primary-soft);
+      color: var(--primary-ink);
     }
 
-    .login-box p {
-      color: #778099;
-      margin-bottom: 28px;
+    .btn-ghost {
+      background: white;
+      border: 1px solid var(--line);
     }
+
+    .btn-danger {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .btn-sm {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: 10px;
+    }
+
+    .link {
+      border: 0;
+      background: none;
+      color: var(--primary-ink);
+      font-weight: 700;
+      padding: 2px;
+    }
+
+    /* ================= FORMULÁRIOS ================= */
 
     .field {
-      margin-bottom: 16px;
+      margin-bottom: 15px;
     }
 
     .field label {
       display: block;
       margin-bottom: 7px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
     }
 
+    .input,
     .field input {
       width: 100%;
-      padding: 14px 16px;
-      border: 1px solid #dfe3ed;
-      border-radius: 13px;
+      padding: 13px 15px;
+      border: 1px solid #dde1ec;
+      border-radius: 12px;
       outline: none;
-      transition: .2s;
+      background: white;
+      transition: border-color .2s, box-shadow .2s;
     }
 
+    .input:focus,
     .field input:focus {
-      border-color: #7657ff;
-      box-shadow: 0 0 0 4px #7657ff15;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px #7657ff18;
     }
 
-    .btn {
-      border: 0;
-      border-radius: 13px;
-      padding: 13px 18px;
+    .hint {
+      font-size: 12px;
+      color: var(--ink-2);
+      margin-top: 6px;
+    }
+
+    .error {
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 18px;
+      margin-bottom: 10px;
+    }
+
+    .check {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13px;
+      color: var(--ink-2);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .check input {
+      accent-color: var(--primary);
+      width: 17px;
+      height: 17px;
+      margin-top: 1px;
+      flex: none;
+    }
+
+    /* ================= LOGO ================= */
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       font-weight: 800;
-      transition: .2s;
+      font-size: 22px;
+      letter-spacing: -.02em;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      width: 100%;
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
       color: white;
-      background: linear-gradient(135deg, #7657ff, #a05cff);
+      font-size: 20px;
+      background: linear-gradient(135deg, #7657ff, #a86cff);
+      flex: none;
+    }
+
+    /* ================= LOGIN / CADASTRO ================= */
+
+    #authPage {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .auth-art {
+      position: relative;
+      overflow: hidden;
+      color: white;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 40px;
+      background:
+        radial-gradient(circle at 85% 10%, #8f72ff66, transparent 40%),
+        radial-gradient(circle at 10% 90%, #c06bff40, transparent 40%),
+        linear-gradient(140deg, #11152a, #26194d);
+    }
+
+    .auth-art h1 {
+      font-size: clamp(32px, 4vw, 50px);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+      max-width: 13ch;
+    }
+
+    .auth-art h1 span {
+      background: linear-gradient(90deg, #b9a8ff, #e2b8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .auth-art .lead {
+      margin-top: 16px;
+      color: #c9cbe0;
+      font-size: 17px;
+      line-height: 1.6;
+      max-width: 44ch;
+    }
+
+    .how {
+      display: grid;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .how div {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: #ffffff0d;
+      border: 1px solid #ffffff14;
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .how b {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #ffffff1a;
+      flex: none;
+    }
+
+    .how small {
+      display: block;
+      color: #b4b8d2;
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .auth-side {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-card h2 {
+      font-size: 30px;
+      letter-spacing: -.02em;
+      margin-bottom: 6px;
+    }
+
+    .auth-card > form > p {
+      color: var(--ink-2);
+      margin-bottom: 26px;
+    }
+
+    .switch-auth {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 14px;
+      color: var(--ink-2);
     }
 
     .demo {
       margin-top: 18px;
-      padding: 12px;
+      padding: 12px 14px;
       border-radius: 12px;
-      background: #f3f1ff;
-      color: #6754b7;
-      font-size: 12px;
+      background: var(--primary-soft);
+      color: var(--primary-ink);
+      font-size: 13px;
       text-align: center;
     }
 
-    /* APP */
-
-    #app {
-      min-height: 100vh;
-    }
+    /* ================= APP ================= */
 
     .sidebar {
       position: fixed;
+      inset: 0 auto 0 0;
       width: 250px;
-      height: 100vh;
-      padding: 25px 18px;
-      background: #15182a;
+      padding: 24px 16px;
+      background: var(--side);
       color: white;
+      display: flex;
+      flex-direction: column;
+      z-index: 5;
     }
 
     .sidebar .logo {
-      margin-left: 10px;
-    }
-
-    .nav {
-      margin-top: 35px;
+      margin: 0 0 30px 8px;
     }
 
     .nav button {
       width: 100%;
       text-align: left;
-      padding: 13px 15px;
-      margin-bottom: 6px;
+      padding: 12px 14px;
+      margin-bottom: 4px;
       border: 0;
       border-radius: 12px;
       background: transparent;
-      color: #adb3c7;
-      font-weight: 700;
+      color: #a9afc6;
+      font-weight: 600;
     }
 
     .nav button:hover,
     .nav button.active {
       color: white;
-      background: #ffffff12;
+      background: #ffffff14;
     }
 
-    .logout {
-      position: absolute;
-      bottom: 25px;
-      left: 18px;
-      right: 18px;
+    .account {
+      margin-top: auto;
+      padding: 14px;
+      border-radius: 14px;
+      background: #ffffff0c;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7657ff, #c06bff);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      flex: none;
+    }
+
+    .account .who {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .account .who b,
+    .account .who small {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .account .who small {
+      color: #9ea4bd;
+      font-size: 12px;
+    }
+
+    .account button {
+      border: 0;
+      background: #ffffff14;
+      color: white;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .content {
       margin-left: 250px;
-      padding: 35px;
+      padding: 34px;
+      max-width: 1250px;
     }
 
     .topbar {
@@ -195,16 +441,18 @@
       align-items: center;
       justify-content: space-between;
       gap: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
     }
 
     .topbar h1 {
-      font-size: 30px;
+      font-size: 28px;
+      letter-spacing: -.02em;
     }
 
     .topbar p {
-      color: #7d8498;
-      margin-top: 5px;
+      color: var(--ink-2);
+      margin-top: 4px;
     }
 
     .section {
@@ -213,41 +461,117 @@
 
     .section.active {
       display: block;
+      animation: fade .2s ease;
     }
 
-    /* CARDS */
+    @keyframes fade {
+      from { opacity: .4; transform: translateY(4px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    /* ================= CARDS ================= */
 
     .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 25px;
+      gap: 16px;
+      margin-bottom: 22px;
     }
 
     .card {
-      background: white;
-      border: 1px solid #e8ebf2;
+      background: var(--surface);
+      border: 1px solid var(--line);
       border-radius: 20px;
       padding: 22px;
-      box-shadow: 0 8px 25px #17203308;
+      box-shadow: var(--shadow);
     }
 
     .stat-label {
-      color: #81899d;
-      font-size: 13px;
+      color: var(--ink-2);
+      font-size: 12px;
       font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
 
     .stat-number {
-      font-size: 30px;
-      font-weight: 900;
+      font-size: 32px;
+      font-weight: 800;
       margin-top: 8px;
+      letter-spacing: -.02em;
+      font-variant-numeric: tabular-nums;
     }
 
-    /* TABLE */
+    .progress {
+      height: 10px;
+      background: #eef0f6;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 16px;
+    }
+
+    .progress i {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
+      border-radius: 99px;
+      transition: width .4s;
+    }
+
+    .funnel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .funnel div {
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .funnel b {
+      display: block;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    /* ================= SELETOR DE EVENTO ================= */
+
+    .event-switch {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 7px 7px 7px 14px;
+    }
+
+    .event-switch label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ink-2);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .event-switch select {
+      border: 0;
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-weight: 700;
+      max-width: 260px;
+    }
+
+    /* ================= TABELA ================= */
 
     .table-card {
-      overflow: hidden;
+      overflow-x: auto;
     }
 
     .table-head {
@@ -255,73 +579,172 @@
       justify-content: space-between;
       gap: 15px;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
     }
 
     .search {
-      max-width: 300px;
-      width: 100%;
-      padding: 11px 14px;
-      border: 1px solid #dfe3ed;
-      border-radius: 11px;
-      outline: none;
+      max-width: 280px;
+    }
+
+    .add-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr auto;
+      gap: 10px;
+      margin-bottom: 6px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 720px;
     }
 
     th, td {
       text-align: left;
-      padding: 15px 10px;
-      border-bottom: 1px solid #edf0f5;
+      padding: 13px 10px;
+      border-bottom: 1px solid #eef0f5;
       font-size: 14px;
+      vertical-align: middle;
     }
 
     th {
       color: #858da0;
-      font-size: 12px;
+      font-size: 11px;
+      letter-spacing: .06em;
       text-transform: uppercase;
+    }
+
+    td.actions {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    td.actions .btn + .btn {
+      margin-left: 6px;
+    }
+
+    .code {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
     }
 
     .badge {
       display: inline-flex;
-      padding: 6px 9px;
+      padding: 5px 9px;
       border-radius: 99px;
       font-size: 11px;
       font-weight: 800;
+      letter-spacing: .02em;
+      white-space: nowrap;
     }
 
-    .green {
-      background: #e5f9ee;
-      color: #1b9b58;
+    .b-wait { background: var(--yellow-soft); color: var(--yellow); }
+    .b-sent { background: var(--blue-soft); color: var(--blue); }
+    .b-done { background: var(--green-soft); color: var(--green); }
+    .b-active { background: var(--green-soft); color: var(--green); }
+
+    .empty {
+      text-align: center;
+      padding: 34px 20px;
+      color: var(--ink-2);
     }
 
-    .yellow {
-      background: #fff4d9;
-      color: #a96c00;
+    .empty h3 {
+      color: var(--ink);
+      margin-bottom: 6px;
     }
 
-    /* EVENT CARDS */
+    /* ================= EVENTOS ================= */
 
     .events {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 18px;
+      gap: 16px;
+    }
+
+    .event-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .event-card.current {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px #7657ff22;
     }
 
     .event-card h3 {
-      margin-bottom: 8px;
+      font-size: 18px;
     }
 
-    .event-card p {
-      color: #7e879b;
+    .event-card .meta {
+      color: var(--ink-2);
       font-size: 14px;
-      margin-bottom: 15px;
+      line-height: 1.7;
     }
 
-    /* MODAL */
+    .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .event-card .row {
+      margin-top: auto;
+    }
+
+    /* ================= RETIRADA ================= */
+
+    .pickup {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .code-input {
+      width: 100%;
+      text-align: center;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: .3em;
+      padding: 16px 10px 16px calc(10px + .3em);
+      border: 2px solid #dde1ec;
+      border-radius: 16px;
+      outline: none;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+
+    .code-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 5px #7657ff18;
+    }
+
+    .pickup-result img {
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+      background: #f2f3f8;
+      border-radius: 14px;
+      margin: 14px 0;
+    }
+
+    .dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 14px;
+      font-size: 14px;
+    }
+
+    .dl dt {
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+
+    /* ================= MODAL ================= */
 
     .modal {
       position: fixed;
@@ -340,7 +763,7 @@
 
     .modal-box {
       width: 100%;
-      max-width: 550px;
+      max-width: 500px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 28px;
@@ -351,68 +774,98 @@
     .modal-head {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 22px;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
     }
 
     .close {
       border: 0;
       background: #f1f3f7;
-      width: 35px;
-      height: 35px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
+      font-size: 20px;
+      line-height: 1;
+      flex: none;
     }
 
-    /* QR */
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    /* ================= QR ================= */
 
     .qr-box {
       text-align: center;
-      padding: 25px;
     }
 
     #qrcode {
       display: flex;
       justify-content: center;
-      margin: 20px;
+      margin: 18px auto;
+      padding: 14px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      width: fit-content;
     }
 
     .qr-name {
       font-size: 20px;
-      font-weight: 900;
+      font-weight: 800;
     }
 
     .qr-url {
-      margin-top: 8px;
-      color: #778099;
+      margin: 0 0 18px;
+      color: var(--ink-2);
       font-size: 12px;
       word-break: break-all;
     }
 
-    /* PHOTOS */
+    /* ================= FOTOS ================= */
 
     .photos {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 18px;
+      gap: 16px;
     }
 
     .photo-card {
       overflow: hidden;
       background: white;
       border-radius: 18px;
-      border: 1px solid #e8ebf2;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
     }
 
     .photo-card img {
+      display: block;
       width: 100%;
       height: 220px;
       object-fit: cover;
+      cursor: zoom-in;
     }
 
     .photo-info {
       padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    /* PUBLIC */
+    .lightbox img {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 14px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* ================= PÁGINA DO CONVIDADO ================= */
 
     #publicPage {
       min-height: 100vh;
@@ -427,53 +880,185 @@
 
     .upload-box {
       width: 100%;
-      max-width: 540px;
+      max-width: 520px;
       background: white;
       border-radius: 28px;
-      padding: 35px;
+      padding: 34px;
       box-shadow: 0 30px 80px #0005;
       text-align: center;
     }
 
+    .upload-box .logo {
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
     .upload-box h1 {
-      margin: 18px 0 8px;
+      font-size: 26px;
+      letter-spacing: -.02em;
+      margin-bottom: 8px;
     }
 
     .upload-box p {
-      color: #7b8396;
+      color: var(--ink-2);
       line-height: 1.6;
     }
 
+    .event-chip {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 12px;
+      border-radius: 99px;
+      background: var(--primary-soft);
+      color: var(--primary-ink);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .steps span {
+      width: 34px;
+      height: 6px;
+      border-radius: 99px;
+      background: #e6e8f2;
+    }
+
+    .steps span.on {
+      background: var(--primary);
+    }
+
+    .upload-box form {
+      text-align: left;
+      margin-top: 22px;
+    }
+
     .drop {
-      margin: 25px 0;
+      position: relative;
+      display: block;
+      margin: 22px 0 14px;
       border: 2px dashed #d9ddef;
       border-radius: 20px;
-      padding: 35px 20px;
+      padding: 28px 20px;
       background: #fafaff;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color .2s, background .2s;
+    }
+
+    .drop:hover,
+    .drop.dragging {
+      border-color: var(--primary);
+      background: #f4f1ff;
     }
 
     .drop-icon {
-      font-size: 45px;
+      font-size: 42px;
+    }
+
+    .drop input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
     }
 
     #preview {
       max-width: 100%;
-      max-height: 320px;
+      max-height: 300px;
       border-radius: 16px;
-      margin-top: 20px;
-      display: none;
+      margin-top: 14px;
     }
 
-    .success {
-      padding: 25px;
-      background: #e8faf0;
+    .result {
+      padding: 24px;
       border-radius: 18px;
-      color: #188a4c;
     }
 
-    /* RESPONSIVE */
+    .result.ok {
+      background: #e8faf0;
+      color: #157a44;
+    }
 
-    @media(max-width: 900px) {
+    .result.warn {
+      background: var(--yellow-soft);
+      color: var(--yellow);
+    }
+
+    .result .big {
+      font-size: 48px;
+    }
+
+    .ticket {
+      margin-top: 20px;
+      border: 2px dashed #b7a9ff;
+      border-radius: 20px;
+      padding: 20px;
+      background: #faf8ff;
+      color: var(--ink);
+    }
+
+    .ticket small {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--primary-ink);
+    }
+
+    .ticket .pickup-code {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: .18em;
+      margin: 6px 0 4px;
+    }
+
+    /* ================= TOAST ================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      background: var(--side);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 50;
+      box-shadow: 0 15px 40px #0004;
+      max-width: calc(100% - 32px);
+    }
+
+    /* ================= RESPONSIVO ================= */
+
+    @media (max-width: 980px) {
+      .pickup {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      #authPage {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-art {
+        padding: 28px 20px;
+      }
+
+      .auth-art .how {
+        display: none;
+      }
+
       .stats {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -481,51 +1066,67 @@
       .sidebar {
         position: static;
         width: 100%;
-        height: auto;
+        padding: 14px 16px;
       }
 
       .sidebar .logo {
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
 
       .nav {
         display: flex;
+        gap: 6px;
         overflow-x: auto;
-        margin-top: 10px;
       }
 
       .nav button {
         white-space: nowrap;
+        width: auto;
+        margin-bottom: 0;
       }
 
-      .logout {
-        position: static;
-        margin-top: 10px;
+      .account {
+        margin-top: 12px;
       }
 
       .content {
         margin-left: 0;
-        padding: 20px;
+        padding: 20px 16px;
       }
     }
 
-    @media(max-width: 550px) {
-      .stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
+    @media (max-width: 600px) {
       .topbar {
-        align-items: flex-start;
+        align-items: stretch;
         flex-direction: column;
       }
 
-      .table-card {
-        overflow-x: auto;
+      .event-switch select {
+        max-width: none;
+        flex: 1;
       }
 
-      .login-box,
+      .add-row {
+        grid-template-columns: 1fr;
+      }
+
+      .funnel {
+        grid-template-columns: 1fr;
+      }
+
       .upload-box {
-        padding: 25px;
+        padding: 24px 20px;
+      }
+
+      .search {
+        max-width: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
       }
     }
   </style>
@@ -533,44 +1134,109 @@
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- ================= ENTRAR / CRIAR CONTA ================= -->
 
-<div id="loginPage">
+<div id="authPage" class="hidden">
 
-  <div class="login-box">
-
+  <div class="auth-art">
     <div class="logo">
       <div class="logo-icon">📸</div>
       FotoEvento
     </div>
 
-    <h1>Bem-vindo</h1>
-    <p>Entre no painel para administrar seus eventos.</p>
-
-    <div class="field">
-      <label>Usuário</label>
-      <input id="loginUser" type="text" placeholder="Digite seu usuário">
+    <div>
+      <h1>Cada convidado leva <span>uma foto impressa</span> do seu evento.</h1>
+      <p class="lead">
+        Gere um QR Code único para cada pessoa, receba as fotos pelo celular
+        e entregue no balcão com um código de retirada. Sem filas, sem confusão.
+      </p>
     </div>
 
-    <div class="field">
-      <label>Senha</label>
-      <input id="loginPass" type="password" placeholder="Digite sua senha">
+    <div class="how">
+      <div><b>1</b><span>Cadastre os convidados<small>Nome e celular de cada pessoa</small></span></div>
+      <div><b>2</b><span>Entregue o QR Code único<small>Impresso no convite ou na mesa</small></span></div>
+      <div><b>3</b><span>O convidado envia a foto<small>Confirma o celular e recebe um código</small></span></div>
+      <div><b>4</b><span>Retirada no balcão<small>Você confere o código e entrega a foto</small></span></div>
     </div>
-
-    <button class="btn btn-primary" onclick="login()">
-      Entrar no painel
-    </button>
-
-    <div class="demo">
-      Demonstração: <b>admin</b> / <b>1234</b>
-    </div>
-
   </div>
 
+  <div class="auth-side">
+    <div class="auth-card">
+
+      <!-- Entrar -->
+      <form id="loginForm" novalidate>
+        <h2>Entrar</h2>
+        <p>Acesse o painel do seu evento.</p>
+
+        <div class="field">
+          <label for="loginEmail">E-mail</label>
+          <input id="loginEmail" type="email" autocomplete="username" placeholder="voce@empresa.com">
+        </div>
+
+        <div class="field">
+          <label for="loginPass">Senha</label>
+          <input id="loginPass" type="password" autocomplete="current-password" placeholder="Sua senha">
+        </div>
+
+        <div class="error" id="loginError" role="alert"></div>
+
+        <button class="btn btn-primary btn-block" type="submit">Entrar no painel</button>
+
+        <div class="demo">
+          Quer só conhecer? <button class="link" type="button" id="demoLogin">Entrar com a conta de demonstração</button>
+        </div>
+
+        <p class="switch-auth">Ainda não tem conta? <button class="link" type="button" data-auth="signup">Criar conta grátis</button></p>
+      </form>
+
+      <!-- Criar conta -->
+      <form id="signupForm" class="hidden" novalidate>
+        <h2>Criar conta</h2>
+        <p>Comece a usar em menos de 1 minuto.</p>
+
+        <div class="field">
+          <label for="suName">Seu nome</label>
+          <input id="suName" autocomplete="name" maxlength="60" placeholder="Nome completo">
+        </div>
+
+        <div class="field">
+          <label for="suCompany">Empresa ou nome do seu negócio <span class="muted">(opcional)</span></label>
+          <input id="suCompany" autocomplete="organization" maxlength="60" placeholder="Ex.: Studio Flash Fotografia">
+        </div>
+
+        <div class="field">
+          <label for="suPhone">Celular / WhatsApp</label>
+          <input id="suPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 98765-4321" data-phone>
+        </div>
+
+        <div class="field">
+          <label for="suEmail">E-mail</label>
+          <input id="suEmail" type="email" autocomplete="email" placeholder="voce@empresa.com">
+        </div>
+
+        <div class="field">
+          <label for="suPass">Senha</label>
+          <input id="suPass" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres">
+        </div>
+
+        <label class="check">
+          <input type="checkbox" id="suTerms">
+          <span>Li e aceito os Termos de Uso e a Política de Privacidade, de acordo com a LGPD.</span>
+        </label>
+
+        <div class="error" id="signupError" role="alert"></div>
+
+        <button class="btn btn-primary btn-block" type="submit">Criar minha conta</button>
+
+        <p class="switch-auth">Já tem conta? <button class="link" type="button" data-auth="login">Entrar</button></p>
+      </form>
+
+    </div>
+  </div>
 </div>
 
 
-<!-- ================= APP ================= -->
+<!-- ================= PAINEL ================= -->
 
 <div id="app" class="hidden">
 
@@ -581,201 +1247,174 @@
       FotoEvento
     </div>
 
-    <div class="nav">
+    <nav class="nav" aria-label="Menu">
+      <button data-section="dashboard" class="active">📊 Visão geral</button>
+      <button data-section="events">🎪 Eventos</button>
+      <button data-section="guests">👥 Convidados</button>
+      <button data-section="pickup">🎟️ Retirada</button>
+      <button data-section="photos">🖼️ Fotos recebidas</button>
+    </nav>
 
-      <button class="active" onclick="showSection('dashboard', this)">
-        📊 Dashboard
-      </button>
-
-      <button onclick="showSection('events', this)">
-        🎪 Eventos
-      </button>
-
-      <button onclick="showSection('guests', this)">
-        👥 Lista de presença
-      </button>
-
-      <button onclick="showSection('photos', this)">
-        📸 Fotos recebidas
-      </button>
-
+    <div class="account">
+      <div class="avatar" id="accAvatar">?</div>
+      <div class="who">
+        <b id="accName"></b>
+        <small id="accCompany"></small>
+      </div>
+      <button id="logoutBtn">Sair</button>
     </div>
-
-    <button class="btn logout" onclick="logout()">
-      Sair
-    </button>
 
   </aside>
 
 
   <main class="content">
 
-    <!-- DASHBOARD -->
+    <!-- VISÃO GERAL -->
 
     <section id="dashboard" class="section active">
 
       <div class="topbar">
-
         <div>
-          <h1>Dashboard</h1>
-          <p>Controle seus eventos e fotos.</p>
+          <h1 id="helloTitle">Olá!</h1>
+          <p>Acompanhe o envio e a retirada das fotos em tempo real.</p>
         </div>
-
-        <button class="btn btn-primary" style="width:auto" onclick="openEventModal()">
-          + Novo evento
-        </button>
-
+        <button class="btn btn-primary" data-open="eventModal">+ Novo evento</button>
       </div>
 
       <div class="stats">
-
         <div class="card">
-          <div class="stat-label">EVENTOS</div>
-          <div class="stat-number" id="statEvents">1</div>
+          <div class="stat-label">Eventos</div>
+          <div class="stat-number" id="statEvents">0</div>
         </div>
-
         <div class="card">
-          <div class="stat-label">CONVIDADOS</div>
-          <div class="stat-number" id="statGuests">5</div>
+          <div class="stat-label">Convidados</div>
+          <div class="stat-number" id="statGuests">0</div>
         </div>
-
         <div class="card">
-          <div class="stat-label">FOTOS RECEBIDAS</div>
-          <div class="stat-number" id="statPhotos">2</div>
+          <div class="stat-label">Fotos recebidas</div>
+          <div class="stat-number" id="statPhotos">0</div>
         </div>
-
         <div class="card">
-          <div class="stat-label">AGUARDANDO</div>
-          <div class="stat-number" id="statWaiting">3</div>
+          <div class="stat-label">Fotos retiradas</div>
+          <div class="stat-number" id="statDelivered">0</div>
         </div>
-
       </div>
 
-      <div class="card">
-
-        <div class="table-head">
-          <h2>Evento atual</h2>
-          <span class="badge green">ATIVO</span>
-        </div>
-
-        <h3>Casamento João & Maria</h3>
-        <p style="color:#7e879b;margin-top:7px">
-          15/11/2026 • Espaço Jardim
-        </p>
-
-      </div>
+      <div class="card" id="currentEventCard"></div>
 
     </section>
 
 
-    <!-- EVENTS -->
+    <!-- EVENTOS -->
 
     <section id="events" class="section">
 
       <div class="topbar">
-
         <div>
           <h1>Eventos</h1>
-          <p>Gerencie seus eventos.</p>
+          <p>Crie eventos e escolha qual está ativo.</p>
         </div>
-
-        <button class="btn btn-primary" style="width:auto" onclick="openEventModal()">
-          + Novo evento
-        </button>
-
+        <button class="btn btn-primary" data-open="eventModal">+ Novo evento</button>
       </div>
 
-      <div class="events">
-
-        <div class="card event-card">
-
-          <h3>Casamento João & Maria</h3>
-
-          <p>
-            📅 15/11/2026<br>
-            📍 Espaço Jardim
-          </p>
-
-          <span class="badge green">ATIVO</span>
-
-          <div style="margin-top:18px">
-            <button class="btn btn-primary" style="width:auto" onclick="showSection('guests')">
-              Gerenciar convidados
-            </button>
-          </div>
-
-        </div>
-
-      </div>
+      <div class="events" id="eventList"></div>
 
     </section>
 
 
-    <!-- GUESTS -->
+    <!-- CONVIDADOS -->
 
     <section id="guests" class="section">
 
       <div class="topbar">
-
         <div>
-          <h1>Lista de presença</h1>
-          <p>Selecione o convidado e gere o QR Code.</p>
+          <h1>Convidados</h1>
+          <p>Cada convidado recebe um QR Code único e intransferível.</p>
         </div>
-
-        <button class="btn btn-primary" style="width:auto" onclick="addGuest()">
-          + Adicionar convidado
-        </button>
-
+        <div class="event-switch">
+          <label for="guestEventSelect">Evento</label>
+          <select id="guestEventSelect" data-event-select></select>
+        </div>
       </div>
 
       <div class="card table-card">
 
+        <form class="add-row" id="addGuestForm" novalidate>
+          <input class="input" id="newGuestName" maxlength="60" placeholder="Nome do convidado" aria-label="Nome do convidado">
+          <input class="input" id="newGuestPhone" type="tel" inputmode="numeric" maxlength="15" placeholder="Celular (11) 98765-4321" aria-label="Celular do convidado" data-phone>
+          <button class="btn btn-primary" type="submit">+ Adicionar</button>
+        </form>
+        <div class="error" id="guestError" role="alert"></div>
+
         <div class="table-head">
-
-          <h2>Convidados</h2>
-
-          <input
-            class="search"
-            id="guestSearch"
-            placeholder="Pesquisar nome..."
-            oninput="renderGuests()"
-          >
-
+          <h2>Lista de convidados</h2>
+          <input class="input search" id="guestSearch" type="search" placeholder="Pesquisar nome ou celular..." aria-label="Pesquisar convidado">
         </div>
 
         <table>
-
           <thead>
-
             <tr>
-              <th>Nome</th>
+              <th>Convidado</th>
+              <th>Celular</th>
               <th>Status</th>
-              <th>QR Code</th>
-              <th>Foto</th>
+              <th>Cód. retirada</th>
+              <th style="text-align:right">Ações</th>
             </tr>
-
           </thead>
-
           <tbody id="guestTable"></tbody>
-
         </table>
+
+        <div class="empty hidden" id="guestEmpty"></div>
 
       </div>
 
     </section>
 
 
-    <!-- PHOTOS -->
+    <!-- RETIRADA -->
+
+    <section id="pickup" class="section">
+
+      <div class="topbar">
+        <div>
+          <h1>Retirada de fotos</h1>
+          <p>Peça o código de retirada que o convidado recebeu ao enviar a foto.</p>
+        </div>
+      </div>
+
+      <div class="pickup">
+        <form class="card" id="pickupForm" novalidate>
+          <h2 style="margin-bottom:6px">Digite o código</h2>
+          <p class="muted" style="margin-bottom:18px;font-size:14px">São 6 números, mostrados na tela do convidado.</p>
+          <input class="code-input" id="pickupCode" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="000000" aria-label="Código de retirada">
+          <div class="error" id="pickupError" role="alert" style="margin-top:10px"></div>
+          <button class="btn btn-primary btn-block" type="submit">Buscar foto</button>
+        </form>
+
+        <div class="card pickup-result" id="pickupResult">
+          <div class="empty">
+            <h3>Nenhum código consultado</h3>
+            <p>A foto e os dados do convidado aparecem aqui para você conferir antes de entregar.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- FOTOS -->
 
     <section id="photos" class="section">
 
       <div class="topbar">
-
         <div>
           <h1>Fotos recebidas</h1>
-          <p>Fotos enviadas pelos convidados.</p>
+          <p>Todas as fotos enviadas pelos convidados, prontas para impressão.</p>
         </div>
-
+        <div class="event-switch">
+          <label for="photoEventSelect">Evento</label>
+          <select id="photoEventSelect" data-event-select></select>
+        </div>
       </div>
 
       <div class="photos" id="photoGrid"></div>
@@ -787,273 +1426,733 @@
 </div>
 
 
-<!-- ================= EVENT MODAL ================= -->
+<!-- ================= MODAL: NOVO EVENTO ================= -->
 
-<div class="modal" id="eventModal">
-
-  <div class="modal-box">
-
+<div class="modal" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+  <form class="modal-box" id="eventForm" novalidate>
     <div class="modal-head">
-
-      <h2>Novo evento</h2>
-
-      <button class="close" onclick="closeModal('eventModal')">
-        ×
-      </button>
-
+      <h2 id="eventModalTitle">Novo evento</h2>
+      <button class="close" type="button" data-close aria-label="Fechar">×</button>
     </div>
 
     <div class="field">
-      <label>Nome do evento</label>
-      <input id="eventName" placeholder="Ex.: Casamento João & Maria">
+      <label for="eventName">Nome do evento</label>
+      <input id="eventName" maxlength="80" placeholder="Ex.: Casamento João & Maria">
     </div>
 
     <div class="field">
-      <label>Data</label>
+      <label for="eventDate">Data</label>
       <input id="eventDate" type="date">
     </div>
 
     <div class="field">
-      <label>Local</label>
-      <input id="eventLocation" placeholder="Nome do local">
+      <label for="eventLocation">Local</label>
+      <input id="eventLocation" maxlength="80" placeholder="Nome do local">
     </div>
 
-    <button class="btn btn-primary" onclick="createEvent()">
-      Criar evento
-    </button>
+    <div class="error" id="eventError" role="alert"></div>
 
-  </div>
-
+    <button class="btn btn-primary btn-block" type="submit">Criar evento</button>
+  </form>
 </div>
 
 
-<!-- ================= QR MODAL ================= -->
+<!-- ================= MODAL: QR CODE ================= -->
 
-<div class="modal" id="qrModal">
-
+<div class="modal" id="qrModal" role="dialog" aria-modal="true" aria-labelledby="qrName">
   <div class="modal-box">
-
     <div class="modal-head">
-
-      <h2>QR Code</h2>
-
-      <button class="close" onclick="closeModal('qrModal')">
-        ×
-      </button>
-
+      <h2>QR Code do convidado</h2>
+      <button class="close" type="button" data-close aria-label="Fechar">×</button>
     </div>
 
     <div class="qr-box">
-
       <div class="qr-name" id="qrName"></div>
-
+      <div class="muted" id="qrEvent" style="font-size:14px;margin-top:4px"></div>
       <div id="qrcode"></div>
-
       <div class="qr-url" id="qrUrl"></div>
-
-      <button class="btn btn-primary" style="width:auto" onclick="printQR()">
-        🖨️ Imprimir QR
-      </button>
-
+      <div class="row" style="justify-content:center">
+        <button class="btn btn-soft" id="copyLinkBtn">🔗 Copiar link</button>
+        <button class="btn btn-soft" id="openLinkBtn">👁️ Testar</button>
+        <button class="btn btn-primary" id="printQrBtn">🖨️ Imprimir</button>
+      </div>
     </div>
-
   </div>
-
 </div>
 
 
-<!-- ================= PUBLIC UPLOAD ================= -->
+<!-- ================= MODAL: CONFIRMAR ================= -->
+
+<div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal-box" style="max-width:420px">
+    <h2 id="confirmTitle" style="margin-bottom:10px"></h2>
+    <p class="muted" id="confirmText" style="margin-bottom:20px;line-height:1.6"></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" type="button" data-close>Cancelar</button>
+      <button class="btn btn-danger" type="button" id="confirmOk">Excluir</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================= MODAL: VER FOTO ================= -->
+
+<div class="modal" id="photoModal" role="dialog" aria-modal="true" aria-labelledby="photoModalTitle">
+  <div class="modal-box lightbox" style="max-width:820px">
+    <div class="modal-head">
+      <h2 id="photoModalTitle"></h2>
+      <button class="close" type="button" data-close aria-label="Fechar">×</button>
+    </div>
+    <img id="photoModalImg" alt="">
+  </div>
+</div>
+
+
+<!-- ================= PÁGINA DO CONVIDADO ================= -->
 
 <div id="publicPage" class="hidden">
-
   <div class="upload-box">
-
-    <div class="logo" style="justify-content:center">
+    <div class="logo">
       <div class="logo-icon">📸</div>
       FotoEvento
     </div>
-
-    <div id="uploadContent">
-
-      <h1>Envie sua foto</h1>
-
-      <p id="guestWelcome">
-        Você ganhou uma foto neste evento.
-        Escolha sua melhor foto para enviar.
-      </p>
-
-      <div class="drop">
-
-        <div class="drop-icon">📷</div>
-
-        <p style="margin-top:10px">
-          Selecione uma foto do seu celular.
-        </p>
-
-        <input
-          type="file"
-          id="photoInput"
-          accept="image/*"
-          style="margin-top:20px"
-          onchange="previewPhoto(event)"
-        >
-
-        <img id="preview">
-
-      </div>
-
-      <button
-        class="btn btn-primary"
-        onclick="sendPhoto()"
-      >
-        Enviar minha foto
-      </button>
-
-    </div>
-
+    <div id="uploadContent"></div>
   </div>
-
 </div>
 
 
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+
 <script>
-
 /* =====================================================
-   DADOS DEMO
+   FotoEvento
+   -----------------------------------------------------
+   Como funciona:
+   1. O organizador cria uma conta e cadastra o evento.
+   2. Cada convidado é cadastrado com nome e celular e
+      recebe um QR Code único.
+   3. O convidado escaneia, confirma o celular e envia a
+      foto. Na hora, é gerado um código de retirada.
+   4. No balcão, o organizador digita o código, confere
+      a foto e marca como entregue.
+
+   Este protótipo roda 100% no navegador: os dados ficam
+   no localStorage. Na versão de produção, contas, fotos
+   e códigos ficam em um servidor.
 ===================================================== */
 
-let guests = [
-  {
-    id: "A7K92X",
-    name: "João da Silva",
-    used: false,
-    photo: null
-  },
-  {
-    id: "B8L31Q",
-    name: "Maria Oliveira",
-    used: true,
-    photo: "demo1"
-  },
-  {
-    id: "C4P82Z",
-    name: "Pedro Santos",
-    used: true,
-    photo: "demo2"
-  },
-  {
-    id: "D9M44K",
-    name: "Ana Souza",
-    used: false,
-    photo: null
-  },
-  {
-    id: "E2N71R",
-    name: "Carlos Lima",
-    used: false,
-    photo: null
-  }
-];
+const STORAGE_KEY = "fotoevento:v3";
+const SESSION_KEY = "fotoevento:sessao";
+const MAX_FILE_MB = 15;
+const MAX_PHOTO_SIDE = 1600;
+const PHOTO_QUALITY = 0.82;
+const DEMO_EMAIL = "demo@fotoevento.com";
+const DEMO_PASS = "demo1234";
 
-let photos = [];
-
-let currentQRGuest = null;
-let currentPublicGuest = null;
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
 
 /* =====================================================
-   LOGIN
+   UTILITÁRIOS
 ===================================================== */
 
-function login() {
-
-  const user = document.getElementById("loginUser").value;
-  const pass = document.getElementById("loginPass").value;
-
-  if (user === "admin" && pass === "1234") {
-
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
-
-    renderGuests();
-    updateStats();
-
-  } else {
-
-    alert("Usuário ou senha incorretos.");
-
-  }
-
+// Evita que um texto digitado vire código na página
+function esc(text) {
+  return String(text ?? "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  }[c]));
 }
 
+function randomInt(max) {
+  return crypto.getRandomValues(new Uint32Array(1))[0] % max;
+}
 
-function logout() {
+// Código do QR: letras e números, sem 0/O e 1/I para não confundir
+function newId(length = 8) {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let id = "";
+  for (let i = 0; i < length; i++) id += chars[randomInt(chars.length)];
+  return id;
+}
 
-  document.getElementById("app").classList.add("hidden");
-  document.getElementById("loginPage").classList.remove("hidden");
+// Código de retirada: 6 números, único entre todas as fotos
+function newPickupCode() {
+  let code;
+  do {
+    code = String(randomInt(1000000)).padStart(6, "0");
+  } while (state.guests.some((g) => g.pickupCode === code));
+  return code;
+}
 
+function onlyDigits(text) {
+  return String(text || "").replace(/\D/g, "");
+}
+
+function formatPhone(digits) {
+  const d = onlyDigits(digits).slice(0, 11);
+  if (d.length <= 2) return d.length ? `(${d}` : "";
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
+function maskPhone(digits) {
+  const d = onlyDigits(digits);
+  return d.length >= 4 ? `(••) •••••-${d.slice(-4)}` : "";
+}
+
+function validPhone(digits) {
+  return /^\d{10,11}$/.test(onlyDigits(digits));
+}
+
+function formatDate(iso) {
+  if (!iso) return "";
+  const [y, m, d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+function nowText() {
+  return new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
+function slug(text) {
+  return String(text)
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|-$/g, "") || "foto";
+}
+
+function initials(name) {
+  return String(name || "?").trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join("").toUpperCase();
+}
+
+// Senha nunca é salva em texto puro
+async function hashPassword(password, salt) {
+  const text = salt + ":" + password;
+  if (window.crypto && crypto.subtle) {
+    const data = new TextEncoder().encode(text);
+    const buf = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
+  }
+  // Alternativa simples quando o navegador não oferece crypto.subtle (ex.: arquivo aberto localmente)
+  let h = 5381;
+  for (let i = 0; i < text.length; i++) h = ((h << 5) + h + text.charCodeAt(i)) >>> 0;
+  return "x" + h.toString(16);
+}
+
+let toastTimer;
+function toast(message) {
+  const el = $("#toast");
+  el.textContent = message;
+  el.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add("hidden"), 3000);
+}
+
+// Máscara de celular em todos os campos marcados com data-phone
+document.addEventListener("input", (ev) => {
+  if (ev.target.matches("[data-phone]")) {
+    ev.target.value = formatPhone(ev.target.value);
+  }
+});
+
+
+/* =====================================================
+   DADOS
+===================================================== */
+
+function emptyState() {
+  return { users: [], events: [], guests: [], photos: [], current: {} };
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved && Array.isArray(saved.users)) return saved;
+  } catch (e) { /* sem acesso ao armazenamento */ }
+  return emptyState();
+}
+
+let state = loadState();
+
+function save() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    return true;
+  } catch (e) {
+    toast("Não deu para salvar: o armazenamento do navegador está cheio.");
+    return false;
+  }
+}
+
+// Cria a conta de demonstração com um evento e convidados de exemplo
+async function ensureDemoAccount() {
+  if (state.users.some((u) => u.email === DEMO_EMAIL)) return;
+
+  const salt = newId(12);
+  const user = {
+    id: newId(10),
+    name: "Ana Fotógrafa",
+    company: "Studio Demonstração",
+    phone: "11987654321",
+    email: DEMO_EMAIL,
+    salt,
+    passHash: await hashPassword(DEMO_PASS, salt),
+    createdAt: nowText()
+  };
+  const eventId = newId(10);
+
+  state.users.push(user);
+  state.events.push({ id: eventId, ownerId: user.id, name: "Casamento João & Maria", date: "2026-11-15", location: "Espaço Jardim" });
+  state.current[user.id] = eventId;
+
+  [
+    ["João da Silva", "11991234567"],
+    ["Maria Oliveira", "11992345678"],
+    ["Pedro Santos", "21993456789"],
+    ["Ana Souza", "31994567890"],
+    ["Carlos Lima", "11995678901"]
+  ].forEach(([name, phone]) =>
+    state.guests.push({ id: newId(), eventId, name, phone, status: "aguardando", pickupCode: null })
+  );
+
+  save();
 }
 
 
 /* =====================================================
-   NAVEGAÇÃO
+   SESSÃO
 ===================================================== */
 
-function showSection(id, button) {
+let me = null;
 
-  document.querySelectorAll(".section")
-    .forEach(section => section.classList.remove("active"));
-
-  document.getElementById(id).classList.add("active");
-
-  document.querySelectorAll(".nav button")
-    .forEach(btn => btn.classList.remove("active"));
-
-  if (button) {
-    button.classList.add("active");
-  }
-
-  if (id === "guests") {
-    renderGuests();
-  }
-
-  if (id === "photos") {
-    renderPhotos();
-  }
-
+function getSessionUserId() {
+  try { return sessionStorage.getItem(SESSION_KEY); } catch (e) { return null; }
 }
+
+function setSession(userId) {
+  try {
+    if (userId) sessionStorage.setItem(SESSION_KEY, userId);
+    else sessionStorage.removeItem(SESSION_KEY);
+  } catch (e) { /* ignora */ }
+}
+
+function myEvents() {
+  return me ? state.events.filter((e) => e.ownerId === me.id) : [];
+}
+
+function currentEvent() {
+  const list = myEvents();
+  return list.find((e) => e.id === state.current[me?.id]) || list[0] || null;
+}
+
+function setCurrentEvent(id) {
+  state.current[me.id] = id;
+  save();
+}
+
+const guestsOf = (eventId) => state.guests.filter((g) => g.eventId === eventId);
+const photosOf = (eventId) => state.photos.filter((p) => p.eventId === eventId);
+const findGuest = (id) => state.guests.find((g) => g.id === id);
+const findEvent = (id) => state.events.find((e) => e.id === id);
+const ownsEvent = (eventId) => myEvents().some((e) => e.id === eventId);
 
 
 /* =====================================================
-   EVENTO
+   ENTRAR E CRIAR CONTA
 ===================================================== */
 
-function openEventModal() {
-  document.getElementById("eventModal").classList.add("show");
+function showAuth(which) {
+  $("#loginForm").classList.toggle("hidden", which !== "login");
+  $("#signupForm").classList.toggle("hidden", which !== "signup");
+  $("#loginError").textContent = "";
+  $("#signupError").textContent = "";
+  const first = $(which === "login" ? "#loginEmail" : "#suName");
+  setTimeout(() => first.focus(), 30);
 }
 
+$$("[data-auth]").forEach((b) => b.addEventListener("click", () => showAuth(b.dataset.auth)));
 
-function createEvent() {
+async function login(email, password) {
+  const user = state.users.find((u) => u.email === email.trim().toLowerCase());
+  if (!user) return null;
+  const hash = await hashPassword(password, user.salt);
+  return hash === user.passHash ? user : null;
+}
 
-  const name = document.getElementById("eventName").value;
-  const date = document.getElementById("eventDate").value;
-  const location = document.getElementById("eventLocation").value;
+$("#loginForm").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const email = $("#loginEmail").value;
+  const pass = $("#loginPass").value;
 
-  if (!name || !date || !location) {
-
-    alert("Preencha todos os campos.");
-
+  if (!email || !pass) {
+    $("#loginError").textContent = "Informe seu e-mail e senha.";
     return;
   }
 
-  alert(
-    "Evento criado com sucesso!\n\n" +
-    name
-  );
+  const user = await login(email, pass);
+  if (!user) {
+    $("#loginError").textContent = "E-mail ou senha incorretos.";
+    return;
+  }
 
-  closeModal("eventModal");
+  $("#loginPass").value = "";
+  setSession(user.id);
+  route();
+});
 
+$("#demoLogin").addEventListener("click", async () => {
+  await ensureDemoAccount();
+  const user = await login(DEMO_EMAIL, DEMO_PASS);
+  if (user) {
+    setSession(user.id);
+    route();
+  }
+});
+
+$("#signupForm").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const err = $("#signupError");
+  const name = $("#suName").value.trim();
+  const company = $("#suCompany").value.trim();
+  const phone = onlyDigits($("#suPhone").value);
+  const email = $("#suEmail").value.trim().toLowerCase();
+  const pass = $("#suPass").value;
+
+  if (name.length < 3) return (err.textContent = "Digite seu nome completo.");
+  if (!validPhone(phone)) return (err.textContent = "Digite um celular válido com DDD.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return (err.textContent = "Digite um e-mail válido.");
+  if (pass.length < 6) return (err.textContent = "A senha precisa ter pelo menos 6 caracteres.");
+  if (!$("#suTerms").checked) return (err.textContent = "Para continuar, aceite os Termos e a Política de Privacidade.");
+  if (state.users.some((u) => u.email === email)) return (err.textContent = "Já existe uma conta com esse e-mail. Faça login.");
+
+  const salt = newId(12);
+  const user = {
+    id: newId(10),
+    name,
+    company,
+    phone,
+    email,
+    salt,
+    passHash: await hashPassword(pass, salt),
+    createdAt: nowText()
+  };
+
+  state.users.push(user);
+  if (!save()) return;
+
+  $("#signupForm").reset();
+  setSession(user.id);
+  route();
+  toast(`Bem-vinda(o), ${name.split(" ")[0]}! Crie seu primeiro evento.`);
+});
+
+$("#logoutBtn").addEventListener("click", () => {
+  setSession(null);
+  me = null;
+  route();
+});
+
+
+/* =====================================================
+   ROTAS: painel x página do convidado
+===================================================== */
+
+function route() {
+  const hash = location.hash;
+
+  $("#authPage").classList.add("hidden");
+  $("#app").classList.add("hidden");
+  $("#publicPage").classList.add("hidden");
+  closeAllModals();
+
+  if (hash.startsWith("#foto/")) {
+    renderPublic(decodeURIComponent(hash.slice(6)));
+    $("#publicPage").classList.remove("hidden");
+    return;
+  }
+
+  me = state.users.find((u) => u.id === getSessionUserId()) || null;
+
+  if (!me) {
+    $("#authPage").classList.remove("hidden");
+    showAuth(state.users.length ? "login" : "signup");
+    return;
+  }
+
+  $("#app").classList.remove("hidden");
+  renderAccount();
+  renderAll();
 }
+
+window.addEventListener("hashchange", route);
+
+// Se os dados mudarem em outra aba (ex.: convidado enviou foto), o painel atualiza sozinho
+window.addEventListener("storage", (ev) => {
+  if (ev.key !== STORAGE_KEY) return;
+  state = loadState();
+  if (me && !$("#app").classList.contains("hidden")) {
+    me = state.users.find((u) => u.id === me.id) || null;
+    if (me) renderAll();
+  }
+});
+
+
+/* =====================================================
+   NAVEGAÇÃO E MODAIS
+===================================================== */
+
+function showSection(id) {
+  $$(".section").forEach((s) => s.classList.toggle("active", s.id === id));
+  $$(".nav button").forEach((b) => b.classList.toggle("active", b.dataset.section === id));
+  renderAll();
+  window.scrollTo({ top: 0 });
+  if (id === "pickup") setTimeout(() => $("#pickupCode").focus(), 30);
+}
+
+$$(".nav button").forEach((btn) => btn.addEventListener("click", () => showSection(btn.dataset.section)));
+
+function openModal(id) {
+  $("#" + id).classList.add("show");
+  const first = $("#" + id).querySelector("input, button:not(.close)");
+  if (first) setTimeout(() => first.focus(), 30);
+}
+
+function closeModal(id) {
+  $("#" + id).classList.remove("show");
+}
+
+function closeAllModals() {
+  $$(".modal.show").forEach((m) => m.classList.remove("show"));
+}
+
+document.addEventListener("click", (ev) => {
+  const opener = ev.target.closest("[data-open]");
+  if (opener) openModal(opener.dataset.open);
+
+  const closer = ev.target.closest("[data-close]");
+  if (closer) closer.closest(".modal").classList.remove("show");
+
+  if (ev.target.classList.contains("modal")) ev.target.classList.remove("show");
+
+  const go = ev.target.closest("[data-go]");
+  if (go) showSection(go.dataset.go);
+});
+
+document.addEventListener("keydown", (ev) => {
+  if (ev.key === "Escape") closeAllModals();
+});
+
+let confirmAction = null;
+
+function askConfirm(title, text, action, okLabel = "Excluir") {
+  $("#confirmTitle").textContent = title;
+  $("#confirmText").textContent = text;
+  $("#confirmOk").textContent = okLabel;
+  confirmAction = action;
+  openModal("confirmModal");
+}
+
+$("#confirmOk").addEventListener("click", () => {
+  closeModal("confirmModal");
+  if (confirmAction) confirmAction();
+  confirmAction = null;
+});
+
+
+/* =====================================================
+   PAINEL
+===================================================== */
+
+function renderAccount() {
+  $("#accAvatar").textContent = initials(me.name);
+  $("#accName").textContent = me.name;
+  $("#accCompany").textContent = me.company || me.email;
+  $("#helloTitle").textContent = `Olá, ${me.name.split(" ")[0]}!`;
+}
+
+function renderAll() {
+  if (!me) return;
+  renderStats();
+  renderCurrentEvent();
+  renderEventSelects();
+  renderEvents();
+  renderGuests();
+  renderPhotos();
+}
+
+function statusBadge(status) {
+  return {
+    aguardando: '<span class="badge b-wait">AGUARDANDO FOTO</span>',
+    enviada: '<span class="badge b-sent">PRONTA P/ RETIRAR</span>',
+    retirada: '<span class="badge b-done">RETIRADA</span>'
+  }[status] || "";
+}
+
+function renderStats() {
+  const evIds = myEvents().map((e) => e.id);
+  const guests = state.guests.filter((g) => evIds.includes(g.eventId));
+  $("#statEvents").textContent = evIds.length;
+  $("#statGuests").textContent = guests.length;
+  $("#statPhotos").textContent = guests.filter((g) => g.status !== "aguardando").length;
+  $("#statDelivered").textContent = guests.filter((g) => g.status === "retirada").length;
+}
+
+function renderCurrentEvent() {
+  const box = $("#currentEventCard");
+  const ev = currentEvent();
+
+  if (!ev) {
+    box.innerHTML = `
+      <div class="empty">
+        <h3>Crie seu primeiro evento</h3>
+        <p>Depois é só cadastrar os convidados e imprimir os QR Codes.</p>
+        <button class="btn btn-primary" style="margin-top:16px" data-open="eventModal">+ Criar evento</button>
+      </div>`;
+    return;
+  }
+
+  const guests = guestsOf(ev.id);
+  const waiting = guests.filter((g) => g.status === "aguardando").length;
+  const ready = guests.filter((g) => g.status === "enviada").length;
+  const done = guests.filter((g) => g.status === "retirada").length;
+  const pct = guests.length ? Math.round(((ready + done) / guests.length) * 100) : 0;
+
+  box.innerHTML = `
+    <div class="table-head" style="margin-bottom:8px">
+      <h2>Evento ativo</h2>
+      <span class="badge b-active">ATIVO</span>
+    </div>
+    <h3 style="font-size:20px">${esc(ev.name)}</h3>
+    <p class="muted" style="margin-top:6px">📅 ${formatDate(ev.date)} • 📍 ${esc(ev.location)}</p>
+    <div class="progress" aria-hidden="true"><i style="width:${pct}%"></i></div>
+    <p class="muted" style="margin-top:8px;font-size:14px">
+      <b style="color:var(--ink)">${ready + done} de ${guests.length}</b> convidados já enviaram a foto (${pct}%)
+    </p>
+    <div class="funnel">
+      <div style="background:var(--yellow-soft);color:var(--yellow)"><b>${waiting}</b>Aguardando foto</div>
+      <div style="background:var(--blue-soft);color:var(--blue)"><b>${ready}</b>Prontas para retirar</div>
+      <div style="background:var(--green-soft);color:var(--green)"><b>${done}</b>Já retiradas</div>
+    </div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn btn-soft" data-go="guests">👥 Convidados</button>
+      <button class="btn btn-soft" data-go="pickup">🎟️ Retirada</button>
+      <button class="btn btn-soft" data-go="photos">🖼️ Fotos</button>
+    </div>`;
+}
+
+function renderEventSelects() {
+  const list = myEvents();
+  const current = currentEvent();
+  $$("[data-event-select]").forEach((select) => {
+    select.innerHTML = list.length
+      ? list.map((e) => `<option value="${esc(e.id)}" ${current && e.id === current.id ? "selected" : ""}>${esc(e.name)}</option>`).join("")
+      : "<option>Nenhum evento</option>";
+    select.disabled = !list.length;
+  });
+}
+
+$$("[data-event-select]").forEach((select) =>
+  select.addEventListener("change", () => {
+    setCurrentEvent(select.value);
+    renderAll();
+  })
+);
+
+
+/* =====================================================
+   EVENTOS
+===================================================== */
+
+function renderEvents() {
+  const list = $("#eventList");
+  const events = myEvents();
+  const current = currentEvent();
+
+  if (!events.length) {
+    list.innerHTML = `
+      <div class="card empty" style="grid-column:1/-1">
+        <h3>Nenhum evento criado</h3>
+        <p>Clique em “Novo evento” para começar.</p>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = events.map((e) => {
+    const guests = guestsOf(e.id);
+    const sent = guests.filter((g) => g.status !== "aguardando").length;
+    const isCurrent = current && e.id === current.id;
+    return `
+      <div class="card event-card ${isCurrent ? "current" : ""}">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+          <h3>${esc(e.name)}</h3>
+          ${isCurrent ? '<span class="badge b-active">ATIVO</span>' : ""}
+        </div>
+        <div class="meta">
+          📅 ${formatDate(e.date)}<br>
+          📍 ${esc(e.location)}<br>
+          👥 ${guests.length} convidados · 📸 ${sent} fotos
+        </div>
+        <div class="row">
+          ${isCurrent
+            ? `<button class="btn btn-primary btn-sm" data-go="guests">Gerenciar convidados</button>`
+            : `<button class="btn btn-soft btn-sm" data-event-activate="${esc(e.id)}">Tornar ativo</button>`}
+          <button class="btn btn-danger btn-sm" data-event-delete="${esc(e.id)}">Excluir</button>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+$("#eventList").addEventListener("click", (ev) => {
+  const activate = ev.target.closest("[data-event-activate]");
+  if (activate && ownsEvent(activate.dataset.eventActivate)) {
+    setCurrentEvent(activate.dataset.eventActivate);
+    renderAll();
+    toast("Evento ativo alterado.");
+    return;
+  }
+
+  const del = ev.target.closest("[data-event-delete]");
+  if (del && ownsEvent(del.dataset.eventDelete)) {
+    const e = findEvent(del.dataset.eventDelete);
+    askConfirm(
+      "Excluir evento?",
+      `"${e.name}" será excluído junto com seus convidados e fotos. Essa ação não pode ser desfeita.`,
+      () => {
+        state.events = state.events.filter((x) => x.id !== e.id);
+        state.guests = state.guests.filter((g) => g.eventId !== e.id);
+        state.photos = state.photos.filter((p) => p.eventId !== e.id);
+        if (state.current[me.id] === e.id) state.current[me.id] = myEvents()[0]?.id || null;
+        save();
+        renderAll();
+        toast("Evento excluído.");
+      }
+    );
+  }
+});
+
+$("#eventForm").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const name = $("#eventName").value.trim();
+  const date = $("#eventDate").value;
+  const location = $("#eventLocation").value.trim();
+
+  if (!name || !date || !location) {
+    $("#eventError").textContent = "Preencha todos os campos.";
+    return;
+  }
+
+  const event = { id: newId(10), ownerId: me.id, name, date, location };
+  state.events.push(event);
+  setCurrentEvent(event.id);
+
+  $("#eventForm").reset();
+  $("#eventError").textContent = "";
+  closeModal("eventModal");
+  showSection("guests");
+  toast(`Evento "${name}" criado! Agora adicione os convidados.`);
+});
 
 
 /* =====================================================
@@ -1061,502 +2160,614 @@ function createEvent() {
 ===================================================== */
 
 function renderGuests() {
+  const tbody = $("#guestTable");
+  const empty = $("#guestEmpty");
+  const ev = currentEvent();
+  const search = $("#guestSearch").value.trim().toLowerCase();
+  const searchDigits = onlyDigits(search);
 
-  const tbody = document.getElementById("guestTable");
+  $("#addGuestForm").querySelectorAll("input, button").forEach((el) => (el.disabled = !ev));
 
-  const search =
-    document.getElementById("guestSearch")?.value.toLowerCase() || "";
+  if (!ev) {
+    tbody.innerHTML = "";
+    empty.innerHTML = "<h3>Crie um evento primeiro</h3><p>Os convidados ficam dentro de um evento.</p>";
+    empty.classList.remove("hidden");
+    return;
+  }
 
-  tbody.innerHTML = "";
+  const all = guestsOf(ev.id);
+  const list = all.filter((g) =>
+    g.name.toLowerCase().includes(search) || (searchDigits && g.phone.includes(searchDigits))
+  );
 
-  guests
-    .filter(g => g.name.toLowerCase().includes(search))
-    .forEach(guest => {
+  if (!list.length) {
+    tbody.innerHTML = "";
+    empty.innerHTML = all.length
+      ? "<h3>Nenhum convidado encontrado</h3><p>Tente outro nome ou número.</p>"
+      : "<h3>Nenhum convidado ainda</h3><p>Digite o nome e o celular acima e clique em Adicionar.</p>";
+    empty.classList.remove("hidden");
+    return;
+  }
 
-      const tr = document.createElement("tr");
+  empty.classList.add("hidden");
 
-      tr.innerHTML = `
-
-        <td>
-          <strong>${guest.name}</strong>
-        </td>
-
-        <td>
-          ${
-            guest.used
-              ? '<span class="badge green">PRESENTE</span>'
-              : '<span class="badge yellow">AGUARDANDO</span>'
-          }
-        </td>
-
-        <td>
-
-          <button
-            class="btn"
-            style="background:#eeeaff;color:#634ce0"
-            onclick="generateQR('${guest.id}')"
-          >
-            📱 Ver QR
-          </button>
-
-        </td>
-
-        <td>
-
-          ${
-            guest.used
-              ? '<span class="badge green">RECEBIDA</span>'
-              : '<span class="badge yellow">PENDENTE</span>'
-          }
-
-        </td>
-      `;
-
-      tbody.appendChild(tr);
-
-    });
-
+  tbody.innerHTML = list.map((g) => `
+    <tr>
+      <td><strong>${esc(g.name)}</strong><br><span class="muted code" style="font-size:11px">QR ${esc(g.id)}</span></td>
+      <td>${esc(formatPhone(g.phone))}</td>
+      <td>${statusBadge(g.status)}</td>
+      <td>${g.pickupCode ? `<span class="code">${esc(g.pickupCode)}</span>` : '<span class="muted">—</span>'}</td>
+      <td class="actions">
+        <button class="btn btn-soft btn-sm" data-qr="${esc(g.id)}">📱 QR Code</button>
+        <button class="btn btn-danger btn-sm" data-guest-delete="${esc(g.id)}" aria-label="Remover ${esc(g.name)}">Remover</button>
+      </td>
+    </tr>`).join("");
 }
 
+$("#guestSearch").addEventListener("input", renderGuests);
 
-function addGuest() {
+$("#addGuestForm").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const err = $("#guestError");
+  const nameInput = $("#newGuestName");
+  const phoneInput = $("#newGuestPhone");
+  const name = nameInput.value.trim();
+  const phone = onlyDigits(phoneInput.value);
+  const event = currentEvent();
+  err.textContent = "";
 
-  const name = prompt("Nome do convidado:");
+  if (!event) return;
+  if (name.length < 2) {
+    err.textContent = "Digite o nome do convidado.";
+    nameInput.focus();
+    return;
+  }
+  if (!validPhone(phone)) {
+    err.textContent = "Digite um celular válido com DDD. Ele é usado para confirmar a identidade do convidado.";
+    phoneInput.focus();
+    return;
+  }
+  if (guestsOf(event.id).some((g) => g.phone === phone)) {
+    err.textContent = "Já existe um convidado com esse celular neste evento.";
+    phoneInput.focus();
+    return;
+  }
 
-  if (!name) return;
+  let id;
+  do { id = newId(); } while (findGuest(id));
 
-  const id =
-    Math.random()
-      .toString(36)
-      .substring(2, 8)
-      .toUpperCase();
+  state.guests.push({ id, eventId: event.id, name, phone, status: "aguardando", pickupCode: null });
+  save();
+  nameInput.value = "";
+  phoneInput.value = "";
+  nameInput.focus();
+  renderAll();
+  toast(`${name} adicionado(a) com QR Code único.`);
+});
 
-  guests.push({
-    id,
-    name,
-    used: false,
-    photo: null
-  });
+$("#guestTable").addEventListener("click", (ev) => {
+  const qr = ev.target.closest("[data-qr]");
+  if (qr) {
+    openQR(qr.dataset.qr);
+    return;
+  }
 
-  renderGuests();
-  updateStats();
-
-}
+  const del = ev.target.closest("[data-guest-delete]");
+  if (del) {
+    const g = findGuest(del.dataset.guestDelete);
+    if (!g || !ownsEvent(g.eventId)) return;
+    askConfirm(
+      "Remover convidado?",
+      `${g.name} será removido(a) e o QR Code deixará de funcionar${g.status !== "aguardando" ? ". A foto enviada também será apagada" : ""}.`,
+      () => {
+        state.guests = state.guests.filter((x) => x.id !== g.id);
+        state.photos = state.photos.filter((p) => p.guestId !== g.id);
+        save();
+        renderAll();
+        toast("Convidado removido.");
+      },
+      "Remover"
+    );
+  }
+});
 
 
 /* =====================================================
    QR CODE
 ===================================================== */
 
-function generateQR(id) {
+let qrGuest = null;
 
-  const guest = guests.find(g => g.id === id);
+function guestUrl(id) {
+  return location.href.split("#")[0] + "#foto/" + encodeURIComponent(id);
+}
 
-  if (!guest) return;
+function openQR(id) {
+  const g = findGuest(id);
+  if (!g || !ownsEvent(g.eventId)) return;
+  qrGuest = g;
 
-  currentQRGuest = guest;
+  const url = guestUrl(g.id);
+  $("#qrName").textContent = g.name;
+  $("#qrEvent").textContent = findEvent(g.eventId)?.name || "";
+  $("#qrUrl").textContent = url;
+  $("#qrcode").innerHTML = "";
 
-  document.getElementById("qrName").textContent =
-    guest.name;
-
-  document.getElementById("qrcode").innerHTML = "";
-
-  /*
-    Na versão online, essa URL será substituída pelo
-    endereço real do seu site.
-
-    Exemplo:
-
-    https://fotoevento.com/f/A7K92X
-  */
-
-  const url =
-    window.location.href.split("#")[0] +
-    "#foto/" +
-    guest.id;
-
-  new QRCode(
-    document.getElementById("qrcode"),
-    {
+  if (typeof QRCode === "undefined") {
+    $("#qrcode").innerHTML = '<p class="muted" style="max-width:220px">Não foi possível carregar o gerador de QR Code. Verifique sua internet. O link acima continua funcionando.</p>';
+  } else {
+    new QRCode($("#qrcode"), {
       text: url,
       width: 220,
       height: 220,
-      colorDark: "#15182a",
-      colorLight: "#ffffff"
-    }
-  );
+      colorDark: "#13162a",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
 
-  document.getElementById("qrUrl").textContent = url;
-
-  document.getElementById("qrModal").classList.add("show");
-
+  openModal("qrModal");
 }
 
+function qrImageSrc() {
+  const canvas = $("#qrcode canvas");
+  if (canvas) return canvas.toDataURL("image/png");
+  const img = $("#qrcode img");
+  return img ? img.src : "";
+}
 
-function printQR() {
+$("#copyLinkBtn").addEventListener("click", async () => {
+  if (!qrGuest) return;
+  try {
+    await navigator.clipboard.writeText(guestUrl(qrGuest.id));
+    toast("Link copiado! Você pode enviar pelo WhatsApp.");
+  } catch (e) {
+    toast("Não deu para copiar. Selecione o link acima e copie.");
+  }
+});
 
-  if (!currentQRGuest) return;
+$("#openLinkBtn").addEventListener("click", () => {
+  if (qrGuest) window.open(guestUrl(qrGuest.id), "_blank", "noopener");
+});
 
-  const qr = document.getElementById("qrcode").innerHTML;
-
-  const html = `
-
-    <!DOCTYPE html>
-
-    <html>
-
-    <head>
-
-      <title>QR - ${currentQRGuest.name}</title>
-
-      <style>
-
-        body {
-          text-align:center;
-          font-family:Arial;
-          padding:50px;
-        }
-
-        img {
-          margin:20px;
-        }
-
-        h1 {
-          font-size:28px;
-        }
-
-      </style>
-
-    </head>
-
-    <body>
-
-      <h1>📸 FotoEvento</h1>
-
-      <h2>${currentQRGuest.name}</h2>
-
-      ${qr}
-
-      <p>Escaneie para enviar sua foto.</p>
-
-    </body>
-
-    </html>
-
-  `;
+$("#printQrBtn").addEventListener("click", () => {
+  if (!qrGuest) return;
+  const src = qrImageSrc();
+  const event = findEvent(qrGuest.eventId);
 
   const win = window.open("", "_blank");
+  if (!win) {
+    toast("O navegador bloqueou a janela de impressão. Permita pop-ups.");
+    return;
+  }
 
-  win.document.write(html);
-
+  win.document.write(`<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>QR - ${esc(qrGuest.name)}</title>
+<style>
+  body{font-family:Arial,sans-serif;text-align:center;padding:40px;color:#13162a}
+  .card{display:inline-block;border:2px dashed #c9c3f5;border-radius:24px;padding:32px 44px;max-width:380px}
+  .brand{font-size:14px;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;color:#5b43dc}
+  h1{font-size:20px;margin:10px 0 2px} h2{font-size:28px;margin:8px 0 2px}
+  p{color:#5d6478;margin:6px 0;line-height:1.5} img{width:230px;height:230px;margin:16px 0}
+  .code{font-family:monospace;letter-spacing:.2em;font-size:13px;color:#8a90a3}
+</style></head>
+<body><div class="card">
+  <div class="brand">📸 FotoEvento</div>
+  <h1>${esc(event?.name || "")}</h1>
+  <p>${event ? formatDate(event.date) + " · " + esc(event.location) : ""}</p>
+  <h2>${esc(qrGuest.name)}</h2>
+  ${src ? `<img src="${src}" alt="QR Code">` : ""}
+  <p><b>Você ganhou uma foto impressa!</b><br>Escaneie com a câmera do celular, envie sua foto e retire no balcão.</p>
+  <p class="code">${esc(qrGuest.id)}</p>
+</div>
+<script>window.onload=function(){window.print()}<\/script>
+</body></html>`);
   win.document.close();
-
-  win.print();
-
-}
+});
 
 
 /* =====================================================
-   ÁREA PÚBLICA / QR
+   RETIRADA NO BALCÃO
 ===================================================== */
 
-function checkQR() {
+let pickupGuest = null;
 
-  const hash = window.location.hash;
+$("#pickupCode").addEventListener("input", (ev) => {
+  ev.target.value = onlyDigits(ev.target.value).slice(0, 6);
+});
 
-  if (!hash.startsWith("#foto/")) {
+$("#pickupForm").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const code = $("#pickupCode").value;
+  const err = $("#pickupError");
+  err.textContent = "";
+
+  if (code.length !== 6) {
+    err.textContent = "O código tem 6 números.";
     return;
   }
 
-  const id = hash.replace("#foto/", "");
-
-  const guest = guests.find(g => g.id === id);
-
-  if (!guest) {
-
-    alert("QR Code inválido.");
-
+  const g = state.guests.find((x) => x.pickupCode === code && ownsEvent(x.eventId));
+  if (!g) {
+    pickupGuest = null;
+    err.textContent = "Código não encontrado nos seus eventos.";
+    renderPickupResult();
     return;
-
   }
 
-  currentPublicGuest = guest;
+  pickupGuest = g;
+  renderPickupResult();
+});
 
-  document.getElementById("loginPage")
-    .classList.add("hidden");
+function renderPickupResult() {
+  const box = $("#pickupResult");
+  const g = pickupGuest && findGuest(pickupGuest.id);
 
-  document.getElementById("app")
-    .classList.add("hidden");
+  if (!g) {
+    box.innerHTML = `
+      <div class="empty">
+        <h3>Nenhuma foto para mostrar</h3>
+        <p>Digite um código válido para conferir a foto e os dados do convidado.</p>
+      </div>`;
+    return;
+  }
 
-  document.getElementById("publicPage")
-    .classList.remove("hidden");
+  const photo = state.photos.find((p) => p.guestId === g.id);
+  const event = findEvent(g.eventId);
+  const delivered = g.status === "retirada";
 
-  document.getElementById("guestWelcome").innerHTML =
-    `<b>${guest.name}</b>, escolha uma foto para enviar.`;
+  box.innerHTML = `
+    <div class="table-head" style="margin-bottom:0">
+      <h2>${esc(g.name)}</h2>
+      ${statusBadge(g.status)}
+    </div>
+    ${photo ? `<img src="${photo.image}" alt="Foto de ${esc(g.name)}">` : ""}
+    <dl class="dl">
+      <dt>Evento</dt><dd>${esc(event?.name || "")}</dd>
+      <dt>Celular</dt><dd>${esc(formatPhone(g.phone))}</dd>
+      <dt>Enviada em</dt><dd>${esc(photo?.date || "—")}</dd>
+      ${delivered ? `<dt>Retirada em</dt><dd>${esc(g.deliveredAt || "")}</dd>` : ""}
+    </dl>
+    <div class="row" style="margin-top:18px">
+      ${delivered
+        ? '<p class="muted"><b style="color:var(--green)">Esta foto já foi entregue.</b> Confira se não é uma retirada duplicada.</p>'
+        : `<button class="btn btn-success" id="confirmDelivery">✓ Confirmar entrega</button>`}
+      ${photo ? `<button class="btn btn-soft" data-photo-download="${esc(photo.id)}">⬇ Baixar para imprimir</button>` : ""}
+    </div>`;
 
-  if (guest.used) {
+  const btn = $("#confirmDelivery");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      g.status = "retirada";
+      g.deliveredAt = nowText();
+      save();
+      renderAll();
+      renderPickupResult();
+      $("#pickupCode").value = "";
+      toast(`Foto entregue para ${g.name}.`);
+    });
+  }
+}
 
-    document.getElementById("uploadContent").innerHTML = `
+$("#pickupResult").addEventListener("click", (ev) => {
+  const dl = ev.target.closest("[data-photo-download]");
+  if (dl) downloadPhoto(dl.dataset.photoDownload);
+});
 
-      <div class="success">
 
-        <h2>✅ Foto já recebida</h2>
+/* =====================================================
+   FOTOS (PAINEL)
+===================================================== */
 
-        <p style="margin-top:10px">
-          Este QR Code já foi utilizado.
-          Cada convidado pode enviar apenas uma foto.
+function renderPhotos() {
+  const grid = $("#photoGrid");
+  const ev = currentEvent();
+  const list = ev ? photosOf(ev.id) : [];
+
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="card empty" style="grid-column:1/-1">
+        <h3>Nenhuma foto recebida ainda</h3>
+        <p>As fotos enviadas pelos convidados aparecerão aqui.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = list.slice().reverse().map((p) => {
+    const g = findGuest(p.guestId);
+    return `
+      <div class="photo-card">
+        <img src="${p.image}" alt="Foto de ${esc(p.guestName)}" data-photo-view="${esc(p.id)}" loading="lazy">
+        <div class="photo-info">
+          <div class="table-head" style="margin:0;align-items:flex-start">
+            <div>
+              <strong>${esc(p.guestName)}</strong>
+              <p class="muted" style="font-size:12px;margin-top:3px">${esc(p.date)}</p>
+            </div>
+            ${g ? statusBadge(g.status) : ""}
+          </div>
+          <button class="btn btn-soft btn-sm" data-photo-download="${esc(p.id)}">⬇ Baixar</button>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function downloadPhoto(id) {
+  const p = state.photos.find((x) => x.id === id);
+  if (!p) return;
+  const a = document.createElement("a");
+  a.href = p.image;
+  a.download = `Foto-${slug(p.guestName)}.jpg`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+$("#photoGrid").addEventListener("click", (ev) => {
+  const view = ev.target.closest("[data-photo-view]");
+  if (view) {
+    const p = state.photos.find((x) => x.id === view.dataset.photoView);
+    if (!p) return;
+    $("#photoModalTitle").textContent = p.guestName;
+    $("#photoModalImg").src = p.image;
+    $("#photoModalImg").alt = "Foto de " + p.guestName;
+    openModal("photoModal");
+    return;
+  }
+
+  const dl = ev.target.closest("[data-photo-download]");
+  if (dl) downloadPhoto(dl.dataset.photoDownload);
+});
+
+
+/* =====================================================
+   PÁGINA DO CONVIDADO
+   Passo 1: confirmar o celular
+   Passo 2: escolher e enviar a foto
+   Passo 3: receber o código de retirada
+===================================================== */
+
+let publicGuestId = null;
+let verified = false;
+let pendingImage = null;
+let attempts = 0;
+
+function stepsBar(step) {
+  return `<div class="steps" aria-label="Passo ${step} de 3">${[1, 2, 3].map((i) => `<span class="${i <= step ? "on" : ""}"></span>`).join("")}</div>`;
+}
+
+function renderPublic(id) {
+  const box = $("#uploadContent");
+  state = loadState();
+  publicGuestId = id;
+  verified = false;
+  pendingImage = null;
+  attempts = 0;
+
+  const g = findGuest(id);
+
+  if (!g) {
+    box.innerHTML = `
+      <div class="result warn">
+        <div class="big">🔍</div>
+        <h2>QR Code não encontrado</h2>
+        <p style="margin-top:10px;color:inherit">
+          Este código não existe ou foi desativado. Procure a equipe do evento.
         </p>
-
-      </div>
-
-    `;
-
+      </div>`;
+    return;
   }
 
+  const event = findEvent(g.eventId);
+
+  box.innerHTML = `
+    ${stepsBar(1)}
+    ${event ? `<span class="event-chip">${esc(event.name)}</span>` : ""}
+    <h1>Olá, ${esc(g.name.split(" ")[0])}! 👋</h1>
+    <p>${g.status === "aguardando"
+      ? "Você ganhou uma foto impressa deste evento. Para garantir que é você, confirme seu celular."
+      : "Sua foto já foi enviada. Confirme seu celular para ver seu código de retirada."}</p>
+
+    <form id="verifyForm" novalidate>
+      <div class="field">
+        <label for="verifyPhone">Seu celular com DDD</label>
+        <input id="verifyPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 98765-4321" data-phone>
+        <div class="hint">Final cadastrado: ${esc(maskPhone(g.phone))}</div>
+      </div>
+      <div class="error" id="verifyError" role="alert"></div>
+      <button class="btn btn-primary btn-block" type="submit">Continuar</button>
+    </form>`;
+
+  setTimeout(() => $("#verifyPhone")?.focus(), 50);
+
+  $("#verifyForm").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const typed = onlyDigits($("#verifyPhone").value);
+    const err = $("#verifyError");
+    const guest = findGuest(publicGuestId);
+
+    if (attempts >= 5) {
+      err.textContent = "Muitas tentativas. Procure a equipe do evento.";
+      return;
+    }
+
+    if (!guest || typed !== guest.phone) {
+      attempts++;
+      err.textContent = "Esse celular não confere com o cadastro. Confira o número com DDD.";
+      return;
+    }
+
+    verified = true;
+    if (guest.status === "aguardando") renderUploadStep();
+    else renderTicket(guest);
+  });
 }
 
+function renderUploadStep() {
+  const g = findGuest(publicGuestId);
 
-/* =====================================================
-   PREVIEW
-===================================================== */
+  $("#uploadContent").innerHTML = `
+    ${stepsBar(2)}
+    <h1>Escolha sua foto</h1>
+    <p>Envie a sua melhor foto do evento. Ela será impressa para você.</p>
 
-function previewPhoto(event) {
+    <label class="drop" id="dropZone">
+      <div class="drop-icon">📷</div>
+      <p style="margin-top:10px"><b>Toque para escolher ou tirar uma foto</b><br>ou arraste a imagem para cá</p>
+      <p style="font-size:12px;margin-top:6px">JPG ou PNG · até ${MAX_FILE_MB} MB</p>
+      <input type="file" id="photoInput" accept="image/*">
+      <img id="preview" class="hidden" alt="Pré-visualização da foto">
+    </label>
 
-  const file = event.target.files[0];
+    <div class="error" id="uploadError" role="alert"></div>
+
+    <button class="btn btn-primary btn-block" id="sendBtn" disabled>Enviar minha foto</button>
+    <p style="font-size:12px;margin-top:12px">Atenção: cada convidado pode enviar apenas uma foto.</p>`;
+
+  const input = $("#photoInput");
+  const drop = $("#dropZone");
+
+  input.addEventListener("change", () => handleFile(input.files[0]));
+  drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("dragging"); });
+  drop.addEventListener("dragleave", () => drop.classList.remove("dragging"));
+  drop.addEventListener("drop", (e) => {
+    e.preventDefault();
+    drop.classList.remove("dragging");
+    handleFile(e.dataTransfer.files[0]);
+  });
+
+  $("#sendBtn").addEventListener("click", sendPhoto);
+}
+
+// Reduz a foto para no máximo 1600px e converte para JPEG
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, MAX_PHOTO_SIDE / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", PHOTO_QUALITY));
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("formato"));
+    };
+    img.src = url;
+  });
+}
+
+async function handleFile(file) {
+  const err = $("#uploadError");
+  const btn = $("#sendBtn");
+  const preview = $("#preview");
+  err.textContent = "";
+  pendingImage = null;
+  btn.disabled = true;
 
   if (!file) return;
 
   if (!file.type.startsWith("image/")) {
-
-    alert("Escolha uma imagem.");
-
-    event.target.value = "";
-
+    err.textContent = "Escolha um arquivo de imagem.";
     return;
-
   }
 
-  if (file.size > 10 * 1024 * 1024) {
-
-    alert("A foto deve ter no máximo 10 MB.");
-
-    event.target.value = "";
-
+  if (file.size > MAX_FILE_MB * 1024 * 1024) {
+    err.textContent = `A foto deve ter no máximo ${MAX_FILE_MB} MB.`;
     return;
-
   }
 
-  const reader = new FileReader();
+  btn.textContent = "Preparando a foto...";
 
-  reader.onload = function(e) {
-
-    const preview =
-      document.getElementById("preview");
-
-    preview.src = e.target.result;
-
-    preview.style.display = "block";
-
-  };
-
-  reader.readAsDataURL(file);
-
+  try {
+    pendingImage = await compressImage(file);
+    preview.src = pendingImage;
+    preview.classList.remove("hidden");
+    btn.disabled = false;
+  } catch (e) {
+    err.textContent = "Não consegui abrir essa imagem. Tente outra foto.";
+  } finally {
+    btn.textContent = "Enviar minha foto";
+  }
 }
 
-
-/* =====================================================
-   ENVIAR FOTO
-===================================================== */
-
 function sendPhoto() {
+  if (!verified || !pendingImage) return;
 
-  if (!currentPublicGuest) return;
+  // Recarrega os dados para não sobrescrever mudanças feitas em outra aba
+  state = loadState();
+  const g = findGuest(publicGuestId);
 
-  if (currentPublicGuest.used) {
-
-    alert("Este QR Code já foi utilizado.");
-
+  if (!g) {
+    renderPublic(publicGuestId);
     return;
-
   }
 
-  const input =
-    document.getElementById("photoInput");
-
-  const file = input.files[0];
-
-  if (!file) {
-
-    alert("Selecione uma foto primeiro.");
-
+  if (g.status !== "aguardando") {
+    renderTicket(g);
     return;
-
   }
 
   /*
-    PROTÓTIPO:
-    A foto é armazenada localmente no navegador.
-
-    Na versão real:
-    - enviaremos para o Storage
-    - registraremos no banco
-    - bloquearemos o QR no servidor
+    PROTÓTIPO: a foto fica salva neste navegador.
+    Na versão de produção:
+    - a foto vai para um armazenamento na nuvem
+    - o código de retirada é gerado no servidor
+    - o convidado recebe o código também por SMS/WhatsApp
   */
-
-  const reader = new FileReader();
-
-  reader.onload = function(e) {
-
-    currentPublicGuest.used = true;
-
-    currentPublicGuest.photo = e.target.result;
-
-    photos.push({
-      guest: currentPublicGuest.name,
-      image: e.target.result,
-      date: new Date().toLocaleString("pt-BR")
-    });
-
-    document.getElementById("uploadContent").innerHTML = `
-
-      <div class="success">
-
-        <div style="font-size:50px">🎉</div>
-
-        <h2>Foto enviada!</h2>
-
-        <p style="margin-top:10px">
-          Sua foto foi recebida com sucesso.
-        </p>
-
-        <p style="margin-top:10px">
-          Este QR Code não pode ser utilizado novamente.
-        </p>
-
-      </div>
-
-    `;
-
+  const photo = {
+    id: newId(12),
+    eventId: g.eventId,
+    guestId: g.id,
+    guestName: g.name,
+    image: pendingImage,
+    date: nowText()
   };
 
-  reader.readAsDataURL(file);
+  g.status = "enviada";
+  g.pickupCode = newPickupCode();
+  g.sentAt = photo.date;
+  state.photos.push(photo);
 
-}
-
-
-/* =====================================================
-   FOTOS
-===================================================== */
-
-function renderPhotos() {
-
-  const grid =
-    document.getElementById("photoGrid");
-
-  grid.innerHTML = "";
-
-  if (photos.length === 0) {
-
-    grid.innerHTML = `
-
-      <div class="card">
-
-        <h3>Nenhuma foto recebida ainda.</h3>
-
-        <p style="color:#7e879b;margin-top:8px">
-          As fotos enviadas pelos convidados aparecerão aqui.
-        </p>
-
-      </div>
-
-    `;
-
+  if (!save()) {
+    state = loadState();
+    $("#uploadError").textContent = "Não foi possível salvar a foto. Tente uma imagem menor.";
     return;
-
   }
 
-  photos.forEach(photo => {
-
-    const card =
-      document.createElement("div");
-
-    card.className = "photo-card";
-
-    card.innerHTML = `
-
-      <img src="${photo.image}">
-
-      <div class="photo-info">
-
-        <strong>${photo.guest}</strong>
-
-        <p style="color:#8a92a5;font-size:12px;margin-top:5px">
-          ${photo.date}
-        </p>
-
-        <button
-          class="btn"
-          style="margin-top:10px;background:#eeeaff;color:#634ce0"
-          onclick="downloadPhoto('${photo.image}', '${photo.guest}')"
-        >
-          ⬇ Baixar
-        </button>
-
-      </div>
-
-    `;
-
-    grid.appendChild(card);
-
-  });
-
+  renderTicket(g, true);
 }
 
+function renderTicket(g, justSent = false) {
+  const event = findEvent(g.eventId);
+  const delivered = g.status === "retirada";
 
-function downloadPhoto(src, name) {
+  $("#uploadContent").innerHTML = `
+    ${stepsBar(3)}
+    <div class="result ok">
+      <div class="big">${delivered ? "✅" : "🎉"}</div>
+      <h2>${delivered ? "Foto já retirada" : justSent ? "Foto enviada!" : "Sua foto já foi enviada"}</h2>
+      <p style="margin-top:8px;color:inherit">
+        ${delivered
+          ? `Você retirou sua foto em ${esc(g.deliveredAt || "")}. Obrigado por participar!`
+          : "Mostre o código abaixo no balcão para retirar sua foto impressa."}
+      </p>
+    </div>
 
-  const a =
-    document.createElement("a");
-
-  a.href = src;
-
-  a.download =
-    "Foto-" +
-    name.replace(/\s+/g, "-") +
-    ".jpg";
-
-  a.click();
-
-}
-
-
-/* =====================================================
-   ESTATÍSTICAS
-===================================================== */
-
-function updateStats() {
-
-  document.getElementById("statGuests").textContent =
-    guests.length;
-
-  document.getElementById("statPhotos").textContent =
-    guests.filter(g => g.used).length;
-
-  document.getElementById("statWaiting").textContent =
-    guests.filter(g => !g.used).length;
-
-}
-
-
-/* =====================================================
-   MODAL
-===================================================== */
-
-function closeModal(id) {
-
-  document.getElementById(id)
-    .classList.remove("show");
-
+    ${delivered ? "" : `
+    <div class="ticket">
+      <small>Código de retirada</small>
+      <div class="pickup-code">${esc(g.pickupCode)}</div>
+      <p style="font-size:13px">${esc(g.name)} · ${esc(event?.name || "")}</p>
+    </div>
+    <p style="font-size:12px;margin-top:12px">Dica: tire um print desta tela. O código é pessoal e só pode ser usado uma vez.</p>`}`;
 }
 
 
@@ -1564,14 +2775,7 @@ function closeModal(id) {
    INICIALIZAÇÃO
 ===================================================== */
 
-window.addEventListener("hashchange", checkQR);
-
-checkQR();
-
-renderGuests();
-
-updateStats();
-
+route();
 </script>
 
 </body>
