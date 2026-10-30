@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800;900&display=swap">
 
   <!-- QR Code -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1360,6 +1360,319 @@
         animation: none !important;
         transition: none !important;
       }
+    }
+    /* =====================================================
+       TEMA GIFTS DA ALL (rosa)
+    ===================================================== */
+
+    :root {
+      --bg: #FFF4F8;
+      --surface: #FFFFFF;
+      --ink: #3B1730;
+      --ink-2: #8C6479;
+      --line: #F6D9E6;
+      --primary: #FC438A;
+      --primary-2: #FF7BB0;
+      --primary-soft: #FFE3EE;
+      --primary-ink: #D81B67;
+      --violet-soft: #FFE3EE;
+      --side: #FC438A;
+      --shadow: 0 12px 30px -14px #FC438A40;
+      --display: "Fredoka", "Nunito", system-ui, sans-serif;
+    }
+
+    * {
+      font-family: "Nunito", "Segoe UI", Arial, sans-serif;
+    }
+
+    h1, h2, h3, .logo, .stat-number, .qr-name {
+      font-family: var(--display);
+      letter-spacing: -.01em;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 100% 0%, #FFE0EC 0, transparent 35%),
+        var(--bg);
+      background-attachment: fixed;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #FC438A, #FF7BB0);
+      box-shadow: 0 10px 22px -10px #FC438Acc;
+    }
+
+    .btn,
+    .input,
+    .field input {
+      border-radius: 14px;
+    }
+
+    .input,
+    .field input {
+      border-color: #F3D3E1;
+      background: #FFFBFD;
+    }
+
+    /* coraçõezinhos de fundo */
+    .hearts {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M30 44c-6-6-16-1-16 7 0 9 16 18 16 18s16-9 16-18c0-8-10-13-16-7z' fill='%23ffffff' fill-opacity='.10'/%3E%3Cpath d='M90 94c-4-4-11-1-11 5 0 6 11 12 11 12s11-6 11-12c0-6-7-9-11-5z' fill='%23ffffff' fill-opacity='.08'/%3E%3C/svg%3E");
+    }
+
+    /* ---------- tela de entrada ---------- */
+
+    .auth-art {
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M30 44c-6-6-16-1-16 7 0 9 16 18 16 18s16-9 16-18c0-8-10-13-16-7z' fill='%23ffffff' fill-opacity='.10'/%3E%3Cpath d='M90 94c-4-4-11-1-11 5 0 6 11 12 11 12s11-6 11-12c0-6-7-9-11-5z' fill='%23ffffff' fill-opacity='.08'/%3E%3C/svg%3E"),
+        radial-gradient(circle at 85% 10%, #FFB3D166, transparent 45%),
+        linear-gradient(150deg, #FF5C9B 0%, #FC438A 45%, #D81B67 100%);
+    }
+
+    .auth-art h1 span {
+      background: none;
+      -webkit-background-clip: border-box;
+      background-clip: border-box;
+      color: #FFF1C7;
+      text-shadow: 0 4px 20px #b0004d55;
+    }
+
+    .auth-art .lead {
+      color: #FFE6F0;
+    }
+
+    .auth-art .logo-img {
+      border: 3px solid white;
+      box-shadow: 0 8px 20px -6px #8a003f88;
+    }
+
+    .auth-art .logo small {
+      opacity: .85;
+    }
+
+    .how div {
+      background: #ffffff1f;
+      border-color: #ffffff33;
+      backdrop-filter: blur(4px);
+    }
+
+    .how b {
+      background: white;
+      color: var(--primary);
+      font-family: var(--display);
+    }
+
+    .how small {
+      color: #FFE0EC;
+    }
+
+    .auth-side {
+      background:
+        radial-gradient(circle at 80% 15%, #FFE0EC, transparent 40%),
+        radial-gradient(circle at 10% 95%, #FFE8F1, transparent 40%),
+        #FFF8FB;
+    }
+
+    .auth-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 30px 28px;
+      box-shadow: 0 30px 60px -30px #FC438A55;
+    }
+
+    .role-tabs {
+      background: #FFE8F1;
+    }
+
+    .role-tabs button[aria-selected="true"] {
+      color: var(--primary-ink);
+      box-shadow: 0 4px 12px -4px #FC438A55;
+    }
+
+    .demo {
+      background: #FFF0F6;
+      border: 1px dashed #FFB3D1;
+    }
+
+    /* ---------- painel da equipe ---------- */
+
+    .sidebar {
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M30 44c-6-6-16-1-16 7 0 9 16 18 16 18s16-9 16-18c0-8-10-13-16-7z' fill='%23ffffff' fill-opacity='.08'/%3E%3C/svg%3E"),
+        linear-gradient(180deg, #FC438A 0%, #E62E78 60%, #C81862 100%);
+    }
+
+    .sidebar .logo-img {
+      border: 3px solid white;
+    }
+
+    .sidebar .logo small {
+      opacity: .85;
+    }
+
+    .nav button {
+      color: #FFE3EE;
+    }
+
+    .nav button:hover {
+      background: #ffffff24;
+      color: white;
+    }
+
+    .nav button.active {
+      background: white;
+      color: var(--primary-ink);
+      box-shadow: 0 8px 18px -8px #8a003f66;
+    }
+
+    .nav-count {
+      background: #FFD54F;
+      color: #6b3a00;
+    }
+
+    .nav button.active .nav-count {
+      background: var(--primary);
+      color: white;
+    }
+
+    .account {
+      background: #ffffff26;
+    }
+
+    .account .who small {
+      color: #FFE3EE;
+    }
+
+    .account button {
+      background: white;
+      color: var(--primary-ink);
+    }
+
+    .avatar {
+      background: linear-gradient(135deg, #FF7BB0, #D81B67);
+      color: white;
+    }
+
+    .account .avatar {
+      background: white;
+      color: var(--primary-ink);
+    }
+
+    .card,
+    .photo-card,
+    .print-card {
+      border-color: var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .stats .card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats .card::after {
+      content: "";
+      position: absolute;
+      right: -18px;
+      top: -18px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+    }
+
+    .stats .card:first-child {
+      background: linear-gradient(135deg, #FC438A, #FF7BB0);
+      border: 0;
+      color: white;
+    }
+
+    .stats .card:first-child .stat-label {
+      color: #FFE3EE;
+    }
+
+    .stats .card:first-child::after {
+      background: #ffffff26;
+    }
+
+    .stat-number {
+      color: var(--primary-ink);
+    }
+
+    .stats .card:first-child .stat-number {
+      color: white;
+    }
+
+    .progress {
+      background: #FFE3EE;
+    }
+
+    .event-switch select {
+      background: #FFF0F6;
+      color: var(--ink);
+    }
+
+    .team-tabs {
+      background: #FFE8F1;
+    }
+
+    .modal {
+      background: #3b173099;
+    }
+
+    .modal-box {
+      border-radius: 28px;
+    }
+
+    .close {
+      background: #FFE8F1;
+      color: var(--primary-ink);
+    }
+
+    .code-input {
+      border-color: #F3D3E1;
+      color: var(--primary-ink);
+    }
+
+    th {
+      color: var(--ink-2);
+    }
+
+    /* ---------- página do convidado ---------- */
+
+    #publicPage {
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M30 44c-6-6-16-1-16 7 0 9 16 18 16 18s16-9 16-18c0-8-10-13-16-7z' fill='%23ffffff' fill-opacity='.12'/%3E%3Cpath d='M90 94c-4-4-11-1-11 5 0 6 11 12 11 12s11-6 11-12c0-6-7-9-11-5z' fill='%23ffffff' fill-opacity='.10'/%3E%3C/svg%3E"),
+        linear-gradient(160deg, #FF6FA6 0%, #FC438A 50%, #D81B67 100%);
+    }
+
+    .upload-box {
+      border-radius: 32px;
+      box-shadow: 0 30px 70px -20px #8a003f88;
+    }
+
+    .upload-box .logo-img {
+      width: 64px;
+      height: 64px;
+    }
+
+    .drop {
+      border-color: #FFB3D1;
+      background: #FFF7FA;
+    }
+
+    .ticket {
+      background: linear-gradient(135deg, #FFF0F6, #FFFFFF);
+      border-color: #FF9CC3;
+    }
+
+    .ticket .pickup-code {
+      color: var(--primary-ink);
+    }
+
+    .toast {
+      background: #3B1730;
     }
   </style>
 </head>
