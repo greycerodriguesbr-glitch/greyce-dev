@@ -24,7 +24,7 @@ Um app que reúne em um só lugar tudo o que a pessoa precisa para cuidar da sa�
 - 💊 **Remédios**: lembretes diários com acompanhamento do progresso
 - 💉 **Carteira de vacinas** digital
 - ⚠️ **Alertas na região**: doenças em circulação, sintomas e prevenção
-- 🆘 **Emergência**: números úteis (192, 193, 190) e ficha médica para socorristas
+- 🆘 **Emergência**: números úteis como 192 (SAMU) e 193 (Bombeiros) e ficha médica para socorristas
 - 🌙 Modo escuro, layout responsivo para celular e preocupação com a **LGPD**
 
 ### Como usar
