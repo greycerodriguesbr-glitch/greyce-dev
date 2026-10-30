@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FotoEvento — Fotos impressas para cada convidado</title>
+  <title>Gifts da All — Fotos impressas do seu evento</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <meta name="theme-color" content="#FC438A">
   <meta name="description" content="Cada convidado recebe um QR Code único, envia sua melhor foto pelo celular e retira a foto impressa com um código de retirada.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,10 +23,10 @@
       --ink: #172033;
       --ink-2: #6f788e;
       --line: #e6e9f1;
-      --primary: #7657ff;
-      --primary-2: #a05cff;
-      --primary-soft: #efebff;
-      --primary-ink: #5b43dc;
+      --primary: #FC438A;
+      --primary-2: #FF6FA6;
+      --primary-soft: #FFE6F0;
+      --primary-ink: #D61F68;
       --green-soft: #e3f8ec;
       --green: #178a4e;
       --yellow-soft: #fff3d6;
@@ -32,8 +35,8 @@
       --blue: #2563c9;
       --red-soft: #fde8e8;
       --red: #c33131;
-      --violet-soft: #efebff;
-      --side: #13162a;
+      --violet-soft: #FFE6F0;
+      --side: #241020;
       --shadow: 0 10px 30px #17203310;
     }
 
@@ -101,7 +104,7 @@
     .btn-primary {
       color: white;
       background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      box-shadow: 0 8px 20px -8px #7657ffaa;
+      box-shadow: 0 8px 20px -8px #FC438Aaa;
     }
 
     .btn-soft {
@@ -169,7 +172,7 @@
     .input:focus,
     .field input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 4px #7657ff18;
+      box-shadow: 0 0 0 4px #FC438A1f;
     }
 
     .hint {
@@ -215,6 +218,23 @@
       letter-spacing: -.02em;
     }
 
+    .logo-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      flex: none;
+      box-shadow: 0 6px 16px -6px #FC438A99;
+    }
+
+    .logo small {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0;
+      opacity: .65;
+      margin-top: 2px;
+    }
+
     .logo-icon {
       width: 44px;
       height: 44px;
@@ -223,7 +243,7 @@
       border-radius: 14px;
       color: white;
       font-size: 20px;
-      background: linear-gradient(135deg, #7657ff, #a86cff);
+      background: linear-gradient(135deg, #FC438A, #FF6FA6);
       flex: none;
     }
 
@@ -245,9 +265,9 @@
       justify-content: space-between;
       gap: 40px;
       background:
-        radial-gradient(circle at 85% 10%, #8f72ff66, transparent 40%),
-        radial-gradient(circle at 10% 90%, #c06bff40, transparent 40%),
-        linear-gradient(140deg, #11152a, #26194d);
+        radial-gradient(circle at 85% 10%, #FC438A55, transparent 40%),
+        radial-gradient(circle at 10% 90%, #FF8FBC33, transparent 40%),
+        linear-gradient(140deg, #11152a, #3a1230);
     }
 
     .auth-art h1 {
@@ -258,7 +278,7 @@
     }
 
     .auth-art h1 span {
-      background: linear-gradient(90deg, #b9a8ff, #e2b8ff);
+      background: linear-gradient(90deg, #FF9CC3, #FFD1E3);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -375,7 +395,7 @@
 
     .name-results button:hover {
       border-color: var(--primary);
-      background: #fbfaff;
+      background: #FFF7FA;
     }
 
     .name-results .avatar,
@@ -407,7 +427,7 @@
     .picked {
       margin-bottom: 18px;
       background: var(--primary-soft);
-      border-color: #d8cfff;
+      border-color: #FFC4DC;
     }
 
     .last4 {
@@ -512,7 +532,7 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #7657ff, #c06bff);
+      background: linear-gradient(135deg, #FC438A, #FF6FA6);
       display: grid;
       place-items: center;
       font-weight: 800;
@@ -881,7 +901,7 @@
 
     .event-card.current {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px #7657ff22;
+      box-shadow: 0 0 0 3px #FC438A26;
     }
 
     .event-card h3 {
@@ -928,7 +948,7 @@
 
     .code-input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 5px #7657ff18;
+      box-shadow: 0 0 0 5px #FC438A1f;
     }
 
     .pickup-result img {
@@ -1082,8 +1102,8 @@
       align-items: center;
       justify-content: center;
       background:
-        radial-gradient(circle at top right, #8b6cff40, transparent 35%),
-        linear-gradient(135deg, #11152a, #241744);
+        radial-gradient(circle at top right, #FC438A40, transparent 35%),
+        linear-gradient(135deg, #11152a, #3a1230);
     }
 
     .upload-box {
@@ -1153,7 +1173,7 @@
       border: 2px dashed #d9ddef;
       border-radius: 20px;
       padding: 28px 20px;
-      background: #fafaff;
+      background: #FFFAFC;
       cursor: pointer;
       text-align: center;
       transition: border-color .2s, background .2s;
@@ -1162,7 +1182,7 @@
     .drop:hover,
     .drop.dragging {
       border-color: var(--primary);
-      background: #f4f1ff;
+      background: #FFF0F6;
     }
 
     .drop-icon {
@@ -1204,10 +1224,10 @@
 
     .ticket {
       margin-top: 20px;
-      border: 2px dashed #b7a9ff;
+      border: 2px dashed #FF9CC3;
       border-radius: 20px;
       padding: 20px;
-      background: #faf8ff;
+      background: #FFF7FA;
       color: var(--ink);
     }
 
@@ -1352,8 +1372,8 @@
 
   <div class="auth-art">
     <div class="logo">
-      <div class="logo-icon">📸</div>
-      FotoEvento
+      <img class="logo-img" src="logo.png" alt="">
+      <span>Gifts da All<small>Fotos do seu evento</small></span>
     </div>
 
     <div>
@@ -1488,8 +1508,8 @@
   <aside class="sidebar">
 
     <div class="logo">
-      <div class="logo-icon">📸</div>
-      FotoEvento
+      <img class="logo-img" src="logo.png" alt="">
+      <span>Gifts da All<small>Fotos do seu evento</small></span>
     </div>
 
     <nav class="nav" aria-label="Menu">
@@ -1788,8 +1808,8 @@
 <div id="publicPage" class="hidden">
   <div class="upload-box">
     <div class="logo">
-      <div class="logo-icon">📸</div>
-      FotoEvento
+      <img class="logo-img" src="logo.png" alt="">
+      <span>Gifts da All<small>Fotos do seu evento</small></span>
     </div>
     <div id="uploadContent"></div>
     <button class="link" id="guestExit" style="margin-top:18px;font-size:14px">← Sair da área do convidado</button>
@@ -2770,14 +2790,14 @@ $("#printQrBtn").addEventListener("click", () => {
 <html lang="pt-BR"><head><meta charset="utf-8"><title>QR - ${esc(qrGuest.name)}</title>
 <style>
   body{font-family:Arial,sans-serif;text-align:center;padding:40px;color:#13162a}
-  .card{display:inline-block;border:2px dashed #c9c3f5;border-radius:24px;padding:32px 44px;max-width:380px}
-  .brand{font-size:14px;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;color:#5b43dc}
+  .card{display:inline-block;border:2px dashed #FFB3D1;border-radius:24px;padding:32px 44px;max-width:380px}
+  .brand{font-size:14px;font-weight:bold;letter-spacing:.1em;text-transform:uppercase;color:#D61F68}
   h1{font-size:20px;margin:10px 0 2px} h2{font-size:28px;margin:8px 0 2px}
   p{color:#5d6478;margin:6px 0;line-height:1.5} img{width:230px;height:230px;margin:16px 0}
   .code{font-family:monospace;letter-spacing:.2em;font-size:13px;color:#8a90a3}
 </style></head>
 <body><div class="card">
-  <div class="brand">📸 FotoEvento</div>
+  <img src="logo.png" alt="Gifts da All" style="width:64px;height:64px">
   <h1>${esc(event?.name || "")}</h1>
   <p>${event ? formatDate(event.date) + " · " + esc(event.location) : ""}</p>
   <h2>${esc(qrGuest.name)}</h2>
@@ -2906,7 +2926,7 @@ function printPhotos(guestIds) {
   }
 
   win.document.write(`<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8"><title>Impressão · FotoEvento</title>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Impressão · Gifts da All</title>
 <style>
   @page { size: 10cm 15cm; margin: 0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }

@@ -35,7 +35,9 @@ Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/saud
 
 ---
 
-## 📸 FotoEvento
+## 📸 FotoEvento · Gifts da All
+
+<img src="fotoevento/logo.png" alt="Gifts da All" width="96">
 
 > *Transforme cada momento em memórias especiais.*
 
