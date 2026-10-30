@@ -67,6 +67,7 @@ O caminho de cada foto:
 - 🖨️ Fila de impressão que atualiza sozinha, impressão individual ou de todas, em formato 10x15 com nome do evento e código
 - 🎟️ Código de retirada gerado no envio e tela de retirada para conferir e entregar
 - 🖼️ Galeria de fotos com download
+- 💌 Área do convidado com link para o Instagram **@giftsdaall** e botão **Quero contratar**, que abre o Direct
 - 📲 Layout responsivo para celular
 
 ### Como usar

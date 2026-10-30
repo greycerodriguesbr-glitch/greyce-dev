@@ -1754,6 +1754,67 @@
       font-size: 12px;
     }
 
+    .btn-ig {
+      color: white;
+      background: linear-gradient(45deg, #F9A43A, #E1306C 45%, #A13CC2);
+      box-shadow: 0 8px 18px -8px #E1306Caa;
+      text-decoration: none;
+    }
+
+    a.btn {
+      text-decoration: none;
+    }
+
+    .hire {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #FFF0F6, #FFE3EE);
+      border: 1px solid #FFC9DE;
+      text-align: left;
+      display: grid;
+      gap: 12px;
+    }
+
+    .hire-text b {
+      display: block;
+      color: var(--primary-ink);
+      font-family: var(--display);
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+
+    .hire-text span {
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+
+    .hire-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hire-actions .btn {
+      flex: 1 1 auto;
+    }
+
+    .ig-follow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      color: #C1357A;
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .ig-follow:hover {
+      text-decoration: underline;
+    }
+
     .toast {
       background: #3B1730;
     }
@@ -1822,6 +1883,17 @@
           <div class="error" id="guestLoginError" role="alert"></div>
           <button class="btn btn-primary btn-block" type="submit">Entrar 💕</button>
           <p class="switch-auth"><button class="link" type="button" id="guestBack">← Ops, não sou eu</button></p>
+        </div>
+
+        <div class="hire">
+          <div class="hire-text">
+            <b>💌 Quer a Gifts da All no seu evento?</b>
+            <span>Fotos impressas na hora para casamentos, aniversários, formaturas e eventos da empresa.</span>
+          </div>
+          <div class="hire-actions">
+            <a class="btn btn-primary btn-sm" href="https://ig.me/m/giftsdaall" target="_blank" rel="noopener">Quero contratar</a>
+            <a class="btn btn-ig btn-sm" href="https://www.instagram.com/giftsdaall/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> @giftsdaall</a>
+          </div>
         </div>
       </form>
 
@@ -2217,6 +2289,17 @@
       <span>Gifts da All<small>Fotos do seu evento</small></span>
     </div>
     <div id="uploadContent"></div>
+
+    <div class="hire">
+      <div class="hire-text">
+        <b>💌 Quer a Gifts da All no seu evento?</b>
+        <span>Fotos impressas na hora para casamentos, aniversários, formaturas e eventos da empresa.</span>
+      </div>
+      <div class="hire-actions">
+        <a class="btn btn-primary btn-sm" href="https://ig.me/m/giftsdaall" target="_blank" rel="noopener">Quero contratar</a>
+        <a class="btn btn-ig btn-sm" href="https://www.instagram.com/giftsdaall/" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> @giftsdaall</a>
+      </div>
+    </div>
     <button class="link" id="guestExit" style="margin-top:18px;font-size:14px">← Voltar ao início</button>
   </div>
 </div>
