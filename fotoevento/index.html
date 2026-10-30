@@ -355,6 +355,70 @@
       box-shadow: 0 2px 8px #17203314;
     }
 
+    .name-results {
+      display: grid;
+      gap: 8px;
+    }
+
+    .name-results button,
+    .picked {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 14px;
+      padding: 11px 14px;
+    }
+
+    .name-results button:hover {
+      border-color: var(--primary);
+      background: #fbfaff;
+    }
+
+    .name-results .avatar,
+    .picked .avatar {
+      width: 38px;
+      height: 38px;
+      font-size: 14px;
+      color: white;
+    }
+
+    .name-results b,
+    .picked b {
+      display: block;
+    }
+
+    .name-results small,
+    .picked small {
+      color: var(--ink-2);
+      font-size: 13px;
+    }
+
+    .name-results .none {
+      font-size: 14px;
+      color: var(--ink-2);
+      padding: 6px 2px;
+      line-height: 1.5;
+    }
+
+    .picked {
+      margin-bottom: 18px;
+      background: var(--primary-soft);
+      border-color: #d8cfff;
+    }
+
+    .last4 {
+      text-align: center;
+      font-size: 26px !important;
+      font-weight: 800;
+      letter-spacing: .5em;
+      padding-left: calc(15px + .5em) !important;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+
     .event-pick {
       display: grid;
       gap: 8px;
@@ -1319,19 +1383,29 @@
       <!-- Convidado -->
       <form id="guestLoginForm" class="hidden" novalidate>
         <h2>Área do convidado</h2>
-        <p>Entre com o celular que você informou para o evento e envie sua foto ou veja seu código de retirada.</p>
+        <p>Procure seu nome na lista do evento para enviar sua foto ou ver seu código de retirada.</p>
 
-        <div class="field">
-          <label for="guestPhone">Seu celular com DDD</label>
-          <input id="guestPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 98765-4321" data-phone>
-          <div class="hint">Também dá para entrar escaneando o QR Code do seu convite.</div>
+        <!-- Passo 1: procurar o nome -->
+        <div id="guestFind">
+          <div class="field">
+            <label for="guestName">Seu nome</label>
+            <input id="guestName" type="search" autocomplete="off" maxlength="60" placeholder="Digite pelo menos 3 letras">
+            <div class="hint">Também dá para entrar escaneando o QR Code do seu convite.</div>
+          </div>
+          <div class="name-results" id="guestResults" aria-live="polite"></div>
         </div>
 
-        <div class="error" id="guestLoginError" role="alert"></div>
-
-        <button class="btn btn-primary btn-block" type="submit">Entrar</button>
-
-        <div class="event-pick hidden" id="guestEventPick"></div>
+        <!-- Passo 2: confirmar o celular -->
+        <div id="guestConfirm" class="hidden">
+          <div class="picked" id="guestPicked"></div>
+          <div class="field">
+            <label for="guestLast4">Confirme os 4 últimos números do seu celular</label>
+            <input id="guestLast4" class="last4" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="• • • •">
+          </div>
+          <div class="error" id="guestLoginError" role="alert"></div>
+          <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+          <p class="switch-auth"><button class="link" type="button" id="guestBack">← Não sou eu, voltar</button></p>
+        </div>
       </form>
 
       <!-- Cliente: entrar -->
@@ -1974,9 +2048,8 @@ function showAuth(which) {
   $("#tabClient").setAttribute("aria-selected", which !== "guest");
   $("#loginError").textContent = "";
   $("#signupError").textContent = "";
-  $("#guestLoginError").textContent = "";
-  $("#guestEventPick").classList.add("hidden");
-  const first = $({ guest: "#guestPhone", login: "#loginEmail", signup: "#suName" }[which]);
+  if (which === "guest") showGuestFind();
+  const first = $({ guest: "#guestName", login: "#loginEmail", signup: "#suName" }[which]);
   setTimeout(() => first.focus(), 30);
 }
 
@@ -1988,7 +2061,7 @@ $$("[data-role]").forEach((b) =>
 
 
 /* =====================================================
-   LOGIN DO CONVIDADO (pelo celular)
+   LOGIN DO CONVIDADO (pelo nome + 4 últimos números do celular)
 ===================================================== */
 
 const VERIFIED_KEY = "fotoevento:convidado";
@@ -2007,39 +2080,104 @@ function enterAsGuest(id) {
   location.hash = "#foto/" + encodeURIComponent(id);
 }
 
-$("#guestLoginForm").addEventListener("submit", (ev) => {
-  ev.preventDefault();
-  state = loadState();
-  const phone = onlyDigits($("#guestPhone").value);
-  const err = $("#guestLoginError");
-  const pick = $("#guestEventPick");
-  err.textContent = "";
-  pick.classList.add("hidden");
+// Ignora acentos e maiúsculas na busca: "joao" encontra "João"
+function normalize(text) {
+  return String(text || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+}
 
-  if (!validPhone(phone)) {
-    err.textContent = "Digite um celular válido com DDD.";
+let pickedGuestId = null;
+const wrongTries = {};
+const MAX_TRIES = 5;
+
+function showGuestFind() {
+  pickedGuestId = null;
+  $("#guestFind").classList.remove("hidden");
+  $("#guestConfirm").classList.add("hidden");
+  $("#guestLoginError").textContent = "";
+  $("#guestLast4").value = "";
+  setTimeout(() => $("#guestName").focus(), 30);
+}
+
+$("#guestName").addEventListener("input", () => {
+  state = loadState();
+  const box = $("#guestResults");
+  const q = normalize($("#guestName").value);
+
+  if (q.length < 3) {
+    box.innerHTML = "";
     return;
   }
 
-  const found = state.guests.filter((g) => g.phone === phone && findEvent(g.eventId));
+  const found = state.guests
+    .filter((g) => findEvent(g.eventId) && normalize(g.name).includes(q))
+    .slice(0, 6);
 
   if (!found.length) {
-    err.textContent = "Não encontramos nenhum convite com esse celular. Confira o número ou fale com quem organizou o evento.";
+    box.innerHTML = `<p class="none">Não encontramos esse nome na lista. Confira como seu nome foi escrito ou fale com a equipe do evento.</p>`;
     return;
   }
 
-  if (found.length === 1) {
-    enterAsGuest(found[0].id);
+  box.innerHTML = found.map((g) => {
+    const e = findEvent(g.eventId);
+    return `
+      <button type="button" data-pick-guest="${esc(g.id)}">
+        <span class="avatar">${esc(initials(g.name))}</span>
+        <span><b>${esc(g.name)}</b><small>${esc(e.name)} · ${formatDate(e.date)}</small></span>
+      </button>`;
+  }).join("");
+});
+
+$("#guestResults").addEventListener("click", (ev) => {
+  const b = ev.target.closest("[data-pick-guest]");
+  if (!b) return;
+  const g = findGuest(b.dataset.pickGuest);
+  if (!g) return;
+  const e = findEvent(g.eventId);
+
+  pickedGuestId = g.id;
+  $("#guestPicked").innerHTML = `
+    <span class="avatar">${esc(initials(g.name))}</span>
+    <span><b>${esc(g.name)}</b><small>${esc(e?.name || "")} · ${e ? formatDate(e.date) : ""}</small></span>`;
+  $("#guestFind").classList.add("hidden");
+  $("#guestConfirm").classList.remove("hidden");
+  $("#guestLoginError").textContent = "";
+  setTimeout(() => $("#guestLast4").focus(), 30);
+});
+
+$("#guestBack").addEventListener("click", showGuestFind);
+
+$("#guestLast4").addEventListener("input", (ev) => {
+  ev.target.value = onlyDigits(ev.target.value).slice(0, 4);
+  $("#guestLoginError").textContent = "";
+});
+
+$("#guestLoginForm").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const err = $("#guestLoginError");
+  const g = pickedGuestId && findGuest(pickedGuestId);
+  if (!g) return showGuestFind();
+
+  const typed = $("#guestLast4").value;
+  if (typed.length !== 4) {
+    err.textContent = "Digite os 4 últimos números do seu celular.";
     return;
   }
 
-  // Convidado em mais de um evento: escolhe qual
-  pick.innerHTML = `<p class="muted" style="font-size:14px;margin:0">Você está em mais de um evento. Escolha qual:</p>` +
-    found.map((g) => {
-      const e = findEvent(g.eventId);
-      return `<button type="button" data-guest-enter="${esc(g.id)}">${esc(e.name)}<small>📅 ${formatDate(e.date)} · 📍 ${esc(e.location)}</small></button>`;
-    }).join("");
-  pick.classList.remove("hidden");
+  if ((wrongTries[g.id] || 0) >= MAX_TRIES) {
+    err.textContent = "Muitas tentativas. Procure a equipe do evento.";
+    return;
+  }
+
+  if (g.phone.slice(-4) !== typed) {
+    wrongTries[g.id] = (wrongTries[g.id] || 0) + 1;
+    err.textContent = "Os números não conferem com o cadastro. Tente de novo.";
+    $("#guestLast4").select();
+    return;
+  }
+
+  $("#guestName").value = "";
+  $("#guestResults").innerHTML = "";
+  enterAsGuest(g.id);
 });
 
 let openGuestTab = false;
@@ -2051,10 +2189,7 @@ $("#guestExit").addEventListener("click", () => {
   route();
 });
 
-$("#guestEventPick").addEventListener("click", (ev) => {
-  const b = ev.target.closest("[data-guest-enter]");
-  if (b) enterAsGuest(b.dataset.guestEnter);
-});
+
 
 async function login(email, password) {
   const user = state.users.find((u) => u.email === email.trim().toLowerCase());
@@ -3045,9 +3180,8 @@ function renderPublic(id) {
 
     <form id="verifyForm" novalidate>
       <div class="field">
-        <label for="verifyPhone">Seu celular com DDD</label>
-        <input id="verifyPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 98765-4321" data-phone>
-        <div class="hint">Final cadastrado: ${esc(maskPhone(g.phone))}</div>
+        <label for="verifyPhone">Os 4 últimos números do seu celular</label>
+        <input id="verifyPhone" class="last4" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="• • • •">
       </div>
       <div class="error" id="verifyError" role="alert"></div>
       <button class="btn btn-primary btn-block" type="submit">Continuar</button>
@@ -3057,7 +3191,7 @@ function renderPublic(id) {
 
   $("#verifyForm").addEventListener("submit", (ev) => {
     ev.preventDefault();
-    const typed = onlyDigits($("#verifyPhone").value);
+    const typed = onlyDigits($("#verifyPhone").value).slice(0, 4);
     const err = $("#verifyError");
     const guest = findGuest(publicGuestId);
 
@@ -3066,9 +3200,9 @@ function renderPublic(id) {
       return;
     }
 
-    if (!guest || typed !== guest.phone) {
+    if (!guest || typed.length !== 4 || typed !== guest.phone.slice(-4)) {
       attempts++;
-      err.textContent = "Esse celular não confere com o cadastro. Confira o número com DDD.";
+      err.textContent = "Os números não conferem com o cadastro. Tente de novo.";
       return;
     }
 

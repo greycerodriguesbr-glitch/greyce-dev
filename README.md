@@ -45,7 +45,7 @@ Plataforma para fotógrafos e organizadores de casamentos, aniversários e forma
 
 O app tem **duas áreas**:
 
-- 🎉 **Área do convidado**: entra com o celular (ou pelo QR Code do convite), envia a melhor foto e recebe na hora um código de retirada
+- 🎉 **Área do convidado**: procura o próprio nome na lista (ou escaneia o QR Code do convite), confirma os 4 últimos números do celular, envia a melhor foto e recebe na hora um código de retirada
 - 🛠️ **Área da equipe**: quem trabalha no evento monta a lista de convidados, imprime as fotos e faz a entrega no balcão
 
 O caminho de cada foto:
@@ -60,7 +60,7 @@ O caminho de cada foto:
 - 🔐 Contas da equipe com senha protegida por hash e aceite da LGPD
 - 🎪 Vários eventos, com evento ativo e painel de andamento (aguardando, na fila, prontas e retiradas)
 - 👥 Lista de convidados com celular, busca e QR Code único e intransferível
-- 📱 Convidado entra pelo celular ou pelo QR, com confirmação de identidade
+- 📱 Convidado entra pelo nome ou pelo QR, confirmando os 4 últimos números do celular (com limite de tentativas)
 - 🖨️ Fila de impressão que atualiza sozinha, impressão individual ou de todas, em formato 10x15 com nome do evento e código
 - 🎟️ Código de retirada gerado no envio e tela de retirada para conferir e entregar
 - 🖼️ Galeria de fotos com download
@@ -101,7 +101,7 @@ Plataforma para fotógrafos e organizadores de casamentos, aniversários e forma
 
 ### Como usar
 
-Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador. Na aba **Sou da equipe**, crie uma conta ou clique em **"Entrar com a conta de demonstração"**, que já vem com um evento e convidados de exemplo. Para testar como convidado, use a aba **Sou convidado** com o celular de alguém da lista, como (11) 99123-4567.
+Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador. Na aba **Sou da equipe**, crie uma conta ou clique em **"Entrar com a conta de demonstração"**, que já vem com um evento e convidados de exemplo. Para testar como convidado, use a aba **Sou convidado**, procure por **Maria** e confirme com **5678**.
 
 > Os dados ficam salvos no próprio navegador. Para testar o fluxo completo, use o botão **Testar** no QR Code de um convidado: ele abre a página do convidado na mesma máquina.
 
