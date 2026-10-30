@@ -328,6 +328,58 @@
       margin-bottom: 26px;
     }
 
+    .role-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 5px;
+      background: #eceef5;
+      border-radius: 14px;
+      margin-bottom: 28px;
+    }
+
+    .role-tabs button {
+      border: 0;
+      background: transparent;
+      border-radius: 10px;
+      padding: 11px 8px;
+      font-weight: 700;
+      color: var(--ink-2);
+      transition: background .15s, color .15s;
+    }
+
+    .role-tabs button[aria-selected="true"] {
+      background: white;
+      color: var(--primary-ink);
+      box-shadow: 0 2px 8px #17203314;
+    }
+
+    .event-pick {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .event-pick button {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+    }
+
+    .event-pick button:hover {
+      border-color: var(--primary);
+    }
+
+    .event-pick small {
+      display: block;
+      font-weight: 500;
+      color: var(--ink-2);
+      margin-top: 2px;
+    }
+
     .switch-auth {
       text-align: center;
       margin-top: 18px;
@@ -1163,10 +1215,33 @@
   <div class="auth-side">
     <div class="auth-card">
 
-      <!-- Entrar -->
-      <form id="loginForm" novalidate>
-        <h2>Entrar</h2>
-        <p>Acesse o painel do seu evento.</p>
+      <div class="role-tabs" role="tablist" aria-label="Tipo de acesso">
+        <button type="button" role="tab" id="tabGuest" data-role="guest">🎉 Sou convidado</button>
+        <button type="button" role="tab" id="tabClient" data-role="client">💼 Sou cliente</button>
+      </div>
+
+      <!-- Convidado -->
+      <form id="guestLoginForm" class="hidden" novalidate>
+        <h2>Área do convidado</h2>
+        <p>Entre com o celular que você informou para o evento e envie sua foto ou veja seu código de retirada.</p>
+
+        <div class="field">
+          <label for="guestPhone">Seu celular com DDD</label>
+          <input id="guestPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 98765-4321" data-phone>
+          <div class="hint">Também dá para entrar escaneando o QR Code do seu convite.</div>
+        </div>
+
+        <div class="error" id="guestLoginError" role="alert"></div>
+
+        <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+
+        <div class="event-pick hidden" id="guestEventPick"></div>
+      </form>
+
+      <!-- Cliente: entrar -->
+      <form id="loginForm" class="hidden" novalidate>
+        <h2>Área do cliente</h2>
+        <p>Contratou o FotoEvento? Entre para gerenciar seu evento, convidados e fotos.</p>
 
         <div class="field">
           <label for="loginEmail">E-mail</label>
@@ -1186,13 +1261,13 @@
           Quer só conhecer? <button class="link" type="button" id="demoLogin">Entrar com a conta de demonstração</button>
         </div>
 
-        <p class="switch-auth">Ainda não tem conta? <button class="link" type="button" data-auth="signup">Criar conta grátis</button></p>
+        <p class="switch-auth">Quer contratar para o seu evento? <button class="link" type="button" data-auth="signup">Criar conta</button></p>
       </form>
 
       <!-- Criar conta -->
       <form id="signupForm" class="hidden" novalidate>
-        <h2>Criar conta</h2>
-        <p>Comece a usar em menos de 1 minuto.</p>
+        <h2>Contratar o FotoEvento</h2>
+        <p>Crie sua conta de cliente e monte seu evento em menos de 1 minuto.</p>
 
         <div class="field">
           <label for="suName">Seu nome</label>
@@ -1517,6 +1592,7 @@
       FotoEvento
     </div>
     <div id="uploadContent"></div>
+    <button class="link" id="guestExit" style="margin-top:18px;font-size:14px">← Sair da área do convidado</button>
   </div>
 </div>
 
@@ -1763,16 +1839,96 @@ const ownsEvent = (eventId) => myEvents().some((e) => e.id === eventId);
    ENTRAR E CRIAR CONTA
 ===================================================== */
 
+// which: "guest" (convidado), "login" ou "signup" (cliente)
 function showAuth(which) {
+  $("#guestLoginForm").classList.toggle("hidden", which !== "guest");
   $("#loginForm").classList.toggle("hidden", which !== "login");
   $("#signupForm").classList.toggle("hidden", which !== "signup");
+  $("#tabGuest").setAttribute("aria-selected", which === "guest");
+  $("#tabClient").setAttribute("aria-selected", which !== "guest");
   $("#loginError").textContent = "";
   $("#signupError").textContent = "";
-  const first = $(which === "login" ? "#loginEmail" : "#suName");
+  $("#guestLoginError").textContent = "";
+  $("#guestEventPick").classList.add("hidden");
+  const first = $({ guest: "#guestPhone", login: "#loginEmail", signup: "#suName" }[which]);
   setTimeout(() => first.focus(), 30);
 }
 
 $$("[data-auth]").forEach((b) => b.addEventListener("click", () => showAuth(b.dataset.auth)));
+
+$$("[data-role]").forEach((b) =>
+  b.addEventListener("click", () => showAuth(b.dataset.role === "guest" ? "guest" : "login"))
+);
+
+
+/* =====================================================
+   LOGIN DO CONVIDADO (pelo celular)
+===================================================== */
+
+const VERIFIED_KEY = "fotoevento:convidado";
+
+function markGuestVerified(id) {
+  try { sessionStorage.setItem(VERIFIED_KEY, id); } catch (e) { /* ignora */ }
+}
+
+function isGuestVerified(id) {
+  try { return sessionStorage.getItem(VERIFIED_KEY) === id; } catch (e) { return false; }
+}
+
+function enterAsGuest(id) {
+  markGuestVerified(id);
+  $("#guestLoginForm").reset();
+  location.hash = "#foto/" + encodeURIComponent(id);
+}
+
+$("#guestLoginForm").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  state = loadState();
+  const phone = onlyDigits($("#guestPhone").value);
+  const err = $("#guestLoginError");
+  const pick = $("#guestEventPick");
+  err.textContent = "";
+  pick.classList.add("hidden");
+
+  if (!validPhone(phone)) {
+    err.textContent = "Digite um celular válido com DDD.";
+    return;
+  }
+
+  const found = state.guests.filter((g) => g.phone === phone && findEvent(g.eventId));
+
+  if (!found.length) {
+    err.textContent = "Não encontramos nenhum convite com esse celular. Confira o número ou fale com quem organizou o evento.";
+    return;
+  }
+
+  if (found.length === 1) {
+    enterAsGuest(found[0].id);
+    return;
+  }
+
+  // Convidado em mais de um evento: escolhe qual
+  pick.innerHTML = `<p class="muted" style="font-size:14px;margin:0">Você está em mais de um evento. Escolha qual:</p>` +
+    found.map((g) => {
+      const e = findEvent(g.eventId);
+      return `<button type="button" data-guest-enter="${esc(g.id)}">${esc(e.name)}<small>📅 ${formatDate(e.date)} · 📍 ${esc(e.location)}</small></button>`;
+    }).join("");
+  pick.classList.remove("hidden");
+});
+
+let openGuestTab = false;
+
+$("#guestExit").addEventListener("click", () => {
+  try { sessionStorage.removeItem(VERIFIED_KEY); } catch (e) { /* ignora */ }
+  openGuestTab = true;
+  history.pushState(null, "", location.pathname + location.search);
+  route();
+});
+
+$("#guestEventPick").addEventListener("click", (ev) => {
+  const b = ev.target.closest("[data-guest-enter]");
+  if (b) enterAsGuest(b.dataset.guestEnter);
+});
 
 async function login(email, password) {
   const user = state.users.find((u) => u.email === email.trim().toLowerCase());
@@ -1877,7 +2033,8 @@ function route() {
 
   if (!me) {
     $("#authPage").classList.remove("hidden");
-    showAuth(state.users.length ? "login" : "signup");
+    showAuth(openGuestTab ? "guest" : "login");
+    openGuestTab = false;
     return;
   }
 
@@ -2560,6 +2717,14 @@ function renderPublic(id) {
 
   const event = findEvent(g.eventId);
 
+  // Já entrou pela Área do convidado com o celular: pula a confirmação
+  if (isGuestVerified(g.id)) {
+    verified = true;
+    if (g.status === "aguardando") renderUploadStep();
+    else renderTicket(g);
+    return;
+  }
+
   box.innerHTML = `
     ${stepsBar(1)}
     ${event ? `<span class="event-chip">${esc(event.name)}</span>` : ""}
@@ -2598,6 +2763,7 @@ function renderPublic(id) {
     }
 
     verified = true;
+    markGuestVerified(guest.id);
     if (guest.status === "aguardando") renderUploadStep();
     else renderTicket(guest);
   });

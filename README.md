@@ -51,7 +51,8 @@ Plataforma para fotógrafos e organizadores de casamentos, aniversários e forma
 
 ### Funcionalidades
 
-- 🔐 **Contas de organizador**: criar conta, entrar e sair, com senha protegida por hash e aceite da LGPD
+- 🎉 **Área do convidado**: o convidado entra só com o celular (ou pelo QR Code) para enviar a foto ou ver o código de retirada
+- 💼 **Área do cliente**: quem contrata cria conta, entra e gerencia seus eventos, com senha protegida por hash e aceite da LGPD
 - 🎪 **Vários eventos por conta**, com evento ativo e indicadores de andamento
 - 👥 **Convidados com celular**, busca por nome ou número e QR Code único e intransferível
 - 📱 **Confirmação de identidade**: o convidado só envia a foto depois de confirmar o celular cadastrado
@@ -63,7 +64,7 @@ Plataforma para fotógrafos e organizadores de casamentos, aniversários e forma
 
 ### Como usar
 
-Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador. Crie sua conta ou clique em **"Entrar com a conta de demonstração"**, que já vem com um evento e convidados de exemplo.
+Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador. Na aba **Sou cliente**, crie sua conta ou clique em **"Entrar com a conta de demonstração"**, que já vem com um evento e convidados de exemplo. Para testar como convidado, use a aba **Sou convidado** com o celular de alguém da lista, como (11) 99123-4567.
 
 > Os dados ficam salvos no próprio navegador. Para testar o fluxo completo, use o botão **Testar** no QR Code de um convidado: ele abre a página do convidado na mesma máquina.
 
