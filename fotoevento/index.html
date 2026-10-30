@@ -1703,6 +1703,57 @@
       100% { transform: scale(1); opacity: 1; }
     }
 
+    .invite {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    .invite b {
+      font-size: 18px;
+      color: var(--primary-ink);
+      background: var(--primary-soft);
+      padding: 6px 12px;
+      border-radius: 10px;
+      letter-spacing: .15em;
+    }
+
+    .members {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    .member {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #FFFBFD;
+      min-width: 0;
+    }
+
+    .member > span:last-child {
+      min-width: 0;
+    }
+
+    .member b,
+    .member small {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .member small {
+      color: var(--ink-2);
+      font-size: 12px;
+    }
+
     .toast {
       background: #3B1730;
     }
@@ -1780,8 +1831,8 @@
         <p>Para quem trabalha no evento: monte a lista de convidados, imprima e entregue as fotos.</p>
 
         <div class="field">
-          <label for="loginPhone">Celular</label>
-          <input id="loginPhone" type="tel" inputmode="numeric" autocomplete="username" maxlength="15" placeholder="(11) 98765-4321" data-phone>
+          <label for="loginPhone">E-mail ou celular</label>
+          <input id="loginPhone" type="text" autocomplete="username" maxlength="80" placeholder="seunome@gmail.com ou (11) 98765-4321">
         </div>
 
         <div class="field">
@@ -1797,13 +1848,13 @@
           Quer só conhecer? <button class="link" type="button" id="demoLogin">Entrar com a conta de demonstração</button>
         </div>
 
-        <p class="switch-auth">Ainda não tem acesso? <button class="link" type="button" data-auth="signup">Criar conta da equipe</button></p>
+        <p class="switch-auth">Faz parte da equipe e ainda não tem acesso? <button class="link" type="button" data-auth="signup">Fazer cadastro</button></p>
       </form>
 
       <!-- Criar conta -->
       <form id="signupForm" class="hidden" novalidate>
-        <h2>Criar conta da equipe</h2>
-        <p>Cadastre-se para montar eventos e cuidar das impressões.</p>
+        <h2>Cadastro da equipe</h2>
+        <p>Cada pessoa da equipe cria seu próprio acesso com o e-mail pessoal. Todos trabalham nos mesmos eventos.</p>
 
         <div class="field">
           <label for="suName">Seu nome</label>
@@ -1811,18 +1862,29 @@
         </div>
 
         <div class="field">
-          <label for="suCompany">Função ou empresa <span class="muted">(opcional)</span></label>
-          <input id="suCompany" autocomplete="organization" maxlength="60" placeholder="Ex.: Impressão, Balcão, Studio Flash">
+          <label for="suCompany">Função na equipe <span class="muted">(opcional)</span></label>
+          <input id="suCompany" maxlength="60" placeholder="Ex.: Impressão, Balcão, Fotografia">
         </div>
 
         <div class="field">
-          <label for="suPhone">Celular / WhatsApp <span class="muted">(é com ele que você vai entrar)</span></label>
+          <label for="suEmail">E-mail pessoal</label>
+          <input id="suEmail" type="email" autocomplete="email" maxlength="80" placeholder="seunome@gmail.com">
+        </div>
+
+        <div class="field">
+          <label for="suPhone">Celular / WhatsApp</label>
           <input id="suPhone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" placeholder="(11) 98765-4321" data-phone>
         </div>
 
         <div class="field">
           <label for="suPass">Senha</label>
           <input id="suPass" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres">
+        </div>
+
+        <div class="field" id="suInviteField">
+          <label for="suInvite">Código de convite da equipe</label>
+          <input id="suInvite" autocomplete="off" maxlength="6" placeholder="Ex.: AB12CD" style="text-transform:uppercase;letter-spacing:.15em;font-weight:700">
+          <div class="hint">Só quem tem o código consegue entrar na equipe. Ele aparece no painel de quem já tem acesso.</div>
         </div>
 
         <label class="check">
@@ -1908,6 +1970,8 @@
       </div>
 
       <div class="card" id="currentEventCard"></div>
+
+      <div class="card" id="teamCard" style="margin-top:22px"></div>
 
     </section>
 
@@ -2323,6 +2387,15 @@ function save() {
   }
 }
 
+// Código de convite da equipe: criado no primeiro cadastro
+function newInviteCode() {
+  return newId(6);
+}
+
+function ensureTeamInvite() {
+  if (!state.teamInvite) state.teamInvite = newInviteCode();
+}
+
 // Cria a conta de demonstração com um evento e convidados de exemplo
 async function ensureDemoAccount() {
   if (state.users.some((u) => u.phone === DEMO_PHONE)) return;
@@ -2333,6 +2406,7 @@ async function ensureDemoAccount() {
     name: "Equipe Demonstração",
     company: "Impressão e balcão",
     phone: DEMO_PHONE,
+    email: "demo@gmail.com",
     salt,
     passHash: await hashPassword(DEMO_PASS, salt),
     createdAt: nowText()
@@ -2340,6 +2414,7 @@ async function ensureDemoAccount() {
   const eventId = newId(10);
 
   state.users.push(user);
+  ensureTeamInvite();
   state.events.push({ id: eventId, ownerId: user.id, name: "Casamento João & Maria", date: "2026-11-15", location: "Espaço Jardim" });
   state.current[user.id] = eventId;
 
@@ -2374,8 +2449,9 @@ function setSession(userId) {
   } catch (e) { /* ignora */ }
 }
 
+// A equipe é uma só: todo mundo da equipe vê e trabalha nos mesmos eventos
 function myEvents() {
-  return me ? state.events.filter((e) => e.ownerId === me.id) : [];
+  return me ? state.events : [];
 }
 
 function currentEvent() {
@@ -2409,6 +2485,7 @@ function showAuth(which) {
   $("#loginError").textContent = "";
   $("#signupError").textContent = "";
   if (which === "guest") showGuestFind();
+  $("#suInviteField").classList.toggle("hidden", !state.users.length);
   const first = $({ guest: "#guestName", login: "#loginPhone", signup: "#suName" }[which]);
   setTimeout(() => first.focus(), 30);
 }
@@ -2551,8 +2628,11 @@ $("#guestExit").addEventListener("click", () => {
 
 
 
-async function login(phone, password) {
-  const user = state.users.find((u) => u.phone === onlyDigits(phone));
+async function login(id, password) {
+  const value = String(id || "").trim().toLowerCase();
+  const user = value.includes("@")
+    ? state.users.find((u) => u.email === value)
+    : state.users.find((u) => u.phone === onlyDigits(value));
   if (!user) return null;
   const hash = await hashPassword(password, user.salt);
   return hash === user.passHash ? user : null;
@@ -2563,14 +2643,14 @@ $("#loginForm").addEventListener("submit", async (ev) => {
   const phone = $("#loginPhone").value;
   const pass = $("#loginPass").value;
 
-  if (!validPhone(phone) || !pass) {
-    $("#loginError").textContent = "Informe seu celular com DDD e a senha.";
+  if (!phone.trim() || !pass) {
+    $("#loginError").textContent = "Informe seu e-mail ou celular e a senha.";
     return;
   }
 
   const user = await login(phone, pass);
   if (!user) {
-    $("#loginError").textContent = "Celular ou senha incorretos.";
+    $("#loginError").textContent = "E-mail/celular ou senha incorretos.";
     return;
   }
 
@@ -2593,20 +2673,27 @@ $("#signupForm").addEventListener("submit", async (ev) => {
   const err = $("#signupError");
   const name = $("#suName").value.trim();
   const company = $("#suCompany").value.trim();
+  const email = $("#suEmail").value.trim().toLowerCase();
   const phone = onlyDigits($("#suPhone").value);
   const pass = $("#suPass").value;
+  const invite = $("#suInvite").value.trim().toUpperCase();
+  const firstAccount = !state.users.length;
 
   if (name.length < 3) return (err.textContent = "Digite seu nome completo.");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return (err.textContent = "Digite um e-mail válido.");
   if (!validPhone(phone)) return (err.textContent = "Digite um celular válido com DDD.");
   if (pass.length < 6) return (err.textContent = "A senha precisa ter pelo menos 6 caracteres.");
   if (!$("#suTerms").checked) return (err.textContent = "Para continuar, aceite os Termos e a Política de Privacidade.");
-  if (state.users.some((u) => u.phone === phone)) return (err.textContent = "Já existe uma conta com esse celular. Faça login.");
+  if (!firstAccount && invite !== state.teamInvite) return (err.textContent = "Código de convite incorreto. Peça o código para alguém da equipe.");
+  if (state.users.some((u) => u.email === email)) return (err.textContent = "Já existe um cadastro com esse e-mail. Faça login.");
+  if (state.users.some((u) => u.phone === phone)) return (err.textContent = "Já existe um cadastro com esse celular. Faça login.");
 
   const salt = newId(12);
   const user = {
     id: newId(10),
     name,
     company,
+    email,
     phone,
     salt,
     passHash: await hashPassword(pass, salt),
@@ -2614,12 +2701,13 @@ $("#signupForm").addEventListener("submit", async (ev) => {
   };
 
   state.users.push(user);
+  ensureTeamInvite();
   if (!save()) return;
 
   $("#signupForm").reset();
   setSession(user.id);
   route();
-  toast(`Bem-vinda(o), ${name.split(" ")[0]}! Crie seu primeiro evento.`);
+  toast(firstAccount ? `Bem-vinda(o), ${name.split(" ")[0]}! Crie o primeiro evento da equipe.` : `Bem-vinda(o) à equipe, ${name.split(" ")[0]}!`);
 });
 
 $("#logoutBtn").addEventListener("click", () => {
@@ -2757,7 +2845,50 @@ function renderAll() {
   renderGuests();
   renderPhotos();
   renderPrint();
+  renderTeamCard();
 }
+
+function renderTeamCard() {
+  ensureTeamInvite();
+  const members = state.users;
+  $("#teamCard").innerHTML = `
+    <div class="table-head" style="margin-bottom:14px">
+      <div>
+        <h2>Nossa equipe</h2>
+        <p class="muted" style="font-size:14px;margin-top:4px">Todos da equipe veem os mesmos eventos, convidados e a fila de impressão.</p>
+      </div>
+      <div class="invite">
+        <span class="muted">Código de convite</span>
+        <b class="code">${esc(state.teamInvite)}</b>
+        <button class="btn btn-soft btn-sm" id="copyInvite">Copiar convite</button>
+      </div>
+    </div>
+    <div class="members">
+      ${members.map((u) => `
+        <div class="member">
+          <span class="avatar">${esc(initials(u.name))}</span>
+          <span>
+            <b>${esc(u.name)}${u.id === me.id ? ' <span class="muted" style="font-weight:600">(você)</span>' : ""}</b>
+            <small>${esc(u.company || "Equipe")} · ${esc(u.email || formatPhone(u.phone))}</small>
+          </span>
+        </div>`).join("")}
+    </div>`;
+}
+
+document.addEventListener("click", async (ev) => {
+  if (!ev.target.closest("#copyInvite")) return;
+  const text = `Oi! Faça seu cadastro na equipe Gifts da All:\n${location.href.split("#")[0]}\nAba "Sou da equipe" > Fazer cadastro\nCódigo de convite: ${state.teamInvite}`;
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Convite copiado! Mande pelo WhatsApp para a pessoa da equipe.");
+  } catch (e) {
+    toast(`Código de convite: ${state.teamInvite}`);
+  }
+});
+
+$("#suInvite").addEventListener("input", (ev) => {
+  ev.target.value = ev.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+});
 
 function statusBadge(status) {
   return {
