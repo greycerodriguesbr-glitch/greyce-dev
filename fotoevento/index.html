@@ -2137,7 +2137,7 @@
 
     <div class="field">
       <label for="eventName">Nome do evento</label>
-      <input id="eventName" maxlength="80" placeholder="Ex.: Casamento João & Maria">
+      <input id="eventName" maxlength="80" placeholder="Ex.: Aniversário de 15 anos">
     </div>
 
     <div class="field">
@@ -2415,7 +2415,7 @@ async function ensureDemoAccount() {
 
   state.users.push(user);
   ensureTeamInvite();
-  state.events.push({ id: eventId, ownerId: user.id, name: "Casamento João & Maria", date: "2026-11-15", location: "Espaço Jardim" });
+  state.events.push({ id: eventId, ownerId: user.id, name: "Evento de demonstração", date: "2026-11-15", location: "Salão de festas" });
   state.current[user.id] = eventId;
 
   [
