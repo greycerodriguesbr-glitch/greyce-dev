@@ -64,6 +64,7 @@ O caminho de cada foto:
 - 🎪 Vários eventos, com evento ativo e painel de andamento (aguardando, na fila, prontas e retiradas)
 - 👥 Lista de convidados com celular, busca e QR Code único e intransferível
 - 📱 Convidado entra pelo nome ou pelo QR, confirmando os 4 últimos números do celular (com limite de tentativas)
+- 📱 Seção **QR Codes**: QR do evento (um só para todos, com cartaz A4 para o balcão) e QR individual de cada convidado, gerados na hora e prontos para imprimir em cartões
 - 🖨️ Fila de impressão que atualiza sozinha, impressão individual ou de todas, em formato 10x15 com nome do evento e código
 - 🎟️ Código de retirada gerado no envio e tela de retirada para conferir e entregar
 - 🖼️ Galeria de fotos com download

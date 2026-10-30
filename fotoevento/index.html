@@ -1815,6 +1815,105 @@
       text-decoration: underline;
     }
 
+    .qr-thumb {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 10px;
+      padding: 4px;
+      display: grid;
+      place-items: center;
+      transition: transform .15s, border-color .15s;
+    }
+
+    .qr-thumb:hover {
+      transform: scale(1.06);
+      border-color: var(--primary);
+    }
+
+    .qr-thumb img {
+      width: 48px;
+      height: 48px;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    .event-qr {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+      background: linear-gradient(135deg, #FFFFFF 40%, #FFF0F6);
+    }
+
+    .eq-img {
+      padding: 12px;
+      background: white;
+      border: 2px dashed #FF9CC3;
+      border-radius: 20px;
+    }
+
+    .eq-img img {
+      width: 170px;
+      height: 170px;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    @media (max-width: 700px) {
+      .event-qr {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .event-qr .row {
+        justify-content: center;
+      }
+    }
+
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .qr-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .qr-big {
+      border: 2px dashed #FFC4DC;
+      background: white;
+      border-radius: 16px;
+      padding: 8px;
+      transition: transform .15s, border-color .15s;
+    }
+
+    .qr-big:hover {
+      transform: scale(1.03);
+      border-color: var(--primary);
+    }
+
+    .qr-big img {
+      width: 140px;
+      height: 140px;
+      image-rendering: pixelated;
+      display: block;
+    }
+
+    .qr-card .row {
+      justify-content: center;
+    }
+
     .toast {
       background: #3B1730;
     }
@@ -1991,6 +2090,7 @@
       <button data-section="dashboard" class="active">📊 Visão geral</button>
       <button data-section="events">🎪 Eventos</button>
       <button data-section="guests">👥 Lista de convidados</button>
+      <button data-section="qrs">📱 QR Codes</button>
       <button data-section="print">🖨️ Impressão<span class="nav-count" id="navQueueCount"></span></button>
       <button data-section="pickup">🎟️ Retirada</button>
       <button data-section="photos">🖼️ Fotos recebidas</button>
@@ -2097,6 +2197,7 @@
         <table>
           <thead>
             <tr>
+              <th style="width:70px">QR</th>
               <th>Convidado</th>
               <th>Celular</th>
               <th>Status</th>
@@ -2110,6 +2211,51 @@
         <div class="empty hidden" id="guestEmpty"></div>
 
       </div>
+
+    </section>
+
+
+    <!-- QR CODES -->
+
+    <section id="qrs" class="section">
+
+      <div class="topbar">
+        <div>
+          <h1>QR Codes</h1>
+          <p>Os QR Codes são gerados na hora, sempre que um convidado entra na lista.</p>
+        </div>
+        <div class="event-switch">
+          <label for="qrEventSelect">Evento</label>
+          <select id="qrEventSelect" data-event-select></select>
+        </div>
+      </div>
+
+      <div class="card event-qr" id="eventQrCard" style="margin-bottom:26px">
+        <div class="eq-img"><img id="eventQrImg" alt="QR Code da área do convidado"></div>
+        <div>
+          <span class="badge b-queue">QR DO EVENTO</span>
+          <h2 style="margin:10px 0 6px">Um QR para todos os convidados</h2>
+          <p class="muted" style="line-height:1.6">Coloque no balcão, nas mesas ou no telão. O convidado escaneia, procura o próprio nome, confirma o celular e envia a foto. Cada convidado também tem o seu QR individual na lista de convidados.</p>
+          <div class="row" style="margin-top:16px">
+            <button class="btn btn-primary" id="printPosterBtn">🖨️ Imprimir cartaz</button>
+            <button class="btn btn-soft" id="copyGuestAreaBtn">🔗 Copiar link</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="table-head">
+        <div>
+          <h2>QR de cada convidado</h2>
+          <p class="muted" style="font-size:14px;margin-top:4px">Para colocar no convite ou no lugar marcado de cada pessoa.</p>
+        </div>
+        <div class="row">
+          <button class="btn btn-soft" data-go="guests">+ Adicionar convidado</button>
+          <button class="btn btn-primary" id="printAllQrBtn">🖨️ Imprimir todos</button>
+        </div>
+      </div>
+
+      <div class="qr-grid" id="qrGrid"></div>
 
     </section>
 
@@ -2818,6 +2964,12 @@ function route() {
     return;
   }
 
+  if (hash === "#convidado") {
+    $("#authPage").classList.remove("hidden");
+    showAuth("guest");
+    return;
+  }
+
   me = state.users.find((u) => u.id === getSessionUserId()) || null;
 
   if (!me) {
@@ -2929,7 +3081,163 @@ function renderAll() {
   renderPhotos();
   renderPrint();
   renderTeamCard();
+  renderEventQr();
+  renderQrGrid();
 }
+
+function renderQrGrid() {
+  const grid = $("#qrGrid");
+  const ev = currentEvent();
+  const guests = ev ? guestsOf(ev.id) : [];
+  $("#printAllQrBtn").disabled = !guests.length;
+
+  if (!guests.length) {
+    grid.innerHTML = `
+      <div class="card empty" style="grid-column:1/-1">
+        <h3>Nenhum QR ainda</h3>
+        <p>Adicione convidados na Lista de convidados e os QR Codes aparecem aqui na hora.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = guests.map((g) => `
+    <div class="qr-card">
+      <button class="qr-big" data-qr="${esc(g.id)}" aria-label="Ampliar QR de ${esc(g.name)}">
+        <img src="${qrDataUrl(guestUrl(g.id), 5)}" alt="QR Code de ${esc(g.name)}">
+      </button>
+      <strong>${esc(g.name)}</strong>
+      ${statusBadge(g.status)}
+      <div class="row">
+        <button class="btn btn-soft btn-sm" data-qr="${esc(g.id)}">Ampliar</button>
+        <button class="btn btn-ghost btn-sm" data-qr-print="${esc(g.id)}">🖨️ Imprimir</button>
+      </div>
+    </div>`).join("");
+}
+
+$("#qrGrid").addEventListener("click", (ev) => {
+  const open = ev.target.closest("[data-qr]");
+  if (open) {
+    openQR(open.dataset.qr);
+    return;
+  }
+  const pr = ev.target.closest("[data-qr-print]");
+  if (pr) printQrCards([pr.dataset.qrPrint]);
+});
+
+$("#printAllQrBtn").addEventListener("click", () => {
+  const ev = currentEvent();
+  if (ev) printQrCards(guestsOf(ev.id).map((g) => g.id));
+});
+
+// Cartões de QR em folha A4 (2 colunas x 3 linhas), prontos para recortar
+function printQrCards(ids) {
+  const guests = ids.map(findGuest).filter(Boolean);
+  if (!guests.length) return;
+  const win = window.open("", "_blank");
+  if (!win) {
+    toast("O navegador bloqueou a janela de impressão. Permita pop-ups.");
+    return;
+  }
+  const logo = new URL("logo.png", location.href).href;
+  win.document.write(`<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>QR Codes · Gifts da All</title>
+<style>
+  @page { size: A4; margin: 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; color: #3B1730; }
+  .sheet { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .card { border: 2px dashed #FF9CC3; border-radius: 6mm; padding: 6mm; height: 88mm; display: flex; flex-direction: column;
+          align-items: center; justify-content: space-between; text-align: center; break-inside: avoid; page-break-inside: avoid; }
+  .top { display: flex; align-items: center; gap: 3mm; font-size: 9pt; color: #8C6479; }
+  .top img { width: 10mm; height: 10mm; border-radius: 50%; }
+  h2 { font-size: 14pt; color: #D81B67; }
+  .qr { width: 44mm; height: 44mm; image-rendering: pixelated; }
+  p { font-size: 9pt; color: #5d4552; line-height: 1.35; }
+</style></head>
+<body><div class="sheet">
+${guests.map((g) => {
+  const e = findEvent(g.eventId);
+  return `<div class="card">
+    <div class="top"><img src="${logo}" alt=""><span>${esc(e?.name || "")}</span></div>
+    <h2>${esc(g.name)}</h2>
+    <img class="qr" src="${qrDataUrl(guestUrl(g.id), 6)}" alt="QR">
+    <p><b>Você ganhou uma foto impressa! 💕</b><br>Escaneie, envie sua foto e retire no balcão.</p>
+  </div>`;
+}).join("")}
+</div>
+<script>
+  var imgs = document.images, left = imgs.length;
+  function go(){ if (--left <= 0) setTimeout(function(){ window.print(); }, 200); }
+  for (var i = 0; i < imgs.length; i++) { if (imgs[i].complete) go(); else { imgs[i].onload = go; imgs[i].onerror = go; } }
+<\/script>
+</body></html>`);
+  win.document.close();
+}
+
+function renderEventQr() {
+  const img = $("#eventQrImg");
+  const src = qrDataUrl(guestAreaUrl(), 8);
+  if (img.getAttribute("src") !== src) img.src = src;
+}
+
+$("#copyGuestAreaBtn").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(guestAreaUrl());
+    toast("Link copiado! Dá para mandar no grupo do evento.");
+  } catch (e) {
+    toast(guestAreaUrl());
+  }
+});
+
+$("#printPosterBtn").addEventListener("click", () => {
+  const ev = currentEvent();
+  const win = window.open("", "_blank");
+  if (!win) {
+    toast("O navegador bloqueou a janela de impressão. Permita pop-ups.");
+    return;
+  }
+  const logo = new URL("logo.png", location.href).href;
+  win.document.write(`<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Cartaz QR · Gifts da All</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; color: #3B1730; }
+  .poster { width: 210mm; height: 297mm; padding: 22mm 18mm; display: flex; flex-direction: column; align-items: center;
+            justify-content: space-between; text-align: center;
+            background: linear-gradient(170deg, #FFF0F6 0%, #FFFFFF 45%, #FFE3EE 100%); }
+  .logo { width: 42mm; height: 42mm; border-radius: 50%; }
+  h1 { font-size: 34pt; color: #D81B67; line-height: 1.1; margin-top: 6mm; }
+  .ev { font-size: 15pt; color: #8C6479; margin-top: 4mm; }
+  .qr { background: white; padding: 8mm; border-radius: 10mm; border: 3px dashed #FF9CC3; }
+  .qr img { width: 95mm; height: 95mm; image-rendering: pixelated; display: block; }
+  ol { list-style: none; display: flex; gap: 6mm; font-size: 12pt; }
+  ol li { flex: 1; background: white; border-radius: 6mm; padding: 5mm 4mm; border: 1px solid #F6D9E6; }
+  ol b { display: block; font-size: 20pt; color: #FC438A; }
+  .ig { font-size: 13pt; color: #C1357A; font-weight: bold; }
+</style></head>
+<body><div class="poster">
+  <div>
+    <img class="logo" src="${logo}" alt="Gifts da All">
+    <h1>Leve uma foto<br>impressa pra casa! 💕</h1>
+    ${ev ? `<p class="ev">${esc(ev.name)} · ${formatDate(ev.date)}</p>` : ""}
+  </div>
+  <div class="qr"><img src="${qrDataUrl(guestAreaUrl(), 10)}" alt="QR Code"></div>
+  <ol>
+    <li><b>1</b>Aponte a câmera do celular para o QR</li>
+    <li><b>2</b>Procure seu nome e envie sua foto favorita</li>
+    <li><b>3</b>Retire sua foto impressa no balcão</li>
+  </ol>
+  <p class="ig">📷 @giftsdaall</p>
+</div>
+<script>
+  var imgs = document.images, left = imgs.length;
+  function go(){ if (--left <= 0) setTimeout(function(){ window.print(); }, 200); }
+  for (var i = 0; i < imgs.length; i++) { if (imgs[i].complete) go(); else { imgs[i].onload = go; imgs[i].onerror = go; } }
+<\/script>
+</body></html>`);
+  win.document.close();
+});
 
 function renderTeamCard() {
   ensureTeamInvite();
@@ -3032,6 +3340,7 @@ function renderCurrentEvent() {
     </div>
     <div class="row" style="margin-top:18px">
       <button class="btn btn-soft" data-go="guests">👥 Lista de convidados</button>
+      <button class="btn btn-soft" data-go="qrs">📱 QR Codes</button>
       <button class="btn btn-soft" data-go="print">🖨️ Impressão</button>
       <button class="btn btn-soft" data-go="pickup">🎟️ Retirada</button>
       <button class="btn btn-soft" data-go="photos">🖼️ Fotos</button>
@@ -3189,7 +3498,8 @@ function renderGuests() {
 
   tbody.innerHTML = list.map((g) => `
     <tr>
-      <td><strong>${esc(g.name)}</strong><br><span class="muted code" style="font-size:11px">QR ${esc(g.id)}</span></td>
+      <td><button class="qr-thumb" data-qr="${esc(g.id)}" aria-label="Ver QR Code de ${esc(g.name)}"><img src="${qrDataUrl(guestUrl(g.id), 3)}" alt=""></button></td>
+      <td><strong>${esc(g.name)}</strong><br><span class="muted code" style="font-size:11px">${esc(g.id)}</span></td>
       <td>${esc(formatPhone(g.phone))}</td>
       <td>${statusBadge(g.status)}</td>
       <td>${g.pickupCode ? `<span class="code">${esc(g.pickupCode)}</span>` : '<span class="muted">—</span>'}</td>
@@ -3274,6 +3584,23 @@ $("#guestTable").addEventListener("click", (ev) => {
 
 let qrGuest = null;
 
+// Gera a imagem do QR Code (data URL) para qualquer link
+function qrDataUrl(text, cell = 8) {
+  try {
+    const qr = qrcode(0, "M");
+    qr.addData(text);
+    qr.make();
+    return qr.createDataURL(cell, 2);
+  } catch (e) {
+    return "";
+  }
+}
+
+// Link da área do convidado (QR do evento: o convidado procura o próprio nome)
+function guestAreaUrl() {
+  return location.href.split("#")[0] + "#convidado";
+}
+
 function guestUrl(id) {
   return location.href.split("#")[0] + "#foto/" + encodeURIComponent(id);
 }
@@ -3289,18 +3616,16 @@ function openQR(id) {
   $("#qrUrl").textContent = url;
   $("#qrcode").innerHTML = "";
 
-  try {
-    const qr = qrcode(0, "M");
-    qr.addData(url);
-    qr.make();
+  const src = qrDataUrl(url, 8);
+  if (src) {
     const img = new Image();
-    img.src = qr.createDataURL(8, 2);
+    img.src = src;
     img.width = 230;
     img.height = 230;
     img.alt = "QR Code de " + g.name;
     img.style.imageRendering = "pixelated";
     $("#qrcode").appendChild(img);
-  } catch (e) {
+  } else {
     $("#qrcode").innerHTML = '<p class="muted" style="max-width:220px">Não foi possível gerar o QR Code. Use o botão Copiar link.</p>';
   }
 
