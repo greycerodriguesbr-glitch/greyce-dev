@@ -32,6 +32,7 @@
       --blue: #2563c9;
       --red-soft: #fde8e8;
       --red: #c33131;
+      --violet-soft: #efebff;
       --side: #13162a;
       --shadow: 0 10px 30px #17203310;
     }
@@ -571,9 +572,99 @@
       transition: width .4s;
     }
 
+    .team-tabs {
+      display: inline-flex;
+      gap: 6px;
+      background: #eceef5;
+      padding: 4px;
+      border-radius: 12px;
+      flex-wrap: wrap;
+    }
+
+    .team-tabs button {
+      border: 0;
+      background: transparent;
+      color: var(--ink-2);
+      border-radius: 9px;
+      padding: 9px 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .team-tabs button.active {
+      background: white;
+      color: var(--ink);
+      box-shadow: 0 2px 8px #17203314;
+    }
+
+    .team-tabs .count,
+    .nav-count {
+      display: inline-grid;
+      place-items: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      margin-left: 6px;
+      border-radius: 99px;
+      background: var(--primary);
+      color: white;
+      font-size: 12px;
+    }
+
+    .nav-count:empty {
+      display: none;
+    }
+
+    .print-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .print-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .print-card img {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      background: #f1f2f7;
+      display: block;
+    }
+
+    .print-card .info {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .print-card .info .row {
+      margin-top: auto;
+    }
+
+    .print-card .info .row .btn {
+      flex: 1;
+    }
+
+    .queue-pos {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary-ink);
+      letter-spacing: .04em;
+    }
+
     .funnel {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       margin-top: 18px;
     }
@@ -695,6 +786,7 @@
 
     .b-wait { background: var(--yellow-soft); color: var(--yellow); }
     .b-sent { background: var(--blue-soft); color: var(--blue); }
+    .b-queue { background: var(--violet-soft); color: var(--primary-ink); }
     .b-done { background: var(--green-soft); color: var(--green); }
     .b-active { background: var(--green-soft); color: var(--green); }
 
@@ -1096,6 +1188,10 @@
       .pickup {
         grid-template-columns: 1fr;
       }
+
+      .funnel {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 900px) {
@@ -1205,10 +1301,10 @@
     </div>
 
     <div class="how">
-      <div><b>1</b><span>Cadastre os convidados<small>Nome e celular de cada pessoa</small></span></div>
+      <div><b>1</b><span>Lista de convidados<small>A equipe cadastra nome e celular de quem vai</small></span></div>
       <div><b>2</b><span>Entregue o QR Code único<small>Impresso no convite ou na mesa</small></span></div>
       <div><b>3</b><span>O convidado envia a foto<small>Confirma o celular e recebe um código</small></span></div>
-      <div><b>4</b><span>Retirada no balcão<small>Você confere o código e entrega a foto</small></span></div>
+      <div><b>4</b><span>Impressão e retirada<small>A equipe imprime e entrega no balcão pelo código</small></span></div>
     </div>
   </div>
 
@@ -1217,7 +1313,7 @@
 
       <div class="role-tabs" role="tablist" aria-label="Tipo de acesso">
         <button type="button" role="tab" id="tabGuest" data-role="guest">🎉 Sou convidado</button>
-        <button type="button" role="tab" id="tabClient" data-role="client">💼 Sou cliente</button>
+        <button type="button" role="tab" id="tabClient" data-role="client">🛠️ Sou da equipe</button>
       </div>
 
       <!-- Convidado -->
@@ -1240,8 +1336,8 @@
 
       <!-- Cliente: entrar -->
       <form id="loginForm" class="hidden" novalidate>
-        <h2>Área do cliente</h2>
-        <p>Contratou o FotoEvento? Entre para gerenciar seu evento, convidados e fotos.</p>
+        <h2>Área da equipe</h2>
+        <p>Para quem trabalha no evento: monte a lista de convidados, imprima e entregue as fotos.</p>
 
         <div class="field">
           <label for="loginEmail">E-mail</label>
@@ -1261,13 +1357,13 @@
           Quer só conhecer? <button class="link" type="button" id="demoLogin">Entrar com a conta de demonstração</button>
         </div>
 
-        <p class="switch-auth">Quer contratar para o seu evento? <button class="link" type="button" data-auth="signup">Criar conta</button></p>
+        <p class="switch-auth">Ainda não tem acesso? <button class="link" type="button" data-auth="signup">Criar conta da equipe</button></p>
       </form>
 
       <!-- Criar conta -->
       <form id="signupForm" class="hidden" novalidate>
-        <h2>Contratar o FotoEvento</h2>
-        <p>Crie sua conta de cliente e monte seu evento em menos de 1 minuto.</p>
+        <h2>Criar conta da equipe</h2>
+        <p>Cadastre-se para montar eventos e cuidar das impressões.</p>
 
         <div class="field">
           <label for="suName">Seu nome</label>
@@ -1275,8 +1371,8 @@
         </div>
 
         <div class="field">
-          <label for="suCompany">Empresa ou nome do seu negócio <span class="muted">(opcional)</span></label>
-          <input id="suCompany" autocomplete="organization" maxlength="60" placeholder="Ex.: Studio Flash Fotografia">
+          <label for="suCompany">Função ou empresa <span class="muted">(opcional)</span></label>
+          <input id="suCompany" autocomplete="organization" maxlength="60" placeholder="Ex.: Impressão, Balcão, Studio Flash">
         </div>
 
         <div class="field">
@@ -1325,7 +1421,8 @@
     <nav class="nav" aria-label="Menu">
       <button data-section="dashboard" class="active">📊 Visão geral</button>
       <button data-section="events">🎪 Eventos</button>
-      <button data-section="guests">👥 Convidados</button>
+      <button data-section="guests">👥 Lista de convidados</button>
+      <button data-section="print">🖨️ Impressão<span class="nav-count" id="navQueueCount"></span></button>
       <button data-section="pickup">🎟️ Retirada</button>
       <button data-section="photos">🖼️ Fotos recebidas</button>
     </nav>
@@ -1403,8 +1500,8 @@
 
       <div class="topbar">
         <div>
-          <h1>Convidados</h1>
-          <p>Cada convidado recebe um QR Code único e intransferível.</p>
+          <h1>Lista de convidados</h1>
+          <p>Adicione o nome e o celular de cada pessoa que vai ao evento. Cada uma recebe um QR Code único.</p>
         </div>
         <div class="event-switch">
           <label for="guestEventSelect">Evento</label>
@@ -1442,6 +1539,35 @@
         <div class="empty hidden" id="guestEmpty"></div>
 
       </div>
+
+    </section>
+
+
+    <!-- IMPRESSÃO -->
+
+    <section id="print" class="section">
+
+      <div class="topbar">
+        <div>
+          <h1>Impressão</h1>
+          <p>Fotos enviadas pelos convidados, da mais antiga para a mais nova. A lista atualiza sozinha.</p>
+        </div>
+        <div class="event-switch">
+          <label for="printEventSelect">Evento</label>
+          <select id="printEventSelect" data-event-select></select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-bottom:18px;align-items:center">
+        <div class="team-tabs">
+          <button data-print-tab="queue" class="active">Fila de impressão<span class="count" id="queueCount">0</span></button>
+          <button data-print-tab="ready">Prontas p/ retirada<span class="count" id="readyCount" style="background:#2563c9">0</span></button>
+        </div>
+        <button class="btn btn-primary" id="printAllBtn" style="margin-left:auto">🖨️ Imprimir todas da fila</button>
+      </div>
+
+      <div class="print-grid" id="printQueue"></div>
+      <div class="print-grid hidden" id="printReady"></div>
 
     </section>
 
@@ -1769,8 +1895,8 @@ async function ensureDemoAccount() {
   const salt = newId(12);
   const user = {
     id: newId(10),
-    name: "Ana Fotógrafa",
-    company: "Studio Demonstração",
+    name: "Equipe Demonstração",
+    company: "Impressão e balcão",
     phone: "11987654321",
     email: DEMO_EMAIL,
     salt,
@@ -2107,6 +2233,7 @@ function askConfirm(title, text, action, okLabel = "Excluir") {
   $("#confirmTitle").textContent = title;
   $("#confirmText").textContent = text;
   $("#confirmOk").textContent = okLabel;
+  $("#confirmOk").className = okLabel === "Excluir" || okLabel === "Remover" ? "btn btn-danger" : "btn btn-success";
   confirmAction = action;
   openModal("confirmModal");
 }
@@ -2137,12 +2264,14 @@ function renderAll() {
   renderEvents();
   renderGuests();
   renderPhotos();
+  renderPrint();
 }
 
 function statusBadge(status) {
   return {
     aguardando: '<span class="badge b-wait">AGUARDANDO FOTO</span>',
-    enviada: '<span class="badge b-sent">PRONTA P/ RETIRAR</span>',
+    enviada: '<span class="badge b-queue">NA FILA DE IMPRESSÃO</span>',
+    impressa: '<span class="badge b-sent">PRONTA P/ RETIRAR</span>',
     retirada: '<span class="badge b-done">RETIRADA</span>'
   }[status] || "";
 }
@@ -2172,9 +2301,11 @@ function renderCurrentEvent() {
 
   const guests = guestsOf(ev.id);
   const waiting = guests.filter((g) => g.status === "aguardando").length;
-  const ready = guests.filter((g) => g.status === "enviada").length;
+  const queue = guests.filter((g) => g.status === "enviada").length;
+  const ready = guests.filter((g) => g.status === "impressa").length;
   const done = guests.filter((g) => g.status === "retirada").length;
-  const pct = guests.length ? Math.round(((ready + done) / guests.length) * 100) : 0;
+  const sent = queue + ready + done;
+  const pct = guests.length ? Math.round((sent / guests.length) * 100) : 0;
 
   box.innerHTML = `
     <div class="table-head" style="margin-bottom:8px">
@@ -2185,15 +2316,17 @@ function renderCurrentEvent() {
     <p class="muted" style="margin-top:6px">📅 ${formatDate(ev.date)} • 📍 ${esc(ev.location)}</p>
     <div class="progress" aria-hidden="true"><i style="width:${pct}%"></i></div>
     <p class="muted" style="margin-top:8px;font-size:14px">
-      <b style="color:var(--ink)">${ready + done} de ${guests.length}</b> convidados já enviaram a foto (${pct}%)
+      <b style="color:var(--ink)">${sent} de ${guests.length}</b> convidados já enviaram a foto (${pct}%)
     </p>
     <div class="funnel">
       <div style="background:var(--yellow-soft);color:var(--yellow)"><b>${waiting}</b>Aguardando foto</div>
+      <div style="background:var(--violet-soft);color:var(--primary-ink)"><b>${queue}</b>Na fila de impressão</div>
       <div style="background:var(--blue-soft);color:var(--blue)"><b>${ready}</b>Prontas para retirar</div>
       <div style="background:var(--green-soft);color:var(--green)"><b>${done}</b>Já retiradas</div>
     </div>
     <div class="row" style="margin-top:18px">
-      <button class="btn btn-soft" data-go="guests">👥 Convidados</button>
+      <button class="btn btn-soft" data-go="guests">👥 Lista de convidados</button>
+      <button class="btn btn-soft" data-go="print">🖨️ Impressão</button>
       <button class="btn btn-soft" data-go="pickup">🎟️ Retirada</button>
       <button class="btn btn-soft" data-go="photos">🖼️ Fotos</button>
     </div>`;
@@ -2529,8 +2662,11 @@ $("#printQrBtn").addEventListener("click", () => {
 
 let pickupGuest = null;
 
-$("#pickupCode").addEventListener("input", (ev) => {
-  ev.target.value = onlyDigits(ev.target.value).slice(0, 6);
+// Só números nos campos de código de retirada
+document.addEventListener("input", (ev) => {
+  if (ev.target.classList.contains("code-input")) {
+    ev.target.value = onlyDigits(ev.target.value).slice(0, 6);
+  }
 });
 
 $("#pickupForm").addEventListener("submit", (ev) => {
@@ -2545,20 +2681,17 @@ $("#pickupForm").addEventListener("submit", (ev) => {
   }
 
   const g = state.guests.find((x) => x.pickupCode === code && ownsEvent(x.eventId));
-  if (!g) {
-    pickupGuest = null;
-    err.textContent = "Código não encontrado nos seus eventos.";
-    renderPickupResult();
-    return;
-  }
-
-  pickupGuest = g;
-  renderPickupResult();
+  pickupGuest = g || null;
+  if (!g) err.textContent = "Código não encontrado nos seus eventos.";
+  renderPickupCard($("#pickupResult"), pickupGuest, () => {
+    renderAll();
+    $("#pickupCode").value = "";
+  });
 });
 
-function renderPickupResult() {
-  const box = $("#pickupResult");
-  const g = pickupGuest && findGuest(pickupGuest.id);
+// Cartão de conferência usado pelo cliente e pela equipe no balcão
+function renderPickupCard(box, guest, afterDelivery) {
+  const g = guest && findGuest(guest.id);
 
   if (!g) {
     box.innerHTML = `
@@ -2572,6 +2705,7 @@ function renderPickupResult() {
   const photo = state.photos.find((p) => p.guestId === g.id);
   const event = findEvent(g.eventId);
   const delivered = g.status === "retirada";
+  const notPrinted = g.status === "enviada";
 
   box.innerHTML = `
     <div class="table-head" style="margin-bottom:0">
@@ -2583,34 +2717,210 @@ function renderPickupResult() {
       <dt>Evento</dt><dd>${esc(event?.name || "")}</dd>
       <dt>Celular</dt><dd>${esc(formatPhone(g.phone))}</dd>
       <dt>Enviada em</dt><dd>${esc(photo?.date || "—")}</dd>
+      ${g.printedAt ? `<dt>Impressa em</dt><dd>${esc(g.printedAt)}</dd>` : ""}
       ${delivered ? `<dt>Retirada em</dt><dd>${esc(g.deliveredAt || "")}</dd>` : ""}
     </dl>
-    <div class="row" style="margin-top:18px">
+    ${notPrinted ? '<p style="margin-top:14px;font-size:14px;color:var(--yellow);font-weight:600">⚠️ Esta foto ainda está na fila de impressão.</p>' : ""}
+    <div class="row" style="margin-top:16px">
       ${delivered
         ? '<p class="muted"><b style="color:var(--green)">Esta foto já foi entregue.</b> Confira se não é uma retirada duplicada.</p>'
-        : `<button class="btn btn-success" id="confirmDelivery">✓ Confirmar entrega</button>`}
-      ${photo ? `<button class="btn btn-soft" data-photo-download="${esc(photo.id)}">⬇ Baixar para imprimir</button>` : ""}
+        : `${notPrinted && photo ? '<button class="btn btn-soft" data-print-now>🖨️ Imprimir agora</button>' : ""}
+           <button class="btn btn-success" data-deliver>✓ Confirmar entrega</button>`}
+      ${photo && !notPrinted ? `<button class="btn btn-ghost" data-photo-download="${esc(photo.id)}">⬇ Baixar</button>` : ""}
     </div>`;
 
-  const btn = $("#confirmDelivery");
-  if (btn) {
-    btn.addEventListener("click", () => {
+  box.onclick = (ev) => {
+    if (ev.target.closest("[data-deliver]")) {
       g.status = "retirada";
       g.deliveredAt = nowText();
       save();
-      renderAll();
-      renderPickupResult();
-      $("#pickupCode").value = "";
       toast(`Foto entregue para ${g.name}.`);
-    });
-  }
+      if (afterDelivery) afterDelivery();
+      renderPickupCard(box, g, afterDelivery);
+      return;
+    }
+    if (ev.target.closest("[data-print-now]") && photo) {
+      printPhotos([g.id]);
+      return;
+    }
+    const dl = ev.target.closest("[data-photo-download]");
+    if (dl) downloadPhoto(dl.dataset.photoDownload);
+  };
 }
 
-$("#pickupResult").addEventListener("click", (ev) => {
-  const dl = ev.target.closest("[data-photo-download]");
-  if (dl) downloadPhoto(dl.dataset.photoDownload);
+
+/* =====================================================
+   IMPRESSÃO DAS FOTOS (formato 10x15 cm)
+===================================================== */
+
+function printPhotos(guestIds) {
+  const items = guestIds
+    .map((id) => {
+      const g = findGuest(id);
+      const photo = g && state.photos.find((p) => p.guestId === g.id);
+      return g && photo ? { g, photo, event: findEvent(g.eventId) } : null;
+    })
+    .filter(Boolean);
+
+  if (!items.length) return false;
+
+  const win = window.open("", "_blank");
+  if (!win) {
+    toast("O navegador bloqueou a janela de impressão. Permita pop-ups.");
+    return false;
+  }
+
+  win.document.write(`<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Impressão · FotoEvento</title>
+<style>
+  @page { size: 10cm 15cm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #ddd; }
+  .page { width: 10cm; height: 15cm; background: white; display: flex; flex-direction: column;
+          page-break-after: always; break-after: page; margin: 0 auto 12px; overflow: hidden; }
+  .page img { width: 100%; flex: 1; min-height: 0; object-fit: cover; display: block; }
+  .foot { height: 1.5cm; padding: 0 .45cm; display: flex; align-items: center; justify-content: space-between;
+          font-size: 9pt; color: #333; }
+  .foot b { display: block; font-size: 10pt; color: #111; }
+  .foot .code { font-family: monospace; font-size: 9pt; letter-spacing: .1em; color: #777; text-align: right; }
+  @media print { body { background: white; } .page { margin: 0; } }
+</style></head>
+<body>
+${items.map(({ g, photo, event }) => `
+  <div class="page">
+    <img src="${photo.image}" alt="">
+    <div class="foot">
+      <div><b>${esc(event?.name || "")}</b>${event ? formatDate(event.date) : ""}</div>
+      <div class="code">${esc(g.name)}<br>#${esc(g.pickupCode || "")}</div>
+    </div>
+  </div>`).join("")}
+<script>
+  var imgs = document.images, left = imgs.length;
+  function go(){ if (--left <= 0) setTimeout(function(){ window.print(); }, 150); }
+  if (!left) window.print();
+  for (var i = 0; i < imgs.length; i++) { if (imgs[i].complete) go(); else { imgs[i].onload = go; imgs[i].onerror = go; } }
+<\/script>
+</body></html>`);
+  win.document.close();
+  return true;
+}
+
+
+/* =====================================================
+   IMPRESSÃO (fila da equipe)
+===================================================== */
+
+let printTab = "queue";
+
+$$("[data-print-tab]").forEach((b) =>
+  b.addEventListener("click", () => {
+    printTab = b.dataset.printTab;
+    renderPrint();
+  })
+);
+
+const bySent = (a, b) => (a.sentSeq || 0) - (b.sentSeq || 0);
+
+function printCard(g, position) {
+  const photo = state.photos.find((p) => p.guestId === g.id);
+  const queued = g.status === "enviada";
+  return `
+    <div class="print-card">
+      ${photo ? `<img src="${photo.image}" alt="Foto de ${esc(g.name)}" loading="lazy">` : ""}
+      <div class="info">
+        ${queued ? `<span class="queue-pos">#${position} NA FILA</span>` : ""}
+        <div>
+          <strong>${esc(g.name)}</strong>
+          <p class="muted" style="font-size:12px;margin-top:3px">
+            ${queued ? `Enviada ${esc(g.sentAt || photo?.date || "")}` : `Impressa ${esc(g.printedAt || "")}`}
+          </p>
+          <p class="muted" style="font-size:12px">Retirada: <span class="code">${esc(g.pickupCode || "")}</span></p>
+        </div>
+        <div class="row">
+          <button class="btn btn-soft btn-sm" data-print-one="${esc(g.id)}">🖨️ ${queued ? "Imprimir" : "Reimprimir"}</button>
+          ${queued ? `<button class="btn btn-success btn-sm" data-mark-printed="${esc(g.id)}">✓ Impressa</button>` : ""}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderPrint() {
+  const ev = currentEvent();
+  const guests = ev ? guestsOf(ev.id) : [];
+  const queue = guests.filter((g) => g.status === "enviada").sort(bySent);
+  const ready = guests.filter((g) => g.status === "impressa").sort(bySent);
+
+  $("#queueCount").textContent = queue.length;
+  $("#readyCount").textContent = ready.length;
+  $("#navQueueCount").textContent = queue.length || "";
+
+  $$("[data-print-tab]").forEach((b) => b.classList.toggle("active", b.dataset.printTab === printTab));
+  $("#printQueue").classList.toggle("hidden", printTab !== "queue");
+  $("#printReady").classList.toggle("hidden", printTab !== "ready");
+  $("#printAllBtn").classList.toggle("hidden", printTab !== "queue");
+  $("#printAllBtn").disabled = !queue.length;
+
+  $("#printQueue").innerHTML = queue.length
+    ? queue.map((g, i) => printCard(g, i + 1)).join("")
+    : `<div class="card empty" style="grid-column:1/-1"><h3>Fila vazia 🎉</h3><p>Assim que um convidado enviar uma foto, ela aparece aqui.</p></div>`;
+
+  $("#printReady").innerHTML = ready.length
+    ? ready.map((g) => printCard(g)).join("")
+    : `<div class="card empty" style="grid-column:1/-1"><h3>Nenhuma foto esperando retirada</h3><p>As fotos marcadas como impressas aparecem aqui.</p></div>`;
+}
+
+function markPrinted(ids) {
+  const now = nowText();
+  ids.forEach((id) => {
+    const g = findGuest(id);
+    if (g && g.status === "enviada" && ownsEvent(g.eventId)) {
+      g.status = "impressa";
+      g.printedAt = now;
+    }
+  });
+  save();
+  renderAll();
+}
+
+$("#print").addEventListener("click", (ev) => {
+  const one = ev.target.closest("[data-print-one]");
+  if (one) {
+    printPhotos([one.dataset.printOne]);
+    return;
+  }
+  const done = ev.target.closest("[data-mark-printed]");
+  if (done) {
+    const g = findGuest(done.dataset.markPrinted);
+    markPrinted([done.dataset.markPrinted]);
+    if (g) toast(`Foto de ${g.name} pronta para retirada.`);
+  }
 });
 
+$("#printAllBtn").addEventListener("click", () => {
+  const ev = currentEvent();
+  if (!ev) return;
+  const ids = guestsOf(ev.id).filter((g) => g.status === "enviada").sort(bySent).map((g) => g.id);
+  if (!printPhotos(ids)) return;
+  askConfirm(
+    "As fotos foram impressas?",
+    `Quando a impressora terminar, confirme para mover as ${ids.length} foto(s) para "Prontas p/ retirada".`,
+    () => {
+      markPrinted(ids);
+      toast(`${ids.length} foto(s) prontas para retirada.`);
+    },
+    "Sim, foram impressas"
+  );
+});
+
+// Atualiza a fila sozinho a cada 5 segundos
+setInterval(() => {
+  if (!me || $("#app").classList.contains("hidden")) return;
+  const fresh = loadState();
+  if (JSON.stringify(fresh.guests) !== JSON.stringify(state.guests)) {
+    state = fresh;
+    renderAll();
+  }
+}, 5000);
 
 /* =====================================================
    FOTOS (PAINEL)
@@ -2900,6 +3210,7 @@ function sendPhoto() {
   g.status = "enviada";
   g.pickupCode = newPickupCode();
   g.sentAt = photo.date;
+  g.sentSeq = Date.now();
   state.photos.push(photo);
 
   if (!save()) {
@@ -2923,7 +3234,9 @@ function renderTicket(g, justSent = false) {
       <p style="margin-top:8px;color:inherit">
         ${delivered
           ? `Você retirou sua foto em ${esc(g.deliveredAt || "")}. Obrigado por participar!`
-          : "Mostre o código abaixo no balcão para retirar sua foto impressa."}
+          : g.status === "impressa"
+            ? "<b>Sua foto já está impressa!</b> Vá até o balcão e mostre o código abaixo."
+            : "Sua foto está na fila de impressão. Quando passar no balcão, mostre o código abaixo."}
       </p>
     </div>
 

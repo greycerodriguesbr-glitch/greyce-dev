@@ -7,7 +7,7 @@ Portfólio de projetos web da **Greyce Rodrigues**. Cada projeto é uma aplicaç
 | Projeto | O que faz | Testar |
 |---|---|---|
 | 🏥 **SaúdePerto** | App de saúde com assistente de IA para picadas e mordidas, busca de hospitais, consultas, remédios e vacinas | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/saudeperto/) |
-| 📸 **FotoEvento** | Fotos impressas em eventos: QR Code único por convidado, confirmação por celular e código de retirada | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) |
+| 📸 **FotoEvento** | Fotos impressas em eventos: área do convidado e área da equipe, com fila de impressão e código de retirada | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) |
 
 ---
 
@@ -28,6 +28,43 @@ Um app que reúne em um só lugar tudo o que a pessoa precisa para cuidar da sa�
 - ⚠️ **Alertas na região**: doenças em circulação, sintomas e prevenção
 - 🆘 **Emergência**: números úteis como 192 (SAMU) e 193 (Bombeiros) e ficha médica para socorristas
 - 🌙 Modo escuro, layout responsivo para celular e preocupação com a **LGPD**
+
+### Como usar
+
+Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/saudeperto/) ou abra `saudeperto/index.html` no navegador. Na tela de login, clique em **"Usar CPF de teste"** para entrar com dados de demonstração.
+
+---
+
+## 📸 FotoEvento
+
+> *Transforme cada momento em memórias especiais.*
+
+Plataforma para fotógrafos e organizadores de casamentos, aniversários e formaturas. Cada convidado recebe um **QR Code único**, envia sua melhor foto pelo celular e retira a foto impressa no balcão com um **código de retirada** gerado na hora.
+
+### Como funciona
+
+O app tem **duas áreas**:
+
+- 🎉 **Área do convidado**: entra com o celular (ou pelo QR Code do convite), envia a melhor foto e recebe na hora um código de retirada
+- 🛠️ **Área da equipe**: quem trabalha no evento monta a lista de convidados, imprime as fotos e faz a entrega no balcão
+
+O caminho de cada foto:
+
+1. A equipe cria o evento e **adiciona a lista de convidados** com nome e celular, e cada pessoa ganha um QR Code único
+2. O convidado **confirma o celular e envia a foto**, e recebe um **código de retirada** de 6 números
+3. A foto entra na **fila de impressão** da equipe, que imprime no tamanho **10x15 cm** e marca como impressa
+4. No balcão, a equipe digita o código, confere a foto e **confirma a entrega**
+
+### Funcionalidades
+
+- 🔐 Contas da equipe com senha protegida por hash e aceite da LGPD
+- 🎪 Vários eventos, com evento ativo e painel de andamento (aguardando, na fila, prontas e retiradas)
+- 👥 Lista de convidados com celular, busca e QR Code único e intransferível
+- 📱 Convidado entra pelo celular ou pelo QR, com confirmação de identidade
+- 🖨️ Fila de impressão que atualiza sozinha, impressão individual ou de todas, em formato 10x15 com nome do evento e código
+- 🎟️ Código de retirada gerado no envio e tela de retirada para conferir e entregar
+- 🖼️ Galeria de fotos com download
+- 📲 Layout responsivo para celular
 
 ### Como usar
 
@@ -64,7 +101,7 @@ Plataforma para fotógrafos e organizadores de casamentos, aniversários e forma
 
 ### Como usar
 
-Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador. Na aba **Sou cliente**, crie sua conta ou clique em **"Entrar com a conta de demonstração"**, que já vem com um evento e convidados de exemplo. Para testar como convidado, use a aba **Sou convidado** com o celular de alguém da lista, como (11) 99123-4567.
+Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador. Na aba **Sou da equipe**, crie uma conta ou clique em **"Entrar com a conta de demonstração"**, que já vem com um evento e convidados de exemplo. Para testar como convidado, use a aba **Sou convidado** com o celular de alguém da lista, como (11) 99123-4567.
 
 > Os dados ficam salvos no próprio navegador. Para testar o fluxo completo, use o botão **Testar** no QR Code de um convidado: ele abre a página do convidado na mesma máquina.
 
