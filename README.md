@@ -2,10 +2,12 @@
 
 Portfólio de projetos web da **Greyce Rodrigues**. Cada projeto é uma aplicação completa em um único arquivo HTML, que roda direto no navegador, sem instalar nada.
 
-| Projeto | O que faz | Pasta |
+🌐 **Veja online:** [https://greycerodriguesbr-glitch.github.io/greyce-dev/](https://greycerodriguesbr-glitch.github.io/greyce-dev/)
+
+| Projeto | O que faz | Testar |
 |---|---|---|
-| 🏥 **SaúdePerto** | App de saúde com assistente de IA para picadas e mordidas, busca de hospitais, consultas, remédios e vacinas | [`saudeperto/`](saudeperto/) |
-| 📸 **FotoEvento** | Coleta de fotos de eventos: cada convidado recebe um QR Code e envia uma foto | [`fotoevento/`](fotoevento/) |
+| 🏥 **SaúdePerto** | App de saúde com assistente de IA para picadas e mordidas, busca de hospitais, consultas, remédios e vacinas | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/saudeperto/) |
+| 📸 **FotoEvento** | Coleta de fotos de eventos: cada convidado recebe um QR Code e envia uma foto | [▶ Abrir](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) |
 
 ---
 
@@ -29,7 +31,7 @@ Um app que reúne em um só lugar tudo o que a pessoa precisa para cuidar da sa�
 
 ### Como usar
 
-Abra `saudeperto/index.html` no navegador. Na tela de login, clique em **"Usar CPF de teste"** para entrar com dados de demonstração.
+Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/saudeperto/) ou abra `saudeperto/index.html` no navegador. Na tela de login, clique em **"Usar CPF de teste"** para entrar com dados de demonstração.
 
 ---
 
@@ -48,7 +50,7 @@ Ideal para casamentos, aniversários e formaturas: o organizador cadastra os con
 
 ### Como usar
 
-Abra `fotoevento/index.html` no navegador e entre com o usuário de demonstração **admin** / **1234**.
+Acesse [o app online](https://greycerodriguesbr-glitch.github.io/greyce-dev/fotoevento/) ou abra `fotoevento/index.html` no navegador e entre com o usuário de demonstração **admin** / **1234**.
 
 ---
 
